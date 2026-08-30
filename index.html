@@ -1,2332 +1,1846 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Vernacular EduAI</title>
-
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{
---primary:#667eea;--secondary:#764ba2;--accent:#f093fb;
---success:#4caf50;--danger:#f44336;--light:#f5f7fa;--dark:#1a1a2e
-}
-html,body{
-font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
-background:#f5f7fa;color:var(--dark);min-height:100%
-}
-.app-container{display:flex;min-height:100vh}
-.sidebar{
-width:200px;background:linear-gradient(135deg,var(--primary),var(--secondary));
-color:white;padding:25px 15px;position:fixed;height:100vh;
-overflow-y:auto;z-index:1000
-}
-.sidebar-logo{
-display:flex;align-items:center;gap:8px;margin-bottom:30px;
-font-size:16px;font-weight:bold
-}
-.sidebar-menu{list-style:none}
-.sidebar-menu li{margin:12px 0}
-.sidebar-menu a{
-color:rgba(255,255,255,.85);text-decoration:none;
-display:flex;align-items:center;gap:10px;padding:10px 12px;
-border-radius:8px;font-size:14px
-}
-.sidebar-menu a:hover,.sidebar-menu a.active{
-background:rgba(255,255,255,.2);color:white
-}
-.sidebar-footer{
-margin-top:30px;padding-top:20px;
-border-top:1px solid rgba(255,255,255,.2);
-font-size:12px;color:rgba(255,255,255,.7);line-height:1.5
-}
-.main-content{
-margin-left:200px;flex:1;padding:20px 30px;overflow-y:auto
-}
-.login-screen{
-min-height:100vh;display:flex;justify-content:center;
-align-items:center;
-background:linear-gradient(135deg,#667eea,#764ba2)
-}
-.login-box{
-background:white;border-radius:15px;padding:40px;width:90%;
-max-width:500px;box-shadow:0 20px 60px rgba(0,0,0,.3)
-}
-.login-box h1{font-size:28px;margin-bottom:10px}
-.login-box p{color:#999;margin-bottom:30px}
-.form-group{margin-bottom:15px}
-.form-group label{
-display:block;font-weight:600;margin-bottom:5px;font-size:14px
-}
-input,select,textarea{
-width:100%;padding:12px;border:2px solid #e0e0e0;
-border-radius:8px;font-size:14px;font-family:inherit
-}
-input:focus,select:focus,textarea:focus{
-outline:none;border-color:var(--primary)
-}
-.btn{
-padding:12px 24px;border:none;border-radius:8px;
-font-size:16px;font-weight:600;cursor:pointer
-}
-.btn-primary{
-background:linear-gradient(135deg,var(--primary),var(--secondary));
-color:white;width:100%
-}
-.btn-primary:disabled{opacity:.6;cursor:not-allowed}
-.header{
-background:white;border-radius:12px;padding:15px 20px;
-display:flex;justify-content:space-between;align-items:center;
-margin-bottom:25px;box-shadow:0 2px 8px rgba(0,0,0,.1)
-}
-.header-left{display:flex;align-items:center;gap:20px}
-.language-selector{display:flex;gap:10px;align-items:center}
-.language-selector select{
-padding:8px 12px;border:2px solid var(--primary);
-border-radius:6px
-}
-.user-badge{
-display:flex;align-items:center;gap:10px;
-background:linear-gradient(135deg,var(--primary),var(--secondary));
-color:white;padding:8px 15px;border-radius:8px;font-size:13px
-}
-.stats-bar{
-display:grid;grid-template-columns:repeat(5,1fr);
-gap:15px;margin-bottom:25px
-}
-.stat-card{
-background:white;padding:15px;border-radius:10px;
-text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.1)
-}
-.stat-number{
-font-size:24px;font-weight:bold;color:var(--primary)
-}
-.stat-label{color:#999;font-size:12px;margin-top:5px}
-.dashboard-grid{
-display:grid;grid-template-columns:repeat(2,1fr);
-gap:25px;margin-bottom:25px
-}
-.card{
-background:white;border-radius:12px;padding:25px;
-box-shadow:0 2px 8px rgba(0,0,0,.1);margin-bottom:20px
-}
-.card-header{
-display:flex;align-items:center;gap:12px;margin-bottom:15px
-}
-.card-icon{font-size:32px}
-.card-title{font-size:18px;font-weight:bold}
-.card-subtitle{font-size:12px;color:#999}
-.feature-grid{
-display:grid;grid-template-columns:repeat(2,1fr);gap:12px
-}
-.feature-item{
-background:linear-gradient(
-135deg,rgba(102,126,234,.1),rgba(118,75,162,.1));
-padding:15px;border-radius:8px;
-border-left:4px solid var(--primary);
-cursor:pointer;text-align:center
-}
-.feature-icon{font-size:24px;margin-bottom:8px}
-.feature-name{font-weight:bold;font-size:13px}
-.feature-desc{font-size:11px;color:#999;margin-top:3px}
-.response-box{
-background:#f5f5f5;border-left:4px solid var(--primary);
-padding:15px;margin:15px 0;border-radius:8px
-}
-.response-box.success{
-border-left-color:var(--success);background:#f0f8f4
-}
-.response-box.error{
-border-left-color:var(--danger);background:#fef0f0
-}
-.loading{
-display:inline-block;width:16px;height:16px;
-border:3px solid var(--primary);border-top-color:transparent;
-border-radius:50%;animation:spin .8s linear infinite
-}
-@keyframes spin{to{transform:rotate(360deg)}}
-.leaderboard-list{list-style:none}
-.leaderboard-item{
-display:flex;justify-content:space-between;align-items:center;
-padding:12px;background:rgba(102,126,234,.1);
-border-radius:8px;margin:8px 0;font-size:13px
-}
-.rank-badge{
-display:inline-flex;align-items:center;justify-content:center;
-width:32px;height:32px;background:linear-gradient(
-135deg,var(--primary),var(--secondary));
-color:white;border-radius:50%;font-weight:bold;
-margin-right:10px;font-size:12px
-}
-.points-badge{
-background:var(--accent);color:white;padding:4px 12px;
-border-radius:20px;font-size:12px;font-weight:bold
-}
-.tab-content{display:none}
-.tab-content.active{display:block}
-.schedule-item{
-padding:12px;background:#f5f5f5;border-radius:8px;
-margin:8px 0;font-size:13px;
-display:flex;justify-content:space-between
-}
-.schedule-time{font-weight:bold;color:var(--primary)}
-.view-all-link{
-color:var(--primary);font-size:12px;cursor:pointer;
-text-decoration:underline
-}
-.quiz-option{
-display:flex;align-items:center;padding:12px;
-border:2px solid #e0e0e0;border-radius:8px;
-margin:8px 0;cursor:pointer
-}
-.quiz-option.correct{
-border-color:var(--success);background:#f0f8f4
-}
-.quiz-option.incorrect{
-border-color:var(--danger);background:#fef0f0
-}
-.quiz-feedback{
-font-size:12px;margin-top:10px;padding:10px;border-radius:6px
-}
-.quiz-feedback.correct{
-background:#f0f8f4;color:var(--success)
-}
-.quiz-feedback.incorrect{
-background:#fef0f0;color:var(--danger)
-}
-.translator-section{
-display:grid;grid-template-columns:1fr auto 1fr;
-gap:15px;align-items:end
-}
-.lang-swap{
-display:flex;justify-content:center;align-items:center;
-height:40px;cursor:pointer;font-size:20px;color:var(--primary)
-}
-
-@media(max-width:1200px){
-.dashboard-grid{grid-template-columns:1fr}
-.stats-bar{grid-template-columns:repeat(3,1fr)}
-}
-@media(max-width:768px){
-.sidebar{width:60px;padding:15px 8px}
-.main-content{margin-left:60px;padding:15px}
-.header{flex-direction:column;gap:12px}
-.header-left{width:100%;flex-direction:column}
-.stats-bar{grid-template-columns:repeat(2,1fr)}
-.feature-grid{grid-template-columns:1fr}
-.card{padding:15px}
-.sidebar a span:last-child{display:none}
-}
-</style>
-</head>
-
-<body>
-
-<!-- ================= LOGIN ================= -->
-
-<div id="loginScreen" class="login-screen">
-
-<div class="login-box">
-
-<h1>🎓 Vernacular EduAI</h1>
-<p>AI-Powered Multilingual Learning Platform</p>
-
-<div class="form-group">
-<label>Student Name *</label>
-<input id="loginName" type="text" placeholder="Enter your name">
-</div>
-
-<div class="form-group">
-<label>Grade *</label>
-<select id="loginGrade">
-<option value="">Select Grade</option>
-<option value="6th">6th Grade</option>
-<option value="7th">7th Grade</option>
-<option value="8th">8th Grade</option>
-<option value="9th">9th Grade</option>
-<option value="10th">10th Grade</option>
-</select>
-</div>
-
-<div class="form-group">
-<label>Age *</label>
-<input id="loginAge" type="number" min="5" max="20"
-placeholder="Your age">
-</div>
-
-<div class="form-group">
-<label>Mother Tongue *</label>
-<select id="loginMotherTongue">
-<option value="">Select Language</option>
-<option value="Tamil">Tamil</option>
-<option value="Telugu">Telugu</option>
-<option value="Kannada">Kannada</option>
-<option value="Malayalam">Malayalam</option>
-<option value="Hindi">Hindi</option>
-<option value="Bengali">Bengali</option>
-</select>
-</div>
-
-<div class="form-group">
-<label>Syllabus *</label>
-<select id="loginSyllabus">
-<option value="">Select Syllabus</option>
-<option value="State">State</option>
-<option value="Central">Central</option>
-<option value="ICSE">ICSE</option>
-<option value="IGCSE">IGCSE</option>
-</select>
-</div>
-
-<div class="form-group">
-<label>Parent's Name *</label>
-<input id="loginParentName" type="text"
-placeholder="Parent name">
-</div>
-
-<div class="form-group">
-<label>Parent's Email *</label>
-<input id="loginParentEmail" type="email"
-placeholder="parent@email.com">
-</div>
-
-<div class="form-group">
-<label>Parent's Contact *</label>
-<input id="loginParentContact" type="tel"
-placeholder="Mobile number">
-</div>
-
-<div class="form-group">
-<label>Subject *</label>
-<input id="loginSubject" type="text"
-placeholder="Primary subject">
-</div>
-
-<div class="form-group">
-<label>
-<input type="checkbox" id="loginTerms">
-I agree to Terms & Conditions
-</label>
-</div>
-
-<button id="loginBtn"
-class="btn btn-primary"
-onclick="submitLogin()">
-🚀 Start Learning
-</button>
-
-<div id="loginError"></div>
-
-</div>
-</div>
-
-
-<!-- ================= MAIN APP ================= -->
-
-<div id="appScreen"
-class="app-container"
-style="display:none">
-
-<div class="sidebar">
-
-<div class="sidebar-logo">
-<span>🎓</span>
-<span>EduAI</span>
-</div>
-
-<ul class="sidebar-menu">
-
-<li><a href="#" class="nav-link active"
-onclick="switchTab('dashboard',event)">
-<span>📊</span><span>Dashboard</span></a></li>
-
-<li><a href="#" class="nav-link"
-onclick="switchTab('learning',event)">
-<span>📚</span><span>My Learning</span></a></li>
-
-<li><a href="#" class="nav-link"
-onclick="switchTab('lecture',event)">
-<span>🎬</span><span>AI Lecture</span></a></li>
-
-<li><a href="#" class="nav-link"
-onclick="switchTab('tutor',event)">
-<span>💬</span><span>AI Tutor</span></a></li>
-
-<li><a href="#" class="nav-link"
-onclick="switchTab('quiz',event)">
-<span>📝</span><span>Quizzes</span></a></li>
-
-<li><a href="#" class="nav-link"
-onclick="switchTab('flashcards',event)">
-<span>🌍</span><span>Translator</span></a></li>
-
-<li><a href="#" class="nav-link"
-onclick="switchTab('notes',event)">
-<span>📄</span><span>Notes</span></a></li>
-
-<li><a href="#" class="nav-link"
-onclick="switchTab('papers',event)">
-<span>📖</span><span>Papers</span></a></li>
-
-<li><a href="#" class="nav-link"
-onclick="switchTab('tests',event)">
-<span>✏️</span><span>Tests</span></a></li>
-
-<li><a href="#" class="nav-link"
-onclick="switchTab('progress',event)">
-<span>📈</span><span>Progress</span></a></li>
-
-<li><a href="#" class="nav-link"
-onclick="switchTab('leaderboard',event)">
-<span>🏆</span><span>Leaderboard</span></a></li>
-
-<li><a href="#" class="nav-link"
-onclick="switchTab('schedule',event)">
-<span>📅</span><span>Schedule</span></a></li>
-
-<li><a href="#" class="nav-link"
-onclick="switchTab('settings',event)">
-<span>⚙️</span><span>Settings</span></a></li>
-
-<li><a href="#" class="nav-link"
-onclick="logout(event)">
-<span>🚪</span><span>Logout</span></a></li>
-
-</ul>
-
-<div class="sidebar-footer">
-Learn in your language.<br>
-Understand deeply.<br>
-Succeed everywhere.
-</div>
-
-</div>
-
-
-<div class="main-content">
-
-<!-- HEADER -->
-
-<div class="header">
-
-<div class="header-left">
-
-<div class="language-selector">
-
-<label>Choose Your Language</label>
-
-<select id="languageSelect"
-onchange="changeLanguage()">
-
-<option value="English">English</option>
-<option value="Tamil">தமிழ் (Tamil)</option>
-<option value="Telugu">తెలుగు (Telugu)</option>
-<option value="Kannada">ಕನ್ನಡ (Kannada)</option>
-<option value="Malayalam">മലയാളം (Malayalam)</option>
-<option value="Hindi">हिन्दी (Hindi)</option>
-<option value="Bengali">বাংলা (Bengali)</option>
-
-</select>
-
-</div>
-</div>
-
-<div class="user-badge">
-
-<span>👤</span>
-
-<div>
-<div id="headerStudentName">Student</div>
-<small>Student</small>
-</div>
-
-</div>
-
-</div>
-
-
-<!-- STATS -->
-
-<div class="stats-bar">
-
-<div class="stat-card">
-<div id="pointsDisplay" class="stat-number">0</div>
-<div class="stat-label">Points</div>
-</div>
-
-<div class="stat-card">
-<div id="streakDisplay" class="stat-number">0</div>
-<div class="stat-label">Day Streak</div>
-</div>
-
-<div class="stat-card">
-<div id="quizzesDisplay" class="stat-number">0</div>
-<div class="stat-label">Quizzes</div>
-</div>
-
-<div class="stat-card">
-<div id="rankDisplay" class="stat-number">-</div>
-<div class="stat-label">Rank</div>
-</div>
-
-<div class="stat-card">
-<div id="badgesDisplay" class="stat-number">0</div>
-<div class="stat-label">Badges</div>
-</div>
-
-</div>
-
-
-<!-- DASHBOARD -->
-
-<div id="dashboard" class="tab-content active">
-
-<div class="dashboard-grid">
-
-<div class="card">
-
-<div class="card-header">
-<div class="card-icon">🎬</div>
-<div>
-<div class="card-title">AI Lecture Generator</div>
-<div class="card-subtitle">Auto-generated lessons</div>
-</div>
-</div>
-
-<div class="feature-grid">
-
-<div class="feature-item"
-onclick="switchTab('lecture',event)">
-<div class="feature-icon">📝</div>
-<div class="feature-name">Generate Lecture</div>
-<div class="feature-desc">
-Create lessons on any topic
-</div>
-</div>
-
-<div class="feature-item"
-onclick="switchTab('lecture',event)">
-<div class="feature-icon">🎯</div>
-<div class="feature-name">Learning Goals</div>
-<div class="feature-desc">
-Structured objectives
-</div>
-</div>
-
-</div>
-</div>
-
-
-<div class="card">
-
-<div class="card-header">
-<div class="card-icon">💬</div>
-<div>
-<div class="card-title">AI Tutor</div>
-<div class="card-subtitle">
-Ask doubts and get explanations
-</div>
-</div>
-</div>
-
-<div class="feature-grid">
-
-<div class="feature-item"
-onclick="switchTab('tutor',event)">
-<div class="feature-icon">❓</div>
-<div class="feature-name">Ask Question</div>
-<div class="feature-desc">
-Get instant AI response
-</div>
-</div>
-
-<div class="feature-item"
-onclick="switchTab('tutor',event)">
-<div class="feature-icon">💡</div>
-<div class="feature-name">Get Hints</div>
-<div class="feature-desc">
-Step-by-step guidance
-</div>
-</div>
-
-</div>
-</div>
-
-
-<div class="card">
-
-<div class="card-header">
-<div class="card-icon">📝</div>
-<div>
-<div class="card-title">Quizzes</div>
-<div class="card-subtitle">
-Practice your knowledge
-</div>
-</div>
-</div>
-
-<div class="feature-grid">
-
-<div class="feature-item"
-onclick="switchTab('quiz',event)">
-<div class="feature-icon">📊</div>
-<div class="feature-name">Practice Quiz</div>
-<div class="feature-desc">
-Test your knowledge
-</div>
-</div>
-
-<div class="feature-item"
-onclick="switchTab('quiz',event)">
-<div class="feature-icon">🏅</div>
-<div class="feature-name">Results</div>
-<div class="feature-desc">
-Detailed feedback
-</div>
-</div>
-
-</div>
-</div>
-
-
-<div class="card">
-
-<div class="card-header">
-<div class="card-icon">🌍</div>
-<div>
-<div class="card-title">Translator</div>
-<div class="card-subtitle">
-Learn in your language
-</div>
-</div>
-</div>
-
-<div class="feature-grid">
-
-<div class="feature-item"
-onclick="switchTab('flashcards',event)">
-<div class="feature-icon">🌐</div>
-<div class="feature-name">Translator</div>
-<div class="feature-desc">
-Translate instantly
-</div>
-</div>
-
-<div class="feature-item"
-onclick="switchTab('notes',event)">
-<div class="feature-icon">📝</div>
-<div class="feature-name">Study Notes</div>
-<div class="feature-desc">
-Save your notes
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-
-
-<div class="dashboard-grid">
-
-<div class="card">
-
-<div class="card-header">
-<div class="card-icon">📅</div>
-<div class="card-title">Today's Schedule</div>
-</div>
-
-<div class="schedule-item">
-<span class="schedule-time">09:00 AM</span>
-<span>Maths - Algebra</span>
-</div>
-
-<div class="schedule-item">
-<span class="schedule-time">11:00 AM</span>
-<span>Physics - Motion</span>
-</div>
-
-<div class="schedule-item">
-<span class="schedule-time">02:00 PM</span>
-<span>Chemistry - Atoms</span>
-</div>
-
-</div>
-
-
-<div class="card">
-
-<div class="card-header">
-<div class="card-icon">✏️</div>
-<div class="card-title">Weekly & Monthly Tests</div>
-</div>
-
-<div class="schedule-item">
-<strong>Weekly Test</strong>
-<span class="schedule-time">Next</span>
-</div>
-
-<div class="schedule-item">
-<strong>Monthly Test</strong>
-<span class="schedule-time">Next</span>
-</div>
-
-</div>
-
-</div>
-
-
-<div class="dashboard-grid">
-
-<div class="card">
-
-<div class="card-header">
-<div class="card-icon">🏆</div>
-<div class="card-title">Leaderboard</div>
-</div>
-
-<ul id="leaderboardPreview"
-class="leaderboard-list">
-
-<li class="leaderboard-item">
-<strong>Loading...</strong>
-</li>
-
-</ul>
-
-</div>
-
-
-<div class="card">
-
-<div class="card-header">
-<div class="card-icon">🎖️</div>
-<div class="card-title">Achievements</div>
-</div>
-
-<div style="text-align:center">
-
-<div style="display:inline-block;margin:10px">
-<div style="font-size:32px">🌟</div>
-<small>Quick Master</small>
-</div>
-
-<div style="display:inline-block;margin:10px">
-<div style="font-size:32px">🔥</div>
-<small>Streak</small>
-</div>
-
-<div style="display:inline-block;margin:10px">
-<div style="font-size:32px">📚</div>
-<small>Note Taker</small>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-
-<!-- ================= TUTOR ================= -->
-
-<div id="tutor" class="tab-content">
-
-<div class="card">
-
-<div class="card-header">
-<div class="card-icon">💬</div>
-<div class="card-title">Ask Your AI Tutor</div>
-</div>
-
-<div class="form-group">
-<label>Subject</label>
-<input id="tutorSubject"
-placeholder="e.g. Biology">
-</div>
-
-<div class="form-group">
-<label>Topic</label>
-<input id="tutorTopic"
-placeholder="e.g. Photosynthesis">
-</div>
-
-<div class="form-group">
-<label>Your Question</label>
-<textarea id="tutorQuestion"
-rows="4"
-placeholder="Type your doubt..."></textarea>
-</div>
-
-<button id="tutorBtn"
-class="btn btn-primary"
-onclick="askTutor()">
-💬 Ask Tutor
-</button>
-
-<div id="tutorResponse"></div>
-
-</div>
-</div>
-
-
-<!-- ================= QUIZ ================= -->
-
-<div id="quiz" class="tab-content">
-
-<div class="card">
-
-<div class="card-header">
-<div class="card-icon">📝</div>
-<div class="card-title">Practice Quiz</div>
-</div>
-
-<div id="quizSelectionMode">
-
-<div class="form-group">
-<label>Topic</label>
-<input id="quizTopic"
-placeholder="e.g. Photosynthesis">
-</div>
-
-<div class="form-group">
-<label>Subject</label>
-<input id="quizSubject"
-placeholder="e.g. Biology">
-</div>
-
-<div class="form-group">
-<label>Number of Questions</label>
-<input id="questionCount"
-type="number"
-value="5"
-min="1"
-max="20">
-</div>
-
-<button id="quizGenBtn"
-class="btn btn-primary"
-onclick="generateQuiz()">
-📝 Generate Quiz
-</button>
-
-</div>
-
-<div id="quizContent"></div>
-
-</div>
-</div>
-
-
-<!-- ================= LECTURE ================= -->
-
-<div id="lecture" class="tab-content">
-
-<div class="card">
-
-<div class="card-header">
-<div class="card-icon">🎬</div>
-<div class="card-title">AI-Generated Lectures</div>
-</div>
-
-<div class="form-group">
-<label>Topic</label>
-<input id="lectureTopic"
-placeholder="e.g. Photosynthesis">
-</div>
-
-<div class="form-group">
-<label>Subject</label>
-<input id="lectureSubject"
-placeholder="e.g. Biology">
-</div>
-
-<button id="lectureBtn"
-class="btn btn-primary"
-onclick="generateLecture()">
-🎬 Generate Lecture
-</button>
-
-<div id="lectureContent"></div>
-
-</div>
-</div>
-
-
-<!-- ================= TRANSLATOR ================= -->
-
-<div id="flashcards" class="tab-content">
-
-<div class="card">
-
-<div class="card-header">
-<div class="card-icon">🌍</div>
-<div class="card-title">Real-Time Translator</div>
-</div>
-
-<div class="form-group">
-<label>Text to Translate</label>
-<textarea id="textToTranslate"
-rows="4"
-placeholder="Enter text..."></textarea>
-</div>
-
-<div class="translator-section">
-
-<div>
-<label>From:</label>
-<select id="sourceLang">
-<option value="English">English</option>
-<option value="Tamil">Tamil</option>
-<option value="Telugu">Telugu</option>
-<option value="Kannada">Kannada</option>
-<option value="Malayalam">Malayalam</option>
-<option value="Hindi">Hindi</option>
-</select>
-</div>
-
-<div class="lang-swap"
-onclick="swapLanguages()">⇄</div>
-
-<div>
-<label>To:</label>
-<select id="targetLang">
-<option value="Tamil">Tamil</option>
-<option value="English">English</option>
-<option value="Telugu">Telugu</option>
-<option value="Kannada">Kannada</option>
-<option value="Malayalam">Malayalam</option>
-<option value="Hindi">Hindi</option>
-</select>
-</div>
-
-</div>
-
-<button id="translateBtn"
-class="btn btn-primary"
-onclick="translateText()"
-style="margin-top:15px">
-🌐 Translate
-</button>
-
-<div id="translationResult"></div>
-
-</div>
-</div>
-
-
-<!-- ================= NOTES ================= -->
-
-<div id="notes" class="tab-content">
-
-<div class="card">
-
-<div class="card-header">
-<div class="card-icon">📝</div>
-<div class="card-title">My Study Notes</div>
-</div>
-
-<div class="form-group">
-<label>Topic</label>
-<input id="noteTopic"
-placeholder="e.g. Photosynthesis">
-</div>
-
-<div class="form-group">
-<label>Your Notes</label>
-<textarea id="noteContent"
-rows="8"
-placeholder="Write your notes..."></textarea>
-</div>
-
-<button class="btn btn-primary"
-onclick="saveNote()">
-📝 Save Note
-</button>
-
-<div id="notesResponse"></div>
-
-</div>
-</div>
-
-
-<!-- ================= PROGRESS ================= -->
-
-<div id="progress" class="tab-content">
-
-<div class="card">
-
-<div class="card-header">
-<div class="card-icon">📈</div>
-<div class="card-title">Your Progress</div>
-</div>
-
-<div class="dashboard-grid">
-
-<div class="stat-card">
-<div id="avgScore" class="stat-number">-</div>
-<div>Average Score</div>
-</div>
-
-<div class="stat-card">
-<div id="doubtsAsked" class="stat-number">-</div>
-<div>Doubts Asked</div>
-</div>
-
-<div class="stat-card">
-<div id="quizzesDone" class="stat-number">-</div>
-<div>Quizzes Done</div>
-</div>
-
-<div class="stat-card">
-<div id="studyTime" class="stat-number">-</div>
-<div>Study Time</div>
-</div>
-
-</div>
-
-</div>
-</div>
-
-
-<!-- ================= LEADERBOARD ================= -->
-
-<div id="leaderboard" class="tab-content">
-
-<div class="card">
-
-<div class="card-header">
-<div class="card-icon">🏆</div>
-<div class="card-title">Leaderboard</div>
-</div>
-
-<ul id="fullLeaderboard"
-class="leaderboard-list">
-<li class="leaderboard-item">
-Loading...
-</li>
-</ul>
-
-</div>
-</div>
-
-
-<!-- ================= SCHEDULE ================= -->
-
-<div id="schedule" class="tab-content">
-
-<div class="card">
-
-<div class="card-header">
-<div class="card-icon">📅</div>
-<div class="card-title">My Schedule</div>
-</div>
-
-<div class="schedule-item">
-<span class="schedule-time">09:00 AM</span>
-<span>Maths - Algebra</span>
-</div>
-
-<div class="schedule-item">
-<span class="schedule-time">11:00 AM</span>
-<span>Physics - Motion</span>
-</div>
-
-<div class="schedule-item">
-<span class="schedule-time">02:00 PM</span>
-<span>Chemistry - Atoms</span>
-</div>
-
-<div class="schedule-item">
-<span class="schedule-time">04:00 PM</span>
-<span>English - Grammar</span>
-</div>
-
-</div>
-</div>
-
-
-<!-- ================= SETTINGS ================= -->
-
-<div id="settings" class="tab-content">
-
-<div class="card">
-
-<div class="card-header">
-<div class="card-icon">⚙️</div>
-<div class="card-title">Settings</div>
-</div>
-
-<div class="form-group">
-<label>Student Name</label>
-<input id="settingName">
-</div>
-
-<div class="form-group">
-<label>Email</label>
-<input id="settingEmail" type="email">
-</div>
-
-<div class="form-group">
-<label>Grade</label>
-<select id="settingGrade">
-<option value="">Select Grade</option>
-<option value="6th">6th Grade</option>
-<option value="7th">7th Grade</option>
-<option value="8th">8th Grade</option>
-<option value="9th">9th Grade</option>
-<option value="10th">10th Grade</option>
-</select>
-</div>
-
-<button class="btn btn-primary"
-onclick="saveSettings()">
-💾 Save Settings
-</button>
-
-<div id="settingsResponse"></div>
-
-</div>
-</div>
-
-
-<!-- ================= PAPERS ================= -->
-
-<div id="papers" class="tab-content">
-
-<div class="card">
-
-<div class="card-header">
-<div class="card-icon">📖</div>
-<div class="card-title">Previous Year Papers</div>
-</div>
-
-<div class="schedule-item">
-<span>2024 Question Paper</span>
-<span class="view-all-link">View</span>
-</div>
-
-<div class="schedule-item">
-<span>2023 Question Paper</span>
-<span class="view-all-link">View</span>
-</div>
-
-<div class="schedule-item">
-<span>2022 Question Paper</span>
-<span class="view-all-link">View</span>
-</div>
-
-</div>
-</div>
-
-
-<!-- ================= TESTS ================= -->
-
-<div id="tests" class="tab-content">
-
-<div class="card">
-
-<div class="card-header">
-<div class="card-icon">✏️</div>
-<div class="card-title">Tests & Assessments</div>
-</div>
-
-<div class="schedule-item">
-<strong>Weekly Test</strong>
-<span>Start</span>
-</div>
-
-<div class="schedule-item">
-<strong>Monthly Test</strong>
-<span>Start</span>
-</div>
-
-<div class="schedule-item">
-<strong>Chapter Test</strong>
-<span>Start</span>
-</div>
-
-</div>
-</div>
-
-
-<!-- ================= LEARNING ================= -->
-
-<div id="learning" class="tab-content">
-
-<div class="card">
-
-<div class="card-header">
-<div class="card-icon">📚</div>
-<div class="card-title">My Learning Journey</div>
-</div>
-
-<div class="feature-grid">
-
-<div class="feature-item"
-onclick="switchTab('lecture',event)">
-<div class="feature-icon">🎬</div>
-<div class="feature-name">AI Lectures</div>
-<div class="feature-desc">AI-generated lessons</div>
-</div>
-
-<div class="feature-item"
-onclick="switchTab('tutor',event)">
-<div class="feature-icon">💬</div>
-<div class="feature-name">AI Tutor</div>
-<div class="feature-desc">Ask doubts anytime</div>
-</div>
-
-<div class="feature-item"
-onclick="switchTab('quiz',event)">
-<div class="feature-icon">📝</div>
-<div class="feature-name">Practice Quizzes</div>
-<div class="feature-desc">Test your knowledge</div>
-</div>
-
-<div class="feature-item"
-onclick="switchTab('flashcards',event)">
-<div class="feature-icon">🌍</div>
-<div class="feature-name">Translator</div>
-<div class="feature-desc">Learn in your language</div>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-</div>
-
-
-<script>
-
-/* =====================================================
-   BACKEND
-===================================================== */
-
-const BACKEND_URL =
-"https://script.google.com/macros/s/AKfycbyrFuw61nnDjCpQBj6wW17PINxW3_hvWXXkfA2mHyxq2b5XWSH04nAArbWldeD-kOyZKQ/exec";
-
-
-/* =====================================================
-   STATE
-===================================================== */
-
-let currentStudent = null;
-let currentLanguage = "English";
-let loginInProgress = false;
-
-
-/* =====================================================
-   SAFE BACKEND REQUEST
-===================================================== */
-
-async function backendRequest(payload){
-
-    const response = await fetch(BACKEND_URL,{
-        method:"POST",
-        headers:{
-            "Content-Type":"text/plain;charset=utf-8"
-        },
-        body:JSON.stringify(payload)
-    });
-
-    if(!response.ok){
-        throw new Error("Backend HTTP error: "+response.status);
-    }
-
-    const text = await response.text();
-
-    try{
-        return JSON.parse(text);
-    }catch(e){
-        throw new Error("Invalid response from backend");
-    }
-}
-
-
-/* =====================================================
-   LOGIN
-   IMPORTANT: ONLY ONE REGISTER REQUEST
-===================================================== */
-
-async function submitLogin(){
-
-    /* Prevent double click / double request */
-    if(loginInProgress){
-        return;
-    }
-
-    const name =
-    document.getElementById("loginName").value.trim();
-
-    const grade =
-    document.getElementById("loginGrade").value;
-
-    const age =
-    document.getElementById("loginAge").value;
-
-    const motherTongue =
-    document.getElementById("loginMotherTongue").value;
-
-    const syllabus =
-    document.getElementById("loginSyllabus").value;
-
-    const parentName =
-    document.getElementById("loginParentName").value.trim();
-
-    const parentEmail =
-    document.getElementById("loginParentEmail").value.trim();
-
-    const parentContact =
-    document.getElementById("loginParentContact").value.trim();
-
-    const subject =
-    document.getElementById("loginSubject").value.trim();
-
-    const termsAccepted =
-    document.getElementById("loginTerms").checked;
-
-
-    if(
-        !name ||
-        !grade ||
-        !age ||
-        !motherTongue ||
-        !syllabus ||
-        !parentName ||
-        !parentEmail ||
-        !parentContact ||
-        !subject
-    ){
-        showError(
-            "loginError",
-            "❌ Please fill all required fields"
-        );
-        return;
-    }
-
-    if(!termsAccepted){
-
-        showError(
-            "loginError",
-            "❌ Please accept Terms & Conditions"
-        );
-
-        return;
-    }
-
-
-    const btn =
-    document.getElementById("loginBtn");
-
-
-    /* Lock immediately */
-    loginInProgress = true;
-    btn.disabled = true;
-    btn.innerHTML =
-    '<span class="loading"></span> Signing in...';
-
-
-    /*
-       Unique ID for this registration.
-       Helps backend identify the same request.
-    */
-
-    const requestId =
-    "LOGIN_" +
-    Date.now() +
-    "_" +
-    Math.random()
-    .toString(36)
-    .substring(2,8);
-
-
-    try{
-
-        const data = await backendRequest({
-
-            action:"registerStudent",
-
-            requestId:requestId,
-
-            studentName:name,
-
-            grade:grade,
-
-            age:age,
-
-            motherTongue:motherTongue,
-
-            syllabus:syllabus,
-
-            parentName:parentName,
-
-            parentEmail:parentEmail,
-
-            parentContact:parentContact,
-
-            subject:subject,
-
-            termsAccepted:termsAccepted
-        });
-
-
-        console.log("REGISTER RESPONSE:",data);
-
-
-        if(data && data.success){
-
-            currentStudent = {
-
-                id:
-                data.studentId ||
-                ("STU"+Date.now()),
-
-                name:name,
-
-                grade:grade,
-
-                age:age,
-
-                motherTongue:motherTongue,
-
-                syllabus:syllabus,
-
-                subject:subject,
-
-                parentName:parentName,
-
-                parentEmail:parentEmail,
-
-                parentContact:parentContact
-            };
-
-
-            document.getElementById(
-                "headerStudentName"
-            ).textContent = name;
-
-
-            document.getElementById(
-                "loginScreen"
-            ).style.display = "none";
-
-
-            document.getElementById(
-                "appScreen"
-            ).style.display = "flex";
-
-
-            /*
-              IMPORTANT:
-              Dashboard request is NOT registerStudent.
-              It will NOT be considered a login.
-            */
-
-            loadStudentDashboard();
-
-        }else{
-
-            showError(
-                "loginError",
-                "❌ "+
-                (data && data.error
-                ? data.error
-                : "Registration failed")
-            );
-
-            loginInProgress=false;
-            btn.disabled=false;
-            btn.innerHTML="🚀 Start Learning";
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vernacular EduAI - AI-Powered Multilingual Education</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-    }catch(error){
-
-        console.error(error);
-
-        showError(
-            "loginError",
-            "❌ "+error.message
-        );
-
-        loginInProgress=false;
-        btn.disabled=false;
-        btn.innerHTML="🚀 Start Learning";
-    }
-}
-
-
-/* =====================================================
-   TUTOR
-===================================================== */
-
-async function askTutor(){
-
-    const subject =
-    document.getElementById("tutorSubject").value.trim();
-
-    const topic =
-    document.getElementById("tutorTopic").value.trim();
-
-    const question =
-    document.getElementById("tutorQuestion").value.trim();
-
-    if(!subject || !topic || !question){
-        alert("❌ Please fill all fields");
-        return;
-    }
-
-    const btn =
-    document.getElementById("tutorBtn");
-
-    btn.disabled=true;
-    btn.innerHTML="Thinking...";
-
-    try{
-
-        const data=await backendRequest({
-
-            action:"askDoubt",
-
-            studentId:currentStudent.id,
-
-            subject:subject,
-
-            topic:topic,
-
-            doubt:question,
-
-            language:currentLanguage
-        });
-
-        document.getElementById(
-            "tutorResponse"
-        ).innerHTML=
-        `<div class="response-box success">
-        <h3>✅ AI Tutor Response</h3>
-        <p><strong>Question:</strong> ${escapeHTML(question)}</p>
-        <p><strong>Answer:</strong></p>
-        <p>${escapeHTML(data.answer || "Unable to generate response")}</p>
-        </div>`;
-
-    }catch(error){
-
-        document.getElementById(
-            "tutorResponse"
-        ).innerHTML=
-        `<div class="response-box error">
-        ❌ ${escapeHTML(error.message)}
-        </div>`;
-    }
-
-    btn.disabled=false;
-    btn.innerHTML="💬 Ask Tutor";
-}
-
-
-/* =====================================================
-   TRANSLATOR
-===================================================== */
-
-function swapLanguages(){
-
-    const source=document.getElementById("sourceLang");
-    const target=document.getElementById("targetLang");
-
-    const temp=source.value;
-
-    source.value=target.value;
-    target.value=temp;
-}
-
-
-async function translateText(){
-
-    const text=
-    document.getElementById("textToTranslate")
-    .value.trim();
-
-    const sourceLanguage=
-    document.getElementById("sourceLang").value;
-
-    const targetLanguage=
-    document.getElementById("targetLang").value;
-
-    if(!text){
-        alert("❌ Please enter text");
-        return;
-    }
-
-    const btn=
-    document.getElementById("translateBtn");
-
-    btn.disabled=true;
-    btn.innerHTML="🌐 Translating...";
-
-    try{
-
-        const data=await backendRequest({
-
-            action:"translateText",
-
-            text:text,
-
-            sourceLanguage:sourceLanguage,
-
-            targetLanguage:targetLanguage
-        });
-
-        document.getElementById(
-            "translationResult"
-        ).innerHTML=
-        `<div class="response-box success">
-        <h3>✅ Translation Complete</h3>
-        <p><strong>${sourceLanguage}:</strong></p>
-        <p>${escapeHTML(text)}</p>
-        <br>
-        <p><strong>${targetLanguage}:</strong></p>
-        <p><strong>${escapeHTML(
-        data.translatedText || text
-        )}</strong></p>
-        </div>`;
-
-    }catch(error){
-
-        document.getElementById(
-            "translationResult"
-        ).innerHTML=
-        `<div class="response-box error">
-        ❌ ${escapeHTML(error.message)}
-        </div>`;
-    }
-
-    btn.disabled=false;
-    btn.innerHTML="🌐 Translate";
-}
-
-
-/* =====================================================
-   QUIZ
-===================================================== */
-
-let currentQuiz=[];
-
-
-async function generateQuiz(){
-
-    const topic=
-    document.getElementById("quizTopic")
-    .value.trim();
-
-    const subject=
-    document.getElementById("quizSubject")
-    .value.trim();
-
-    const count=
-    parseInt(
-    document.getElementById("questionCount").value
-    );
-
-
-    if(!topic || !subject){
-        alert("❌ Please fill all fields");
-        return;
-    }
-
-
-    const btn=
-    document.getElementById("quizGenBtn");
-
-    btn.disabled=true;
-    btn.innerHTML="📝 Generating...";
-
-
-    try{
-
-        const data=await backendRequest({
-
-            action:"generateQuiz",
-
-            studentId:currentStudent.id,
-
-            topic:topic,
-
-            subject:subject,
-
-            questionCount:count,
-
-            language:currentLanguage
-        });
-
-
-        currentQuiz=data.questions || [];
-
-
-        if(currentQuiz.length===0){
-
-            throw new Error(
-            "No quiz questions received"
-            );
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --accent: #f093fb;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --danger: #f44336;
+            --light: #f5f7fa;
+            --dark: #1a1a2e;
         }
 
+        html, body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            color: var(--dark);
+            height: 100%;
+        }
 
-        let html=
-        `<div class="response-box"
-        style="margin-top:20px">
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
 
-        <h3>📝 ${escapeHTML(topic)} Quiz</h3>`;
+        /* SIDEBAR */
+        .sidebar {
+            width: 200px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 25px 15px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+        }
 
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 30px;
+            font-size: 16px;
+            font-weight: bold;
+        }
 
-        currentQuiz.forEach((q,index)=>{
+        .sidebar-menu {
+            list-style: none;
+        }
 
-            html+=
-            `<div style="margin:20px 0">
+        .sidebar-menu li {
+            margin: 12px 0;
+        }
 
-            <h4>${index+1}. ${
-            escapeHTML(q.question)
-            }</h4>`;
+        .sidebar-menu a {
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
 
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
 
-            (q.options || []).forEach(
-            (option,optIndex)=>{
+        .sidebar-footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            font-size: 12px;
+            color: rgba(255,255,255,0.7);
+            line-height: 1.5;
+        }
 
-                html+=
-                `<label class="quiz-option">
+        /* MAIN CONTENT */
+        .main-content {
+            margin-left: 200px;
+            flex: 1;
+            padding: 20px 30px;
+            overflow-y: auto;
+        }
 
-                <input
-                type="radio"
-                name="question${index}"
-                value="${optIndex}"
-                onchange="checkAnswer(
-                ${index},
-                ${optIndex}
-                )">
+        /* LOGIN SCREEN */
+        .login-screen {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
 
-                ${escapeHTML(option)}
+        .login-box {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
 
-                </label>`;
-            });
+        .login-box h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
 
+        .login-box p {
+            color: #999;
+            margin-bottom: 30px;
+        }
 
-            html+=
-            `<div id="feedback-${index}">
-            </div>
-            </div>`;
-        });
+        .form-group {
+            margin-bottom: 15px;
+        }
 
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: var(--dark);
+        }
 
-        html+=
-        `<button
-        class="btn btn-primary"
-        onclick="submitQuiz()">
-        Submit Quiz
-        </button>
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
 
-        </div>`;
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
 
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
 
-        document.getElementById(
-            "quizContent"
-        ).innerHTML=html;
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            width: 100%;
+        }
 
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
 
-        document.getElementById(
-            "quizSelectionMode"
-        ).style.display="none";
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
 
+        /* HEADER */
+        .header {
+            background: white;
+            border-radius: 12px;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
 
-    }catch(error){
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
 
-        document.getElementById(
-            "quizContent"
-        ).innerHTML=
-        `<div class="response-box error">
-        ❌ ${escapeHTML(error.message)}
-        </div>`;
-    }
+        .language-selector {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
 
+        .language-selector select {
+            padding: 8px 12px;
+            border: 2px solid var(--primary);
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+        }
 
-    btn.disabled=false;
-    btn.innerHTML="📝 Generate Quiz";
-}
+        .user-badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-size: 13px;
+        }
 
+        /* STATS BAR */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
 
-function checkAnswer(questionIndex,selectedIndex){
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
 
-    const q=currentQuiz[questionIndex];
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-    if(!q)return;
+        .stat-label {
+            color: #999;
+            font-size: 12px;
+            margin-top: 5px;
+        }
 
-    const correctIndex=
-    Number(q.correctAnswer);
+        /* GRID LAYOUT */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-bottom: 25px;
+        }
 
-    const feedback=
-    document.getElementById(
-    `feedback-${questionIndex}`
-    );
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
 
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+        }
 
-    if(selectedIndex===correctIndex){
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
 
-        feedback.innerHTML=
-        `<div class="quiz-feedback correct">
-        ✅ Correct!
-        </div>`;
+        .card-icon {
+            font-size: 32px;
+        }
 
-    }else{
+        .card-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--dark);
+        }
 
-        feedback.innerHTML=
-        `<div class="quiz-feedback incorrect">
-        ❌ Incorrect.<br>
-        Correct answer:
-        ${escapeHTML(
-        q.options[correctIndex] || ""
-        )}
-        </div>`;
-    }
-}
+        .card-subtitle {
+            font-size: 12px;
+            color: #999;
+        }
 
+        /* FEATURE GRID */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
 
-async function submitQuiz(){
+        .feature-item {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
 
-    let score=0;
-    let answered=0;
+        .feature-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
 
+        .feature-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
 
-    currentQuiz.forEach((q,index)=>{
+        .feature-name {
+            font-weight: bold;
+            font-size: 13px;
+            color: var(--dark);
+        }
 
-        const selected=
-        document.querySelector(
-        `input[name="question${index}"]:checked`
-        );
+        .feature-desc {
+            font-size: 11px;
+            color: #999;
+            margin-top: 3px;
+        }
 
+        /* LOADING & RESPONSE */
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 3px solid var(--primary);
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
 
-        if(selected){
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
 
-            answered++;
+        .response-box {
+            background: #f5f5f5;
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            animation: slideIn 0.3s ease;
+        }
 
-            if(
-            Number(selected.value) ===
-            Number(q.correctAnswer)
-            ){
+        .response-box.success {
+            border-left-color: var(--success);
+            background: #f0f8f4;
+        }
 
-                score++;
+        .response-box.error {
+            border-left-color: var(--danger);
+            background: #fef0f0;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* LEADERBOARD */
+        .leaderboard-list {
+            list-style: none;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            border-radius: 8px;
+            margin: 8px 0;
+            font-size: 13px;
+        }
+
+        .rank-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 50%;
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 12px;
+        }
+
+        .points-badge {
+            background: var(--accent);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* TABS */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1200px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            .stats-bar {
+                grid-template-columns: repeat(3, 1fr);
             }
         }
-    });
 
-
-    if(answered===0){
-
-        alert(
-        "❌ Please answer at least one question"
-        );
-
-        return;
-    }
-
-
-    const total=currentQuiz.length;
-
-
-    document.getElementById(
-        "quizContent"
-    ).innerHTML +=
-    `<div class="response-box success">
-
-    <h3>🎉 Quiz Completed!</h3>
-
-    <p>
-    Questions Answered:
-    <strong>${answered}/${total}</strong>
-    </p>
-
-    <p style="font-size:20px">
-    Score:
-    <strong>${score}/${total}</strong>
-    </p>
-
-    <p>
-    ${score===total
-    ?"🏆 Excellent! Perfect score!"
-    :score>=total/2
-    ?"👍 Good job! Keep practicing."
-    :"📚 Keep learning and try again!"}
-    </p>
-
-    <button
-    class="btn btn-primary"
-    onclick="resetQuiz()">
-    Take Another Quiz
-    </button>
-
-    </div>`;
-}
-
-
-function resetQuiz(){
-
-    document.getElementById(
-        "quizContent"
-    ).innerHTML="";
-
-    document.getElementById(
-        "quizSelectionMode"
-    ).style.display="block";
-}
-
-
-/* =====================================================
-   LECTURE
-===================================================== */
-
-async function generateLecture(){
-
-    const topic=
-    document.getElementById("lectureTopic")
-    .value.trim();
-
-    const subject=
-    document.getElementById("lectureSubject")
-    .value.trim();
-
-    if(!topic || !subject){
-
-        alert("❌ Please fill all fields");
-
-        return;
-    }
-
-
-    const btn=
-    document.getElementById("lectureBtn");
-
-    btn.disabled=true;
-    btn.innerHTML="🎬 Generating...";
-
-
-    try{
-
-        const data=
-        await backendRequest({
-
-            action:"generateLecture",
-
-            studentId:currentStudent.id,
-
-            topic:topic,
-
-            subject:subject,
-
-            language:currentLanguage
-        });
-
-
-        document.getElementById(
-            "lectureContent"
-        ).innerHTML=
-        `<div class="response-box success">
-
-        <h3>📚 ${escapeHTML(topic)}</h3>
-
-        <p>
-        <strong>Subject:</strong>
-        ${escapeHTML(subject)}
-        </p>
-
-        <hr style="margin:15px 0">
-
-        <p>
-        ${escapeHTML(
-        data.lectureContent ||
-        "Lecture generated successfully."
-        )}
-        </p>
-
-        </div>`;
-
-
-    }catch(error){
-
-        document.getElementById(
-            "lectureContent"
-        ).innerHTML=
-        `<div class="response-box error">
-        ❌ ${escapeHTML(error.message)}
-        </div>`;
-    }
-
-
-    btn.disabled=false;
-    btn.innerHTML="🎬 Generate Lecture";
-}
-
-
-/* =====================================================
-   NOTES
-===================================================== */
-
-async function saveNote(){
-
-    const topic=
-    document.getElementById("noteTopic")
-    .value.trim();
-
-    const content=
-    document.getElementById("noteContent")
-    .value.trim();
-
-
-    if(!topic || !content){
-
-        alert("❌ Please fill all fields");
-
-        return;
-    }
-
-
-    try{
-
-        const data=
-        await backendRequest({
-
-            action:"saveNote",
-
-            studentId:currentStudent.id,
-
-            topic:topic,
-
-            content:content
-        });
-
-
-        if(data.success){
-
-            document.getElementById(
-                "notesResponse"
-            ).innerHTML=
-            `<div class="response-box success">
-            ✅ Note saved successfully!
-            </div>`;
-
-            document.getElementById(
-                "noteTopic"
-            ).value="";
-
-            document.getElementById(
-                "noteContent"
-            ).value="";
-
-        }else{
-
-            throw new Error(
-            data.error || "Could not save note"
-            );
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 60px;
+                padding: 15px 8px;
+            }
+            .main-content {
+                margin-left: 60px;
+                padding: 15px;
+            }
+            .header {
+                flex-direction: column;
+                gap: 12px;
+            }
+            .header-left {
+                width: 100%;
+                flex-direction: column;
+            }
+            .stats-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+            .card {
+                padding: 15px;
+            }
+            .sidebar a span:last-child {
+                display: none;
+            }
         }
 
-    }catch(error){
+        /* TRANSLATOR SPECIFIC */
+        .translator-section {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 15px;
+            align-items: end;
+        }
 
-        document.getElementById(
-            "notesResponse"
-        ).innerHTML=
-        `<div class="response-box error">
-        ❌ ${escapeHTML(error.message)}
-        </div>`;
-    }
-}
+        .lang-swap {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 40px;
+            cursor: pointer;
+            font-size: 20px;
+            color: var(--primary);
+        }
 
+        /* SCHEDULE */
+        .schedule-item {
+            padding: 12px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            margin: 8px 0;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-/* =====================================================
-   DASHBOARD
-   THIS IS A SEPARATE ACTION
-===================================================== */
+        .schedule-time {
+            font-weight: bold;
+            color: var(--primary);
+        }
 
-async function loadStudentDashboard(){
+        /* QUIZ */
+        .quiz-option {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            margin: 8px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
 
-    if(!currentStudent){
-        return;
-    }
+        .quiz-option:hover {
+            border-color: var(--primary);
+            background: rgba(102, 126, 234, 0.05);
+        }
 
+        .quiz-option input[type="radio"] {
+            margin-right: 10px;
+            cursor: pointer;
+        }
 
-    try{
+        .quiz-option.correct {
+            border-color: var(--success);
+            background: #f0f8f4;
+        }
 
-        const data=
-        await backendRequest({
+        .quiz-option.incorrect {
+            border-color: var(--danger);
+            background: #fef0f0;
+        }
 
-            action:"getStudentProgress",
+        .quiz-feedback {
+            font-size: 12px;
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 6px;
+        }
 
-            studentId:currentStudent.id
-        });
+        .quiz-feedback.correct {
+            background: #f0f8f4;
+            color: var(--success);
+        }
 
+        .quiz-feedback.incorrect {
+            background: #fef0f0;
+            color: var(--danger);
+        }
 
-        document.getElementById(
-            "pointsDisplay"
-        ).textContent=data.points || 0;
+        .view-all-link {
+            color: var(--primary);
+            font-size: 12px;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- LOGIN SCREEN -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-box">
+            <h1>🎓 Vernacular EduAI</h1>
+            <p>AI-Powered Multilingual Learning Platform</p>
 
-        document.getElementById(
-            "streakDisplay"
-        ).textContent=data.streak || 0;
+            <div class="form-group">
+                <label>Student Name *</label>
+                <input type="text" id="loginName" placeholder="Enter your name">
+            </div>
 
-        document.getElementById(
-            "quizzesDisplay"
-        ).textContent=
-        data.quizzesTaken || 0;
+            <div class="form-group">
+                <label>Grade *</label>
+                <select id="loginGrade">
+                    <option value="">Select Grade</option>
+                    <option value="6th">6th Grade</option>
+                    <option value="7th">7th Grade</option>
+                    <option value="8th">8th Grade</option>
+                    <option value="9th">9th Grade</option>
+                    <option value="10th">10th Grade</option>
+                </select>
+            </div>
 
-        document.getElementById(
-            "rankDisplay"
-        ).textContent=
-        data.rank || "-";
+            <div class="form-group">
+                <label>Age *</label>
+                <input type="number" id="loginAge" placeholder="Your age" min="5" max="20">
+            </div>
 
-        document.getElementById(
-            "badgesDisplay"
-        ).textContent=
-        data.badges || 0;
+            <div class="form-group">
+                <label>Mother Tongue *</label>
+                <select id="loginMotherTongue">
+                    <option value="">Select Language</option>
+                    <option value="Tamil">Tamil</option>
+                    <option value="Telugu">Telugu</option>
+                    <option value="Kannada">Kannada</option>
+                    <option value="Malayalam">Malayalam</option>
+                    <option value="Hindi">Hindi</option>
+                    <option value="Bengali">Bengali</option>
+                </select>
+            </div>
 
+            <div class="form-group">
+                <label>Syllabus *</label>
+                <select id="loginSyllabus">
+                    <option value="">Select Syllabus</option>
+                    <option value="State">State</option>
+                    <option value="Central">Central</option>
+                    <option value="ICSE">ICSE</option>
+                    <option value="IGCSE">IGCSE</option>
+                </select>
+            </div>
 
-        if(
-        data.leaderboard &&
-        data.leaderboard.length
-        ){
+            <div class="form-group">
+                <label>Parent's Name *</label>
+                <input type="text" id="loginParentName" placeholder="Parent name">
+            </div>
 
-            let html="";
+            <div class="form-group">
+                <label>Parent's Email *</label>
+                <input type="email" id="loginParentEmail" placeholder="parent@email.com">
+            </div>
 
-            data.leaderboard.forEach(
-            (student,index)=>{
+            <div class="form-group">
+                <label>Parent's Contact *</label>
+                <input type="tel" id="loginParentContact" placeholder="Mobile number">
+            </div>
 
-                html+=
-                `<li class="leaderboard-item">
+            <div class="form-group">
+                <label>Subject *</label>
+                <input type="text" id="loginSubject" placeholder="Primary subject">
+            </div>
 
-                <div>
-                <span class="rank-badge">
-                ${index+1}
-                </span>
+            <div class="form-group">
+                <label>State *</label>
+                <input type="text" id="loginState" placeholder="Enter your state">
+            </div>
 
-                <strong>
-                ${escapeHTML(student.name)}
-                </strong>
+            <div class="form-group">
+                <label>Country *</label>
+                <input type="text" id="loginCountry" placeholder="Enter your country" value="India">
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="loginTerms"> I agree to Terms & Conditions
+                </label>
+            </div>
+
+            <button class="btn btn-primary" onclick="submitLogin()" id="loginBtn">
+                🚀 Start Learning
+            </button>
+            <div id="loginError"></div>
+        </div>
+    </div>
+
+    <!-- MAIN APP -->
+    <div id="appScreen" class="app-container" style="display: none;">
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <div class="sidebar-logo">
+                <span>🎓</span>
+                <span>EduAI</span>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="#" class="nav-link active" onclick="switchTab('dashboard', event)"><span>📊</span> <span>Dashboard</span></a></li>
+                <li><a href="#" class="nav-link" onclick="switchTab('learning', event)"><span>📚</span> <span>My Learning</span></a></li>
+                <li><a href="#" class="nav-link" onclick="switchTab('lecture', event)"><span>🎬</span> <span>AI Lecture</span></a></li>
+                <li><a href="#" class="nav-link" onclick="switchTab('tutor', event)"><span>💬</span> <span>AI Tutor</span></a></li>
+                <li><a href="#" class="nav-link" onclick="switchTab('quiz', event)"><span>📝</span> <span>Quizzes</span></a></li>
+                <li><a href="#" class="nav-link" onclick="switchTab('flashcards', event)"><span>📇</span> <span>Flashcards</span></a></li>
+                <li><a href="#" class="nav-link" onclick="switchTab('notes', event)"><span>📄</span> <span>Notes</span></a></li>
+                <li><a href="#" class="nav-link" onclick="switchTab('papers', event)"><span>📖</span> <span>Papers</span></a></li>
+                <li><a href="#" class="nav-link" onclick="switchTab('tests', event)"><span>✏️</span> <span>Tests</span></a></li>
+                <li><a href="#" class="nav-link" onclick="switchTab('progress', event)"><span>📈</span> <span>My Progress</span></a></li>
+                <li><a href="#" class="nav-link" onclick="switchTab('leaderboard', event)"><span>🏆</span> <span>Leaderboard</span></a></li>
+                <li><a href="#" class="nav-link" onclick="switchTab('schedule', event)"><span>📅</span> <span>Schedule</span></a></li>
+                <li><a href="#" class="nav-link" onclick="switchTab('settings', event)"><span>⚙️</span> <span>Settings</span></a></li>
+                <li><a href="#" class="nav-link" onclick="logout(event)"><span>🚪</span> <span>Logout</span></a></li>
+            </ul>
+            <div class="sidebar-footer">
+                Learn in your language. Understand deeply. Succeed everywhere.
+            </div>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
+            <!-- HEADER -->
+            <div class="header">
+                <div class="header-left">
+                    <div class="language-selector">
+                        <label>Choose Your Language</label>
+                        <select id="languageSelect" onchange="changeLanguage()">
+                            <option value="English">English</option>
+                            <option value="Tamil">தமிழ் (Tamil)</option>
+                            <option value="Telugu">తెలుగు (Telugu)</option>
+                            <option value="Kannada">ಕನ್ನಡ (Kannada)</option>
+                            <option value="Malayalam">മലയാളം (Malayalam)</option>
+                            <option value="Hindi">हिन्दी (Hindi)</option>
+                            <option value="Bengali">বাংলা (Bengali)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="user-badge">
+                    <span>👤</span>
+                    <div>
+                        <div id="headerStudentName">Karthik S</div>
+                        <small>Student</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STATS BAR -->
+            <div class="stats-bar">
+                <div class="stat-card">
+                    <div class="stat-number" id="pointsDisplay">0</div>
+                    <div class="stat-label">Points</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="streakDisplay">0</div>
+                    <div class="stat-label">Day Streak</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="quizzesDisplay">0</div>
+                    <div class="stat-label">Quizzes</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="rankDisplay">-</div>
+                    <div class="stat-label">Rank</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="badgesDisplay">0</div>
+                    <div class="stat-label">Badges</div>
+                </div>
+            </div>
+
+            <!-- DASHBOARD TAB -->
+            <div id="dashboard" class="tab-content active">
+                <div class="dashboard-grid">
+                    <!-- AI Lecture Generator -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon">🎬</div>
+                            <div>
+                                <div class="card-title">AI Lecture Generator</div>
+                                <div class="card-subtitle">Auto-generated lessons</div>
+                            </div>
+                        </div>
+                        <div class="feature-grid">
+                            <div class="feature-item" onclick="switchTab('lecture', event)">
+                                <div class="feature-icon">📝</div>
+                                <div class="feature-name">Generate Lecture</div>
+                                <div class="feature-desc">Create lessons on any topic</div>
+                            </div>
+                            <div class="feature-item" onclick="switchTab('lecture', event)">
+                                <div class="feature-icon">🎯</div>
+                                <div class="feature-name">Learning Goals</div>
+                                <div class="feature-desc">Structured objectives</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Tutor -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon">💬</div>
+                            <div>
+                                <div class="card-title">AI Tutor (Ask Doubts)</div>
+                                <div class="card-subtitle">Get instant answers, Get instant explanations</div>
+                            </div>
+                        </div>
+                        <div class="feature-grid">
+                            <div class="feature-item" onclick="switchTab('tutor', event)">
+                                <div class="feature-icon">❓</div>
+                                <div class="feature-name">Ask Question</div>
+                                <div class="feature-desc">Get instant AI response</div>
+                            </div>
+                            <div class="feature-item" onclick="switchTab('tutor', event)">
+                                <div class="feature-icon">💡</div>
+                                <div class="feature-name">Get Hints</div>
+                                <div class="feature-desc">Step-by-step guidance</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quizzes -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon">📝</div>
+                            <div>
+                                <div class="card-title">Quizzes</div>
+                                <div class="card-subtitle" id="quizzesSub">Practice your knowledge</div>
+                            </div>
+                        </div>
+                        <div class="feature-grid">
+                            <div class="feature-item" onclick="switchTab('quiz', event)">
+                                <div class="feature-icon">📊</div>
+                                <div class="feature-name">Practice Quiz</div>
+                                <div class="feature-desc">Test your knowledge</div>
+                            </div>
+                            <div class="feature-item" onclick="switchTab('quiz', event)">
+                                <div class="feature-icon">🏅</div>
+                                <div class="feature-name">Results</div>
+                                <div class="feature-desc">Detailed feedback</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notes & Flashcards -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon">📇</div>
+                            <div>
+                                <div class="card-title">Notes & Flashcards</div>
+                                <div class="card-subtitle">Smart notes, Flashcards, Test-mode reviews</div>
+                            </div>
+                        </div>
+                        <div class="feature-grid">
+                            <div class="feature-item" onclick="switchTab('flashcards', event)">
+                                <div class="feature-icon">📇</div>
+                                <div class="feature-name">Flashcards</div>
+                                <div class="feature-desc">Quick revision</div>
+                            </div>
+                            <div class="feature-item" onclick="switchTab('notes', event)">
+                                <div class="feature-icon">📝</div>
+                                <div class="feature-name">Study Notes</div>
+                                <div class="feature-desc">Organized notes</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <span class="points-badge">
-                ${student.points || 0} pts
-                </span>
+                <!-- SCHEDULE & TESTS SECTION -->
+                <div class="dashboard-grid">
+                    <!-- Today's Schedule -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon">📅</div>
+                            <div class="card-title">Today's Schedule</div>
+                        </div>
+                        <div id="scheduleContainer">
+                            <div class="schedule-item">
+                                <span class="schedule-time">09:00 AM</span>
+                                <span>Maths - Algebra</span>
+                            </div>
+                            <div class="schedule-item">
+                                <span class="schedule-time">11:00 AM</span>
+                                <span>Physics - Motion</span>
+                            </div>
+                            <div class="schedule-item">
+                                <span class="schedule-time">02:00 PM</span>
+                                <span>Chemistry - Atoms</span>
+                            </div>
+                        </div>
+                        <a class="view-all-link" onclick="switchTab('schedule', event)">View full schedule →</a>
+                    </div>
 
-                </li>`;
+                    <!-- Weekly & Monthly Tests -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon">✏️</div>
+                            <div class="card-title">Weekly & Monthly Tests</div>
+                        </div>
+                        <div id="testsContainer">
+                            <div class="schedule-item">
+                                <span><strong>Weekly Test</strong></span>
+                                <span class="schedule-time">Next: 24 May</span>
+                            </div>
+                            <div class="schedule-item">
+                                <span><strong>Monthly Test</strong></span>
+                                <span class="schedule-time">Next: 31 May</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LEADERBOARD & ACHIEVEMENTS -->
+                <div class="dashboard-grid">
+                    <!-- Leaderboard -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon">🏆</div>
+                            <div>
+                                <div class="card-title">Leaderboard</div>
+                            </div>
+                        </div>
+                        <ul class="leaderboard-list" id="leaderboardPreview">
+                            <li class="leaderboard-item">
+                                <div style="display: flex; align-items: center; flex: 1;">
+                                    <span class="rank-badge">1</span>
+                                    <strong>Loading...</strong>
+                                </div>
+                                <span class="points-badge">-</span>
+                            </li>
+                        </ul>
+                        <a class="view-all-link" onclick="switchTab('leaderboard', event)">View all →</a>
+                    </div>
+
+                    <!-- Achievements -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon">🎖️</div>
+                            <div class="card-title">Achievements</div>
+                        </div>
+                        <div id="achievementsContainer">
+                            <div class="achievement-badge" style="display: inline-block; margin: 5px; text-align: center;">
+                                <div style="font-size: 32px;">🌟</div>
+                                <div style="font-size: 11px; color: #999;">Quick Master</div>
+                            </div>
+                            <div class="achievement-badge" style="display: inline-block; margin: 5px; text-align: center;">
+                                <div style="font-size: 32px;">🔥</div>
+                                <div style="font-size: 11px; color: #999;">Streak Change</div>
+                            </div>
+                            <div class="achievement-badge" style="display: inline-block; margin: 5px; text-align: center;">
+                                <div style="font-size: 32px;">📚</div>
+                                <div style="font-size: 11px; color: #999;">Note Taker</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LEARNING RESOURCES -->
+                <div class="dashboard-grid">
+                    <!-- Upload Syllabus -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon">📤</div>
+                            <div class="card-title">Upload Syllabus</div>
+                        </div>
+                        <div style="text-align: center; padding: 20px;">
+                            <p style="font-size: 12px; color: #999; margin-bottom: 15px;">Upload PDF, DOCX, images, or text</p>
+                            <button class="btn btn-primary" style="margin-top: 10px;">📤 Upload File</button>
+                        </div>
+                    </div>
+
+                    <!-- Previous Year Papers -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon">📖</div>
+                            <div class="card-title">Previous Year Papers</div>
+                        </div>
+                        <div id="papersContainer">
+                            <div class="schedule-item">
+                                <span>2024 Question Paper</span>
+                                <span class="view-all-link">View</span>
+                            </div>
+                            <div class="schedule-item">
+                                <span>2023 Question Paper</span>
+                                <span class="view-all-link">View</span>
+                            </div>
+                            <div class="schedule-item">
+                                <span>2022 Question Paper</span>
+                                <span class="view-all-link">View</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ADVANCED LEARNING -->
+                <div class="dashboard-grid">
+                    <!-- Smart Flashcards -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon">🧠</div>
+                            <div class="card-title">Smart Flashcards</div>
+                        </div>
+                        <div style="padding: 15px; background: #f5f5f5; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 14px; margin-bottom: 10px;">Drag to create your flashcards</div>
+                            <button class="btn btn-primary">Create Flashcards</button>
+                        </div>
+                    </div>
+
+                    <!-- AI Deep Lessons -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon">🎓</div>
+                            <div class="card-title">AI Deep Lessons</div>
+                        </div>
+                        <div style="padding: 15px; background: #f5f5f5; border-radius: 8px;">
+                            <div style="font-size: 13px; color: #666; margin-bottom: 10px;">Get comprehensive AI-generated deep-dive lessons</div>
+                            <button class="btn btn-primary" onclick="switchTab('lecture', event)">Explore Lessons</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TUTOR TAB -->
+            <div id="tutor" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">💬</div>
+                        <div class="card-title">Ask Your AI Tutor</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Subject</label>
+                        <input type="text" id="tutorSubject" placeholder="e.g., Biology, Mathematics, Physics">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Topic</label>
+                        <input type="text" id="tutorTopic" placeholder="e.g., Photosynthesis, Quadratic Equations">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Your Question</label>
+                        <textarea id="tutorQuestion" placeholder="Type your doubt or question..." rows="4"></textarea>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="askTutor()" id="tutorBtn">💬 Ask Tutor</button>
+                    <div id="tutorResponse"></div>
+                </div>
+            </div>
+
+            <!-- QUIZ TAB -->
+            <div id="quiz" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📝</div>
+                        <div class="card-title">Practice Quizzes</div>
+                    </div>
+
+                    <div id="quizSelectionMode">
+                        <div class="form-group">
+                            <label>Topic</label>
+                            <input type="text" id="quizTopic" placeholder="e.g., Photosynthesis">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Subject</label>
+                            <input type="text" id="quizSubject" placeholder="e.g., Biology">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Number of Questions</label>
+                            <input type="number" id="questionCount" value="5" min="1" max="20">
+                        </div>
+
+                        <button class="btn btn-primary" onclick="generateQuiz()" id="quizGenBtn">📝 Generate Quiz</button>
+                    </div>
+
+                    <div id="quizContent"></div>
+                </div>
+            </div>
+
+            <!-- LECTURE TAB -->
+            <div id="lecture" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🎬</div>
+                        <div class="card-title">AI-Generated Lectures</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Topic</label>
+                        <input type="text" id="lectureTopic" placeholder="e.g., Photosynthesis">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Subject</label>
+                        <input type="text" id="lectureSubject" placeholder="e.g., Biology">
+                    </div>
+
+                    <button class="btn btn-primary" onclick="generateLecture()" id="lectureBtn">🎬 Generate Lecture</button>
+                    <div id="lectureContent"></div>
+                </div>
+            </div>
+
+            <!-- FLASHCARDS/TRANSLATOR TAB -->
+            <div id="flashcards" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🌍</div>
+                        <div class="card-title">🚀 Real-Time Translator</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Text to Translate</label>
+                        <textarea id="textToTranslate" placeholder="Enter text to translate..." rows="4"></textarea>
+                    </div>
+
+                    <div class="translator-section">
+                        <div>
+                            <label style="display: block; font-weight: 600; margin-bottom: 5px; font-size: 14px;">From:</label>
+                            <select id="sourceLang">
+                                <option value="English">🇬🇧 English</option>
+                                <option value="Tamil">🇮🇳 Tamil</option>
+                                <option value="Telugu">🇮🇳 Telugu</option>
+                                <option value="Kannada">🇮🇳 Kannada</option>
+                                <option value="Malayalam">🇮🇳 Malayalam</option>
+                                <option value="Hindi">🇮🇳 Hindi</option>
+                            </select>
+                        </div>
+                        <div class="lang-swap" onclick="swapLanguages()">⇄</div>
+                        <div>
+                            <label style="display: block; font-weight: 600; margin-bottom: 5px; font-size: 14px;">To:</label>
+                            <select id="targetLang">
+                                <option value="Tamil">🇮🇳 Tamil</option>
+                                <option value="English">🇬🇧 English</option>
+                                <option value="Telugu">🇮🇳 Telugu</option>
+                                <option value="Kannada">🇮🇳 Kannada</option>
+                                <option value="Malayalam">🇮🇳 Malayalam</option>
+                                <option value="Hindi">🇮🇳 Hindi</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="translateText()" id="translateBtn" style="margin-top: 15px;">🌐 Translate</button>
+                    <div id="translationResult"></div>
+                </div>
+            </div>
+
+            <!-- NOTES TAB -->
+            <div id="notes" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📝</div>
+                        <div class="card-title">My Study Notes</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Topic</label>
+                        <input type="text" id="noteTopic" placeholder="e.g., Photosynthesis">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Your Notes</label>
+                        <textarea id="noteContent" placeholder="Write your study notes..." rows="8"></textarea>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="saveNote()">📝 Save Note</button>
+                    <div id="notesResponse"></div>
+
+                    <div id="savedNotesList" style="margin-top: 20px;"></div>
+                </div>
+            </div>
+
+            <!-- PROGRESS TAB -->
+            <div id="progress" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📈</div>
+                        <div class="card-title">Your Progress & Analytics</div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                        <div style="padding: 20px; background: #f5f5f5; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 28px; font-weight: bold; color: var(--primary);" id="avgScore">-</div>
+                            <div style="color: #999; margin-top: 5px;">Average Score</div>
+                        </div>
+                        <div style="padding: 20px; background: #f5f5f5; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 28px; font-weight: bold; color: var(--primary);" id="doubtsAsked">-</div>
+                            <div style="color: #999; margin-top: 5px;">Doubts Asked</div>
+                        </div>
+                        <div style="padding: 20px; background: #f5f5f5; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 28px; font-weight: bold; color: var(--primary);" id="quizzesDone">-</div>
+                            <div style="color: #999; margin-top: 5px;">Quizzes Done</div>
+                        </div>
+                        <div style="padding: 20px; background: #f5f5f5; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 28px; font-weight: bold; color: var(--primary);" id="studyTime">-</div>
+                            <div style="color: #999; margin-top: 5px;">Study Time</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LEADERBOARD TAB -->
+            <div id="leaderboard" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🏆</div>
+                        <div class="card-title">Full Leaderboard</div>
+                    </div>
+                    <ul class="leaderboard-list" id="fullLeaderboard">
+                        <li class="leaderboard-item">
+                            <div style="display: flex; align-items: center; flex: 1;">
+                                <span class="rank-badge">📊</span>
+                                <strong>Loading leaderboard...</strong>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- SCHEDULE TAB -->
+            <div id="schedule" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📅</div>
+                        <div class="card-title">My Schedule</div>
+                    </div>
+                    <div id="fullSchedule">
+                        <div class="schedule-item">
+                            <span class="schedule-time">09:00 AM</span>
+                            <span>Maths - Algebra</span>
+                        </div>
+                        <div class="schedule-item">
+                            <span class="schedule-time">11:00 AM</span>
+                            <span>Physics - Motion</span>
+                        </div>
+                        <div class="schedule-item">
+                            <span class="schedule-time">02:00 PM</span>
+                            <span>Chemistry - Atoms</span>
+                        </div>
+                        <div class="schedule-item">
+                            <span class="schedule-time">04:00 PM</span>
+                            <span>English - Grammar</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SETTINGS TAB -->
+            <div id="settings" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">⚙️</div>
+                        <div class="card-title">Settings</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Student Name</label>
+                        <input type="text" id="settingName" placeholder="Your name">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="settingEmail" placeholder="Your email">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Grade</label>
+                        <select id="settingGrade">
+                            <option value="">Select Grade</option>
+                            <option value="6th">6th Grade</option>
+                            <option value="7th">7th Grade</option>
+                            <option value="8th">8th Grade</option>
+                            <option value="9th">9th Grade</option>
+                            <option value="10th">10th Grade</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Preferred Language</label>
+                        <select id="settingLanguage">
+                            <option value="English">English</option>
+                            <option value="Tamil">Tamil</option>
+                            <option value="Telugu">Telugu</option>
+                            <option value="Kannada">Kannada</option>
+                            <option value="Malayalam">Malayalam</option>
+                            <option value="Hindi">Hindi</option>
+                        </select>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="saveSettings()">💾 Save Settings</button>
+                    <div id="settingsResponse"></div>
+                </div>
+            </div>
+
+            <!-- PAPERS TAB -->
+            <div id="papers" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📖</div>
+                        <div class="card-title">Previous Year Papers</div>
+                    </div>
+                    <div id="papersList">
+                        <div class="schedule-item">
+                            <span>2024 Question Paper</span>
+                            <span class="view-all-link">Download</span>
+                        </div>
+                        <div class="schedule-item">
+                            <span>2023 Question Paper</span>
+                            <span class="view-all-link">Download</span>
+                        </div>
+                        <div class="schedule-item">
+                            <span>2022 Question Paper</span>
+                            <span class="view-all-link">Download</span>
+                        </div>
+                        <div class="schedule-item">
+                            <span>2021 Question Paper</span>
+                            <span class="view-all-link">Download</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TESTS TAB -->
+            <div id="tests" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">✏️</div>
+                        <div class="card-title">Tests & Assessments</div>
+                    </div>
+                    <div id="testsList">
+                        <div class="schedule-item">
+                            <span><strong>Weekly Test</strong></span>
+                            <span class="schedule-time">Next: 24 May</span>
+                        </div>
+                        <div class="schedule-item">
+                            <span><strong>Monthly Test</strong></span>
+                            <span class="schedule-time">Next: 31 May</span>
+                        </div>
+                        <div class="schedule-item">
+                            <span><strong>Chapter Test</strong></span>
+                            <span class="view-all-link">Start</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LEARNING TAB -->
+            <div id="learning" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📚</div>
+                        <div class="card-title">My Learning Journey</div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                        <div class="feature-item" onclick="switchTab('lecture', event)">
+                            <div style="font-size: 28px;">🎬</div>
+                            <div class="feature-name">AI Lectures</div>
+                            <div class="feature-desc">Learn from AI-generated lessons</div>
+                        </div>
+                        <div class="feature-item" onclick="switchTab('tutor', event)">
+                            <div style="font-size: 28px;">💬</div>
+                            <div class="feature-name">AI Tutor</div>
+                            <div class="feature-desc">Ask doubts anytime</div>
+                        </div>
+                        <div class="feature-item" onclick="switchTab('quiz', event)">
+                            <div style="font-size: 28px;">📝</div>
+                            <div class="feature-name">Practice Quizzes</div>
+                            <div class="feature-desc">Test your knowledge</div>
+                        </div>
+                        <div class="feature-item" onclick="switchTab('flashcards', event)">
+                            <div style="font-size: 28px;">🌍</div>
+                            <div class="feature-name">Translator</div>
+                            <div class="feature-desc">Learn in your language</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============ CONFIGURATION ============
+        const BACKEND_URL = "https://script.google.com/macros/s/AKfycbyrFuw61nnDjCpQBj6wW17PINxW3_hvWXXkfA2mHyxq2b5XWSH04nAArbWldeD-kOyZKQ/exec";
+
+        // ============ STATE MANAGEMENT ============
+        let currentStudent = null;
+        let currentLanguage = "English";
+        let isProcessing = false;
+
+        // ============ LOGIN FUNCTIONALITY ============
+        async function submitLogin() {
+            const name = document.getElementById('loginName').value.trim();
+            const grade = document.getElementById('loginGrade').value;
+            const age = document.getElementById('loginAge').value;
+            const motherTongue = document.getElementById('loginMotherTongue').value;
+            const syllabus = document.getElementById('loginSyllabus').value;
+            const parentName = document.getElementById('loginParentName').value.trim();
+            const parentEmail = document.getElementById('loginParentEmail').value.trim();
+            const parentContact = document.getElementById('loginParentContact').value.trim();
+            const subject = document.getElementById('loginSubject').value.trim();
+            const state = document.getElementById('loginState').value.trim();
+            const country = document.getElementById('loginCountry').value.trim();
+            const termsAccepted = document.getElementById('loginTerms').checked;
+
+            if (!name || !grade || !age || !motherTongue || !syllabus ||
+                !parentName || !parentEmail || !parentContact || !subject ||
+                !state || !country) {
+                showError('loginError', '❌ Please fill all required fields');
+                return;
+            }
+
+            if (!termsAccepted) {
+                showError('loginError', '❌ Please accept Terms & Conditions');
+                return;
+            }
+
+            const btn = document.getElementById('loginBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading"></span> Saving...';
+
+            try {
+                // Send standard form data so Apps Script e.parameter receives every field reliably.
+                const formData = new URLSearchParams();
+                formData.append('action', 'registerStudent');
+                formData.append('name', name);
+                formData.append('studentName', name);
+                formData.append('grade', grade);
+                formData.append('age', age);
+                formData.append('motherTongue', motherTongue);
+                formData.append('syllabus', syllabus);
+                formData.append('parentName', parentName);
+                formData.append('parentEmail', parentEmail);
+                formData.append('parentContact', parentContact);
+                formData.append('subject', subject);
+                formData.append('state', state);
+                formData.append('country', country);
+                formData.append('termsAccepted', termsAccepted ? 'true' : 'false');
+
+                const response = await fetch(BACKEND_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+                    },
+                    body: formData.toString()
+                });
+
+                if (!response.ok) {
+                    throw new Error('Backend HTTP error: ' + response.status);
+                }
+
+                const data = await response.json();
+
+                console.log('Student registration response:', data);
+
+                if (data.success) {
+                    currentStudent = {
+                        id: data.studentId || 'STU' + Date.now(),
+                        name: name,
+                        grade: grade,
+                        age: age,
+                        motherTongue: motherTongue,
+                        syllabus: syllabus,
+                        parentName: parentName,
+                        parentEmail: parentEmail,
+                        parentContact: parentContact,
+                        subject: subject,
+                        state: state,
+                        country: country
+                    };
+
+                    document.getElementById('headerStudentName').textContent = name;
+                    document.getElementById('loginScreen').style.display = 'none';
+                    document.getElementById('appScreen').style.display = 'flex';
+
+                    // Dashboard is a separate action and is not a registration.
+                    loadStudentDashboard();
+                } else {
+                    showError('loginError', `❌ ${data.error || data.message || 'Registration failed'}`);
+                }
+            } catch (error) {
+                console.error('Student registration error:', error);
+                showError('loginError', `❌ ${error.message}`);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '🚀 Start Learning';
+            }
+        }
+
+        // ============ TUTOR FUNCTIONALITY ============
+        async function askTutor() {
+            const subject = document.getElementById('tutorSubject').value.trim();
+            const topic = document.getElementById('tutorTopic').value.trim();
+            const question = document.getElementById('tutorQuestion').value.trim();
+
+            if (!subject || !topic || !question) {
+                alert('❌ Please fill all fields');
+                return;
+            }
+
+            const btn = document.getElementById('tutorBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading"></span> Thinking...';
+
+            try {
+                const response = await fetch(BACKEND_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        action: 'askDoubt',
+                        studentId: currentStudent.id,
+                        subject: subject,
+                        topic: topic,
+                        doubt: question,
+                        language: currentLanguage
+                    })
+                });
+
+                const data = await response.json();
+
+                let html = '<div class="response-box success">';
+                html += '<h3>✅ AI Tutor Response</h3>';
+                html += `<p><strong>Question:</strong> ${question}</p>`;
+                html += `<p><strong>Answer:</strong></p>`;
+                html += `<p>${data.answer || 'Unable to generate response'}</p>`;
+                if (data.pointsEarned) {
+                    html += `<p style="color: var(--success); font-weight: bold;">🎉 +${data.pointsEarned} Points!</p>`;
+                }
+                html += '</div>';
+
+                document.getElementById('tutorResponse').innerHTML = html;
+                document.getElementById('tutorQuestion').value = '';
+            } catch (error) {
+                document.getElementById('tutorResponse').innerHTML = `<div class="response-box error">❌ Error: ${error.message}</div>`;
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '💬 Ask Tutor';
+            }
+        }
+
+        // ============ TRANSLATOR FUNCTIONALITY ============
+        function swapLanguages() {
+            const source = document.getElementById('sourceLang');
+            const target = document.getElementById('targetLang');
+            const temp = source.value;
+            source.value = target.value;
+            target.value = temp;
+        }
+
+        async function translateText() {
+            const text = document.getElementById('textToTranslate').value.trim();
+            const sourceLang = document.getElementById('sourceLang').value;
+            const targetLang = document.getElementById('targetLang').value;
+
+            if (!text) {
+                alert('❌ Please enter text to translate');
+                return;
+            }
+
+            const btn = document.getElementById('translateBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading"></span> Translating...';
+
+            try {
+                const response = await fetch(BACKEND_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        action: 'translateText',
+                        text: text,
+                        sourceLanguage: sourceLang,
+                        targetLanguage: targetLang
+                    })
+                });
+
+                const data = await response.json();
+
+                let html = '<div class="response-box success">';
+                html += '<h3>✅ Translation Complete</h3>';
+                html += `<p><strong>${sourceLang} (Original):</strong></p>`;
+                html += `<p style="padding: 10px; background: #f5f5f5; border-radius: 8px;">${text}</p>`;
+                html += `<p style="margin-top: 15px;"><strong>${targetLang} (Translated):</strong></p>`;
+                html += `<p style="padding: 10px; background: #f5f5f5; border-radius: 8px; color: var(--primary); font-weight: bold;">${data.translatedText || text}</p>`;
+                html += '</div>';
+
+                document.getElementById('translationResult').innerHTML = html;
+            } catch (error) {
+                document.getElementById('translationResult').innerHTML = `<div class="response-box error">❌ Error: ${error.message}</div>`;
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '🌐 Translate';
+            }
+        }
+
+        // ============ QUIZ FUNCTIONALITY ============
+        async function generateQuiz() {
+            const topic = document.getElementById('quizTopic').value.trim();
+            const subject = document.getElementById('quizSubject').value.trim();
+            const count = parseInt(document.getElementById('questionCount').value);
+
+            if (!topic || !subject) {
+                alert('❌ Please fill all fields');
+                return;
+            }
+
+            const btn = document.getElementById('quizGenBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading"></span> Generating...';
+
+            try {
+                const response = await fetch(BACKEND_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        action: 'generateQuiz',
+                        studentId: currentStudent.id,
+                        topic: topic,
+                        subject: subject,
+                        questionCount: count,
+                        language: currentLanguage
+                    })
+                });
+
+                const data = await response.json();
+
+                let html = '<div class="response-box success" style="margin-top: 20px;">';
+                html += `<h3>📝 ${topic} Quiz - ${count} Questions</h3>`;
+
+                if (data.questions && data.questions.length > 0) {
+                    data.questions.forEach((q, idx) => {
+                        html += `<div style="margin: 20px 0;">`;
+                        html += `<h4 style="margin-bottom: 10px;"><strong>${idx + 1}. ${q.question}</strong></h4>`;
+                        q.options.forEach((opt, optIdx) => {
+                            html += `<label class="quiz-option">
+                                <input type="radio" name="q${idx}" value="${optIdx}" onchange="checkAnswer(${idx}, ${optIdx}, '${q.correctAnswer}')">
+                                ${opt}
+                            </label>`;
+                        });
+                        html += `<div id="feedback-${idx}"></div>`;
+                        html += '</div>';
+                    });
+
+                    html += '<button class="btn btn-primary" onclick="submitQuiz()">Submit Quiz</button>';
+                } else {
+                    html += '<p>Unable to generate questions. Please try again.</p>';
+                }
+
+                html += '</div>';
+                document.getElementById('quizContent').innerHTML = html;
+                document.getElementById('quizSelectionMode').style.display = 'none';
+            } catch (error) {
+                document.getElementById('quizContent').innerHTML = `<div class="response-box error">❌ Error: ${error.message}</div>`;
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '📝 Generate Quiz';
+            }
+        }
+
+        function checkAnswer(questionIdx, selectedIdx, correctAnswer) {
+            const feedbackDiv = document.getElementById(`feedback-${questionIdx}`);
+            const isCorrect = selectedIdx == correctAnswer;
+
+            if (isCorrect) {
+                feedbackDiv.innerHTML = '<div class="quiz-feedback correct">✅ Correct!</div>';
+            } else {
+                feedbackDiv.innerHTML = `<div class="quiz-feedback incorrect">❌ Incorrect. The correct answer is option ${parseInt(correctAnswer) + 1}</div>`;
+            }
+        }
+
+        function submitQuiz() {
+            const answers = [];
+            document.querySelectorAll('input[type="radio"]:checked').forEach(input => {
+                answers.push(input.value);
             });
 
+            if (answers.length === 0) {
+                alert('❌ Please answer at least one question');
+                return;
+            }
 
-            document.getElementById(
-                "leaderboardPreview"
-            ).innerHTML=html;
+            let html = '<div class="response-box success" style="margin-top: 20px;">';
+            html += '<h3>✅ Quiz Submitted!</h3>';
+            html += `<p><strong>Questions Answered:</strong> ${answers.length}</p>`;
+            html += `<p style="font-size: 16px; color: var(--primary); font-weight: bold;">Score: ${answers.length} / 5</p>`;
+            html += '<button class="btn btn-primary" onclick="resetQuiz()" style="margin-top: 15px;">Take Another Quiz</button>';
+            html += '</div>';
 
-            document.getElementById(
-                "fullLeaderboard"
-            ).innerHTML=html;
+            document.getElementById('quizContent').innerHTML += html;
         }
 
-    }catch(error){
-
-        console.error(
-        "Dashboard error:",
-        error
-        );
-    }
-}
-
-
-/* =====================================================
-   NAVIGATION
-===================================================== */
-
-function switchTab(tabName,event){
-
-    if(event){
-        event.preventDefault();
-    }
-
-
-    document.querySelectorAll(
-    ".tab-content"
-    ).forEach(tab=>{
-        tab.classList.remove("active");
-    });
-
-
-    document.querySelectorAll(
-    ".nav-link"
-    ).forEach(link=>{
-        link.classList.remove("active");
-    });
-
-
-    const tab=
-    document.getElementById(tabName);
-
-    if(tab){
-        tab.classList.add("active");
-    }
-
-
-    if(event){
-
-        const link=
-        event.target.closest("a");
-
-        if(link){
-            link.classList.add("active");
-        }
-    }
-}
-
-
-/* =====================================================
-   LANGUAGE
-===================================================== */
-
-function changeLanguage(){
-
-    currentLanguage=
-    document.getElementById(
-    "languageSelect"
-    ).value;
-
-}
-
-
-/* =====================================================
-   SETTINGS
-===================================================== */
-
-function saveSettings(){
-
-    const name=
-    document.getElementById(
-    "settingName"
-    ).value.trim();
-
-    const grade=
-    document.getElementById(
-    "settingGrade"
-    ).value;
-
-
-    if(currentStudent){
-
-        if(name){
-            currentStudent.name=name;
-
-            document.getElementById(
-            "headerStudentName"
-            ).textContent=name;
+        function resetQuiz() {
+            document.getElementById('quizContent').innerHTML = '';
+            document.getElementById('quizSelectionMode').style.display = 'block';
+            document.getElementById('quizTopic').value = '';
+            document.getElementById('quizSubject').value = '';
         }
 
-        if(grade){
-            currentStudent.grade=grade;
+        // ============ LECTURE FUNCTIONALITY ============
+        async function generateLecture() {
+            const topic = document.getElementById('lectureTopic').value.trim();
+            const subject = document.getElementById('lectureSubject').value.trim();
+
+            if (!topic || !subject) {
+                alert('❌ Please fill all fields');
+                return;
+            }
+
+            const btn = document.getElementById('lectureBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading"></span> Generating...';
+
+            try {
+                const response = await fetch(BACKEND_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        action: 'generateLecture',
+                        studentId: currentStudent.id,
+                        topic: topic,
+                        subject: subject,
+                        language: currentLanguage
+                    })
+                });
+
+                const data = await response.json();
+
+                let html = '<div class="response-box success" style="margin-top: 20px;">';
+                html += `<h3>📚 ${topic} - Complete Lecture</h3>`;
+                html += `<p><strong>Subject:</strong> ${subject}</p>`;
+                html += `<h4 style="margin-top: 15px;">📖 Lecture Content:</h4>`;
+                html += `<p>${data.lectureContent || 'Comprehensive lecture content will appear here'}</p>`;
+                html += '</div>';
+
+                document.getElementById('lectureContent').innerHTML = html;
+            } catch (error) {
+                document.getElementById('lectureContent').innerHTML = `<div class="response-box error">❌ Error: ${error.message}</div>`;
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '🎬 Generate Lecture';
+            }
         }
-    }
 
+        // ============ UTILITY FUNCTIONS ============
+        function switchTab(tabName, event) {
+            if (event) event.preventDefault();
 
-    document.getElementById(
-    "settingsResponse"
-    ).innerHTML=
-    `<div class="response-box success">
-    ✅ Settings saved successfully!
-    </div>`;
-}
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
 
+            // Remove active from all nav links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
 
-/* =====================================================
-   LOGOUT
-===================================================== */
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
 
-function logout(event){
+            // Mark nav link as active
+            event?.target?.closest('a')?.classList.add('active');
+        }
 
-    if(event){
-        event.preventDefault();
-    }
+        function changeLanguage() {
+            currentLanguage = document.getElementById('languageSelect').value;
+            console.log('Language changed to:', currentLanguage);
+        }
 
+        function showError(elementId, message) {
+            document.getElementById(elementId).innerHTML = `<div class="response-box error">${message}</div>`;
+        }
 
-    currentStudent=null;
+        async function saveNote() {
+            const topic = document.getElementById('noteTopic').value.trim();
+            const content = document.getElementById('noteContent').value.trim();
 
-    loginInProgress=false;
+            if (!topic || !content) {
+                alert('❌ Please fill all fields');
+                return;
+            }
 
+            try {
+                const response = await fetch(BACKEND_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        action: 'saveNote',
+                        studentId: currentStudent.id,
+                        topic: topic,
+                        content: content
+                    })
+                });
 
-    document.getElementById(
-    "loginScreen"
-    ).style.display="flex";
+                const data = await response.json();
 
+                if (data.success) {
+                    document.getElementById('notesResponse').innerHTML = '<div class="response-box success">✅ Note saved successfully!</div>';
+                    document.getElementById('noteTopic').value = '';
+                    document.getElementById('noteContent').value = '';
+                } else {
+                    document.getElementById('notesResponse').innerHTML = `<div class="response-box error">❌ ${data.error}</div>`;
+                }
+            } catch (error) {
+                document.getElementById('notesResponse').innerHTML = `<div class="response-box error">❌ Error: ${error.message}</div>`;
+            }
+        }
 
-    document.getElementById(
-    "appScreen"
-    ).style.display="none";
+        function saveSettings() {
+            const name = document.getElementById('settingName').value;
+            const email = document.getElementById('settingEmail').value;
+            const grade = document.getElementById('settingGrade').value;
 
+            if (name) currentStudent.name = name;
+            if (grade) currentStudent.grade = grade;
 
-    document.getElementById(
-    "loginBtn"
-    ).disabled=false;
+            document.getElementById('settingsResponse').innerHTML = '<div class="response-box success">✅ Settings saved successfully!</div>';
+        }
 
+        function logout(event) {
+            event.preventDefault();
+            currentStudent = null;
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('appScreen').style.display = 'none';
 
-    document.getElementById(
-    "loginBtn"
-    ).innerHTML=
-    "🚀 Start Learning";
-}
+            // Reset login form
+            document.getElementById('loginName').value = '';
+            document.getElementById('loginGrade').value = '';
+            document.getElementById('loginAge').value = '';
+            document.getElementById('loginMotherTongue').value = '';
+            document.getElementById('loginSyllabus').value = '';
+            document.getElementById('loginParentName').value = '';
+            document.getElementById('loginParentEmail').value = '';
+            document.getElementById('loginParentContact').value = '';
+            document.getElementById('loginSubject').value = '';
+            document.getElementById('loginState').value = '';
+            document.getElementById('loginCountry').value = 'India';
+            document.getElementById('loginTerms').checked = false;
+            document.getElementById('loginError').innerHTML = '';
+        }
 
+        async function loadStudentDashboard() {
+            try {
+                const response = await fetch(BACKEND_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        action: 'getStudentProgress',
+                        studentId: currentStudent.id
+                    })
+                });
 
-/* =====================================================
-   ERROR
-===================================================== */
+                const data = await response.json();
 
-function showError(elementId,message){
+                // Update stats
+                document.getElementById('pointsDisplay').textContent = data.points || '0';
+                document.getElementById('streakDisplay').textContent = data.streak || '0';
+                document.getElementById('quizzesDisplay').textContent = data.quizzesTaken || '0';
+                document.getElementById('rankDisplay').textContent = data.rank || '-';
+                document.getElementById('badgesDisplay').textContent = data.badges || '0';
 
-    document.getElementById(
-    elementId
-    ).innerHTML=
-    `<div class="response-box error">
-    ${escapeHTML(message)}
-    </div>`;
-}
+                // Update leaderboard
+                if (data.leaderboard && data.leaderboard.length > 0) {
+                    let leaderboardHtml = '';
+                    data.leaderboard.forEach((student, idx) => {
+                        const medals = ['🥇', '🥈', '🥉'];
+                        leaderboardHtml += `<li class="leaderboard-item">
+                            <div style="display: flex; align-items: center; flex: 1;">
+                                <span class="rank-badge">${medals[idx] || (idx + 1)}</span>
+                                <strong>${student.name}</strong>
+                            </div>
+                            <span class="points-badge">${student.points} pts</span>
+                        </li>`;
+                    });
+                    document.getElementById('leaderboardPreview').innerHTML = leaderboardHtml;
+                    document.getElementById('fullLeaderboard').innerHTML = leaderboardHtml;
+                }
+            } catch (error) {
+                console.error('Dashboard load error:', error);
+            }
+        }
 
-
-/* =====================================================
-   SECURITY / DISPLAY HELPER
-===================================================== */
-
-function escapeHTML(value){
-
-    return String(value ?? "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-}
-
-
-/* =====================================================
-   START
-===================================================== */
-
-window.addEventListener(
-"load",
-function(){
-
-    console.log(
-    "🎓 Vernacular EduAI initialized"
-    );
-
-    console.log(
-    "Backend:",
-    BACKEND_URL
-    );
-
-});
-
-</script>
-
+        // Initialize
+        window.addEventListener('load', () => {
+            console.log('🎓 Vernacular EduAI initialized');
+        });
+    </script>
 </body>
 </html>
