@@ -2,741 +2,6082 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Vernacular EduAI | Primary Learning</title>
-<meta name="description" content="Vernacular EduAI - AI powered multilingual learning platform for primary students.">
+
+<meta name="description"
+content="Vernacular EduAI - AI powered multilingual primary education platform">
+
 <style>
+
 :root{
-  --purple:#7c3aed;--purple2:#9b5de5;--blue:#38bdf8;--green:#22c55e;
-  --yellow:#fbbf24;--pink:#f472b6;--ink:#172554;--muted:#64748b;
-  --bg:#f7f9ff;--card:#fff;--line:#e5e7eb;--danger:#ef4444;
+--purple:#7c3aed;
+--purple2:#a855f7;
+--blue:#38bdf8;
+--green:#22c55e;
+--yellow:#fbbf24;
+--pink:#f472b6;
+--orange:#fb923c;
+--red:#ef4444;
+
+--dark:#172554;
+--text:#334155;
+--muted:#64748b;
+
+--bg:#f7f9ff;
+--white:#ffffff;
+--line:#e2e8f0;
 }
-*{box-sizing:border-box}
-body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink)}
-button,input,select,textarea{font:inherit}
-button{cursor:pointer}
-.hidden{display:none!important}
-.loading{width:17px;height:17px;border:3px solid rgba(255,255,255,.45);border-top-color:#fff;border-radius:50%;display:inline-block;animation:spin .8s linear infinite;vertical-align:-3px}
-@keyframes spin{to{transform:rotate(360deg)}}
 
-/* LOGIN */
-.login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:
- radial-gradient(circle at 12% 12%,#fde68a 0 5%,transparent 6%),
- radial-gradient(circle at 90% 15%,#bae6fd 0 7%,transparent 8%),
- linear-gradient(135deg,#eff6ff,#faf5ff 55%,#ecfdf5)}
-.login-wrap{width:min(1100px,100%);display:grid;grid-template-columns:1fr 1.15fr;gap:24px;align-items:stretch}
-.login-art{border-radius:32px;padding:42px;background:linear-gradient(160deg,#dbeafe,#f5d0fe 55%,#dcfce7);position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:center;min-height:650px}
-.login-art h1{font-size:44px;line-height:1.05;margin:10px 0;color:#4338ca}
-.login-art p{font-size:18px;color:#334155;max-width:470px;line-height:1.6}
-.big-kids{font-size:120px;letter-spacing:-24px;margin-top:30px;filter:drop-shadow(0 12px 12px rgba(0,0,0,.08))}
-.cloud{position:absolute;font-size:45px;opacity:.8}.c1{top:30px;right:45px}.c2{bottom:70px;left:30px}.rainbow{font-size:80px;position:absolute;right:30px;bottom:20px}
-.login-card{background:#fff;border:1px solid #e5e7eb;border-radius:32px;padding:32px;box-shadow:0 25px 70px rgba(76,29,149,.12);max-height:calc(100vh - 48px);overflow:auto}
-.brand{text-align:center;margin-bottom:24px}.brand-logo{font-size:50px}.brand h2{margin:4px 0;font-size:28px;color:#4c1d95}.brand p{margin:0;color:var(--muted)}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.full{grid-column:1/-1}
-.field label{display:block;font-size:13px;font-weight:800;margin:0 0 7px;color:#334155}
-.field input,.field select,.field textarea{width:100%;border:2px solid #e2e8f0;border-radius:13px;padding:12px 13px;outline:none;background:#fff;color:#172554;transition:.2s}
-.field input:focus,.field select:focus,.field textarea:focus{border-color:#8b5cf6;box-shadow:0 0 0 4px #ede9fe}
-.check{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:#475569;line-height:1.5}.check input{margin-top:3px;accent-color:var(--purple)}
-.primary-btn{border:0;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;padding:13px 20px;border-radius:14px;font-weight:900;box-shadow:0 8px 20px rgba(124,58,237,.25);transition:.2s}
-.primary-btn:hover{transform:translateY(-1px);box-shadow:0 12px 24px rgba(124,58,237,.3)}
-.primary-btn:disabled{opacity:.65;cursor:not-allowed;transform:none}
-.error-box,.success-box{margin-top:12px;padding:12px 14px;border-radius:12px;font-size:13px}.error-box{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}.success-box{background:#f0fdf4;color:#166534;border:1px solid #bbf7d0}
-.backend-status{font-size:12px;text-align:center;margin-top:10px;color:#64748b}
+*{
+box-sizing:border-box;
+}
 
-/* APP */
-.app{min-height:100vh;display:flex}.sidebar{width:245px;background:#fff;border-right:1px solid #e8eaf0;padding:22px 14px;position:fixed;left:0;top:0;bottom:0;z-index:10;overflow:auto}
-.side-brand{display:flex;align-items:center;gap:9px;padding:5px 10px 22px}.side-brand .logo{font-size:35px}.side-brand strong{font-size:18px;color:#4c1d95;line-height:1.05}.side-brand small{display:block;color:#64748b;font-weight:700;margin-top:4px}
-.nav{display:flex;flex-direction:column;gap:6px}.nav button{border:0;background:transparent;text-align:left;padding:12px 13px;border-radius:12px;color:#334155;font-weight:800;display:flex;align-items:center;gap:11px}.nav button:hover{background:#f5f3ff;color:#6d28d9}.nav button.active{background:linear-gradient(135deg,#7c3aed,#9333ea);color:#fff;box-shadow:0 8px 18px rgba(124,58,237,.2)}
-.side-quote{margin:30px 6px 0;padding:17px;border-radius:18px;background:#fff7ed;text-align:center;font-size:12px;line-height:1.5;color:#475569}
-.main{margin-left:245px;flex:1;min-width:0;padding:22px 28px 35px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:20px}.hello h1{margin:0;font-size:28px}.hello p{margin:5px 0 0;color:#64748b}.top-actions{display:flex;align-items:center;gap:10px}.lang{border:1px solid #ddd6fe;background:#fff;padding:10px 13px;border-radius:14px;font-weight:800;color:#4c1d95}.profile-pill{display:flex;align-items:center;gap:9px;background:#fff;border:1px solid #e5e7eb;padding:7px 11px;border-radius:30px}.avatar{width:38px;height:38px;border-radius:50%;background:#fef3c7;display:grid;place-items:center;font-size:24px}
-.hero{background:linear-gradient(100deg,#dbeafe,#f5d0fe 58%,#fce7f3);border:1px solid #d8b4fe;border-radius:25px;padding:24px 28px;position:relative;overflow:hidden;margin-bottom:20px}.hero h2{margin:0 0 6px;font-size:26px}.hero p{margin:0;color:#475569;max-width:650px}.hero-art{position:absolute;right:30px;bottom:-13px;font-size:85px}.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:13px;margin-bottom:20px}.stat{border:1px solid #e5e7eb;border-radius:18px;padding:17px;text-align:center;background:#fff;box-shadow:0 6px 18px rgba(15,23,42,.04)}.stat .ico{font-size:28px}.stat b{display:block;font-size:25px;margin:4px 0}.stat span{font-size:12px;color:#64748b;font-weight:800}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.feature{min-height:170px;border:2px solid #e5e7eb;border-radius:22px;padding:22px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;transition:.2s}.feature:hover{transform:translateY(-3px);box-shadow:0 12px 25px rgba(15,23,42,.08)}.feature .ficon{font-size:52px}.feature h3{margin:8px 0 4px;font-size:18px}.feature p{margin:0;color:#64748b;font-size:12px}.blue{background:#eff8ff;border-color:#bae6fd}.green{background:#f0fdf4;border-color:#bbf7d0}.yellow{background:#fffbeb;border-color:#fde68a}.pink{background:#fdf2f8;border-color:#fbcfe8}.purple{background:#faf5ff;border-color:#ddd6fe}.cyan{background:#ecfeff;border-color:#a5f3fc}
-.lower{display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:16px;margin-top:16px}.card{background:#fff;border:1px solid #e5e7eb;border-radius:20px;padding:19px;box-shadow:0 5px 18px rgba(15,23,42,.04)}.card h3{margin:0 0 14px}.schedule{display:grid;gap:8px}.schedule div{display:flex;justify-content:space-between;gap:10px;padding:10px;border-radius:11px;background:#f8fafc;font-size:12px}.leader{display:grid;gap:8px}.leader div{display:flex;justify-content:space-between;padding:9px 10px;border-radius:10px;background:#f8fafc;font-size:12px}.tip{margin-top:16px;background:#fffbeb;border:1px solid #fde68a;border-radius:18px;padding:17px;display:flex;gap:14px;align-items:center}.tip .tipicon{font-size:42px}.tip p{margin:4px 0 0;color:#64748b;font-size:13px}
-.tab{display:none}.tab.active{display:block}.section-head{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:18px}.section-head h2{margin:0}.section-head p{margin:4px 0;color:#64748b}
-.panel{background:#fff;border:1px solid #e5e7eb;border-radius:22px;padding:22px;box-shadow:0 5px 18px rgba(15,23,42,.04);margin-bottom:16px}.panel .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}.panel textarea{min-height:120px;resize:vertical}.result{margin-top:16px;padding:18px;border-radius:16px;background:#f8fafc;border:1px solid #e2e8f0;line-height:1.7}.result h3{margin-top:0}.muted{color:#64748b}.feedback{padding:10px 12px;border-radius:10px;margin-top:8px;font-size:13px;font-weight:800}.correct{background:#dcfce7;color:#166534}.wrong{background:#fee2e2;color:#991b1b}.quiz-question{padding:18px 0;border-bottom:1px solid #e5e7eb}.quiz-question:last-child{border-bottom:0}.option{display:block;padding:10px 12px;border:1px solid #e2e8f0;border-radius:11px;margin-top:8px;cursor:pointer}.option:hover{background:#f8fafc}.score{font-size:26px;font-weight:900;color:#6d28d9}.flashcard{min-height:220px;display:grid;place-items:center;text-align:center;background:linear-gradient(135deg,#eff6ff,#fdf4ff);border-radius:20px;padding:25px;font-size:22px;font-weight:900}.progressbar{height:12px;background:#e2e8f0;border-radius:20px;overflow:hidden}.progressbar span{display:block;height:100%;background:linear-gradient(90deg,#7c3aed,#38bdf8);border-radius:20px}
-.mobile-menu{display:none;border:0;background:#fff;border-radius:10px;padding:9px;font-size:22px}.toast{position:fixed;right:22px;bottom:22px;z-index:100;padding:13px 16px;background:#172554;color:#fff;border-radius:13px;box-shadow:0 12px 30px rgba(0,0,0,.2);display:none}
-@media(max-width:1050px){.stats{grid-template-columns:repeat(3,1fr)}.lower{grid-template-columns:1fr 1fr}.login-wrap{grid-template-columns:1fr}.login-art{display:none}}
-@media(max-width:760px){.sidebar{transform:translateX(-100%);transition:.25s}.sidebar.open{transform:translateX(0)}.main{margin-left:0;padding:15px}.mobile-menu{display:block}.topbar{align-items:flex-start}.top-actions .lang{display:none}.grid3,.lower{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.hero-art{opacity:.35}.form-grid,.panel .row{grid-template-columns:1fr}.full{grid-column:auto}.login-card{padding:22px;border-radius:22px;max-height:none}.login-screen{padding:12px}.hello h1{font-size:23px}}
+html{
+scroll-behavior:smooth;
+}
+
+body{
+margin:0;
+font-family:
+Inter,
+ui-sans-serif,
+system-ui,
+-apple-system,
+BlinkMacSystemFont,
+"Segoe UI",
+sans-serif;
+
+background:
+radial-gradient(circle at 10% 10%,#ede9fe 0 8%,transparent 9%),
+radial-gradient(circle at 90% 20%,#e0f2fe 0 8%,transparent 9%),
+var(--bg);
+
+color:var(--dark);
+}
+
+button,
+input,
+select,
+textarea{
+font:inherit;
+}
+
+button{
+cursor:pointer;
+}
+
+.hidden{
+display:none!important;
+}
+
+.loading{
+width:18px;
+height:18px;
+
+border:3px solid rgba(255,255,255,.4);
+border-top-color:white;
+
+border-radius:50%;
+
+display:inline-block;
+
+animation:spin .8s linear infinite;
+
+vertical-align:-4px;
+}
+
+@keyframes spin{
+to{
+transform:rotate(360deg);
+}
+}
+
+
+/* =====================================================
+LOGIN
+===================================================== */
+
+.login-screen{
+min-height:100vh;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+padding:25px;
+
+background:
+radial-gradient(circle at 8% 15%,#fde68a 0 5%,transparent 6%),
+radial-gradient(circle at 90% 10%,#bae6fd 0 7%,transparent 8%),
+linear-gradient(
+135deg,
+#eff6ff,
+#faf5ff 50%,
+#ecfdf5
+);
+}
+
+.login-wrap{
+width:min(1150px,100%);
+
+display:grid;
+grid-template-columns:1fr 1.15fr;
+
+gap:25px;
+}
+
+.login-art{
+
+min-height:680px;
+
+border-radius:35px;
+
+padding:45px;
+
+display:flex;
+flex-direction:column;
+justify-content:center;
+
+position:relative;
+overflow:hidden;
+
+background:
+linear-gradient(
+145deg,
+#dbeafe,
+#f5d0fe 50%,
+#dcfce7
+);
+
+box-shadow:
+0 25px 70px rgba(76,29,149,.12);
+}
+
+.login-art h1{
+
+font-size:52px;
+
+line-height:1;
+
+margin:12px 0;
+
+color:#4c1d95;
+}
+
+.login-art p{
+
+font-size:18px;
+
+line-height:1.7;
+
+max-width:480px;
+
+color:#475569;
+}
+
+.kids{
+font-size:110px;
+
+letter-spacing:-22px;
+
+margin-top:35px;
+
+filter:
+drop-shadow(0 12px 12px rgba(0,0,0,.08));
+}
+
+.cloud{
+position:absolute;
+font-size:55px;
+opacity:.8;
+}
+
+.cloud.one{
+right:40px;
+top:35px;
+}
+
+.cloud.two{
+left:25px;
+bottom:110px;
+}
+
+.rainbow{
+position:absolute;
+right:25px;
+bottom:20px;
+font-size:85px;
+}
+
+.login-card{
+
+background:white;
+
+border:1px solid var(--line);
+
+border-radius:32px;
+
+padding:32px;
+
+box-shadow:
+0 25px 70px rgba(76,29,149,.13);
+
+max-height:calc(100vh - 50px);
+
+overflow:auto;
+}
+
+.brand{
+text-align:center;
+margin-bottom:25px;
+}
+
+.brand-logo{
+font-size:55px;
+}
+
+.brand h2{
+
+font-size:28px;
+
+margin:5px 0;
+
+color:#4c1d95;
+}
+
+.brand p{
+margin:0;
+color:var(--muted);
+}
+
+.form-grid{
+
+display:grid;
+
+grid-template-columns:1fr 1fr;
+
+gap:15px;
+}
+
+.full{
+grid-column:1/-1;
+}
+
+.field label{
+
+display:block;
+
+font-size:13px;
+
+font-weight:900;
+
+margin-bottom:7px;
+
+color:#334155;
+}
+
+.field input,
+.field select,
+.field textarea{
+
+width:100%;
+
+border:2px solid #e2e8f0;
+
+border-radius:14px;
+
+padding:12px 13px;
+
+outline:none;
+
+background:white;
+
+color:#172554;
+
+transition:.2s;
+}
+
+.field textarea{
+min-height:120px;
+resize:vertical;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus{
+
+border-color:#8b5cf6;
+
+box-shadow:
+0 0 0 4px #ede9fe;
+}
+
+.check{
+
+display:flex;
+
+gap:10px;
+
+align-items:flex-start;
+
+font-size:13px;
+
+line-height:1.5;
+
+color:#475569;
+}
+
+.check input{
+margin-top:3px;
+accent-color:var(--purple);
+}
+
+.primary-btn{
+
+border:0;
+
+background:
+linear-gradient(
+135deg,
+#7c3aed,
+#a855f7
+);
+
+color:white;
+
+padding:13px 20px;
+
+border-radius:14px;
+
+font-weight:900;
+
+box-shadow:
+0 8px 20px rgba(124,58,237,.25);
+
+transition:.2s;
+}
+
+.primary-btn:hover{
+
+transform:translateY(-2px);
+
+box-shadow:
+0 12px 25px rgba(124,58,237,.3);
+}
+
+.primary-btn:disabled{
+opacity:.6;
+cursor:not-allowed;
+transform:none;
+}
+
+.error-box,
+.success-box{
+
+margin-top:12px;
+
+padding:12px 14px;
+
+border-radius:12px;
+
+font-size:13px;
+}
+
+.error-box{
+
+background:#fef2f2;
+
+color:#991b1b;
+
+border:1px solid #fecaca;
+}
+
+.success-box{
+
+background:#f0fdf4;
+
+color:#166534;
+
+border:1px solid #bbf7d0;
+}
+
+.backend-status{
+
+font-size:12px;
+
+text-align:center;
+
+margin-top:10px;
+
+color:#64748b;
+}
+
+
+/* =====================================================
+APP
+===================================================== */
+
+.app{
+min-height:100vh;
+display:flex;
+}
+
+.sidebar{
+
+width:250px;
+
+background:white;
+
+border-right:1px solid #e8eaf0;
+
+padding:20px 14px;
+
+position:fixed;
+
+left:0;
+top:0;
+bottom:0;
+
+z-index:50;
+
+overflow:auto;
+}
+
+.side-brand{
+
+display:flex;
+
+align-items:center;
+
+gap:10px;
+
+padding:
+5px 10px 22px;
+}
+
+.side-brand .logo{
+font-size:38px;
+}
+
+.side-brand strong{
+
+font-size:18px;
+
+line-height:1.05;
+
+color:#4c1d95;
+}
+
+.side-brand small{
+
+display:block;
+
+margin-top:4px;
+
+color:#64748b;
+
+font-weight:800;
+}
+
+.nav{
+
+display:flex;
+
+flex-direction:column;
+
+gap:6px;
+}
+
+.nav button{
+
+border:0;
+
+background:transparent;
+
+text-align:left;
+
+padding:12px 13px;
+
+border-radius:13px;
+
+color:#334155;
+
+font-weight:800;
+
+display:flex;
+
+align-items:center;
+
+gap:11px;
+
+transition:.2s;
+}
+
+.nav button:hover{
+
+background:#f5f3ff;
+
+color:#6d28d9;
+}
+
+.nav button.active{
+
+background:
+linear-gradient(
+135deg,
+#7c3aed,
+#9333ea
+);
+
+color:white;
+
+box-shadow:
+0 8px 18px rgba(124,58,237,.2);
+}
+
+.side-quote{
+
+margin:30px 6px 0;
+
+padding:17px;
+
+border-radius:18px;
+
+background:#fff7ed;
+
+text-align:center;
+
+font-size:12px;
+
+line-height:1.5;
+
+color:#475569;
+}
+
+.main{
+
+margin-left:250px;
+
+flex:1;
+
+min-width:0;
+
+padding:22px 30px 40px;
+}
+
+.topbar{
+
+display:flex;
+
+align-items:center;
+
+justify-content:space-between;
+
+gap:15px;
+
+margin-bottom:20px;
+}
+
+.hello h1{
+
+margin:0;
+
+font-size:29px;
+}
+
+.hello p{
+
+margin:5px 0 0;
+
+color:#64748b;
+}
+
+.top-actions{
+
+display:flex;
+
+align-items:center;
+
+gap:10px;
+}
+
+.lang{
+
+border:1px solid #ddd6fe;
+
+background:white;
+
+padding:10px 13px;
+
+border-radius:14px;
+
+font-weight:800;
+
+color:#4c1d95;
+}
+
+.profile-pill{
+
+display:flex;
+
+align-items:center;
+
+gap:9px;
+
+background:white;
+
+border:1px solid #e5e7eb;
+
+padding:7px 11px;
+
+border-radius:30px;
+}
+
+.avatar{
+
+width:38px;
+
+height:38px;
+
+border-radius:50%;
+
+background:#fef3c7;
+
+display:grid;
+
+place-items:center;
+
+font-size:24px;
+}
+
+
+/* HERO */
+
+.hero{
+
+background:
+linear-gradient(
+100deg,
+#dbeafe,
+#f5d0fe 55%,
+#fce7f3
+);
+
+border:1px solid #d8b4fe;
+
+border-radius:25px;
+
+padding:25px 28px;
+
+position:relative;
+
+overflow:hidden;
+
+margin-bottom:20px;
+}
+
+.hero h2{
+
+margin:0 0 6px;
+
+font-size:27px;
+}
+
+.hero p{
+
+margin:0;
+
+color:#475569;
+
+max-width:650px;
+
+line-height:1.6;
+}
+
+.hero-art{
+
+position:absolute;
+
+right:30px;
+
+bottom:-10px;
+
+font-size:90px;
+}
+
+
+/* STATS */
+
+.stats{
+
+display:grid;
+
+grid-template-columns:
+repeat(5,1fr);
+
+gap:13px;
+
+margin-bottom:20px;
+}
+
+.stat{
+
+border:1px solid #e5e7eb;
+
+border-radius:18px;
+
+padding:17px;
+
+text-align:center;
+
+background:white;
+
+box-shadow:
+0 6px 18px rgba(15,23,42,.04);
+}
+
+.stat .ico{
+font-size:28px;
+}
+
+.stat b{
+
+display:block;
+
+font-size:25px;
+
+margin:4px 0;
+}
+
+.stat span{
+
+font-size:12px;
+
+color:#64748b;
+
+font-weight:800;
+}
+
+
+/* FEATURE CARDS */
+
+.grid3{
+
+display:grid;
+
+grid-template-columns:
+repeat(3,1fr);
+
+gap:16px;
+}
+
+.feature{
+
+min-height:175px;
+
+border:2px solid #e5e7eb;
+
+border-radius:22px;
+
+padding:22px;
+
+display:flex;
+
+flex-direction:column;
+
+justify-content:center;
+
+align-items:center;
+
+text-align:center;
+
+cursor:pointer;
+
+transition:.2s;
+}
+
+.feature:hover{
+
+transform:
+translateY(-4px);
+
+box-shadow:
+0 15px 30px rgba(15,23,42,.08);
+}
+
+.feature .ficon{
+font-size:52px;
+}
+
+.feature h3{
+
+margin:8px 0 4px;
+
+font-size:18px;
+}
+
+.feature p{
+
+margin:0;
+
+color:#64748b;
+
+font-size:12px;
+}
+
+.blue{
+
+background:#eff8ff;
+
+border-color:#bae6fd;
+}
+
+.green{
+
+background:#f0fdf4;
+
+border-color:#bbf7d0;
+}
+
+.yellow{
+
+background:#fffbeb;
+
+border-color:#fde68a;
+}
+
+.pink{
+
+background:#fdf2f8;
+
+border-color:#fbcfe8;
+}
+
+.purple{
+
+background:#faf5ff;
+
+border-color:#ddd6fe;
+}
+
+.cyan{
+
+background:#ecfeff;
+
+border-color:#a5f3fc;
+}
+
+
+/* LOWER */
+
+.lower{
+
+display:grid;
+
+grid-template-columns:
+1.1fr 1fr 1fr;
+
+gap:16px;
+
+margin-top:16px;
+}
+
+.card{
+
+background:white;
+
+border:1px solid #e5e7eb;
+
+border-radius:20px;
+
+padding:19px;
+
+box-shadow:
+0 5px 18px rgba(15,23,42,.04);
+}
+
+.card h3{
+margin:0 0 14px;
+}
+
+.schedule{
+
+display:grid;
+
+gap:8px;
+}
+
+.schedule div{
+
+display:flex;
+
+justify-content:space-between;
+
+padding:10px;
+
+border-radius:11px;
+
+background:#f8fafc;
+
+font-size:12px;
+}
+
+.leader{
+
+display:grid;
+
+gap:8px;
+}
+
+.leader div{
+
+display:flex;
+
+justify-content:space-between;
+
+padding:9px 10px;
+
+border-radius:10px;
+
+background:#f8fafc;
+
+font-size:12px;
+}
+
+.tip{
+
+margin-top:16px;
+
+background:#fffbeb;
+
+border:1px solid #fde68a;
+
+border-radius:18px;
+
+padding:17px;
+
+display:flex;
+
+gap:14px;
+
+align-items:center;
+}
+
+.tip .tipicon{
+font-size:42px;
+}
+
+.tip p{
+
+margin:4px 0 0;
+
+color:#64748b;
+
+font-size:13px;
+}
+
+
+/* TABS */
+
+.tab{
+display:none;
+}
+
+.tab.active{
+display:block;
+}
+
+.section-head{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+gap:15px;
+
+margin-bottom:18px;
+}
+
+.section-head h2{
+margin:0;
+}
+
+.section-head p{
+
+margin:4px 0;
+
+color:#64748b;
+}
+
+.panel{
+
+background:white;
+
+border:1px solid #e5e7eb;
+
+border-radius:22px;
+
+padding:22px;
+
+box-shadow:
+0 5px 18px rgba(15,23,42,.04);
+
+margin-bottom:16px;
+}
+
+.panel .row{
+
+display:grid;
+
+grid-template-columns:1fr 1fr;
+
+gap:14px;
+}
+
+.result{
+
+margin-top:16px;
+
+padding:18px;
+
+border-radius:16px;
+
+background:#f8fafc;
+
+border:1px solid #e2e8f0;
+
+line-height:1.7;
+}
+
+.result h3{
+margin-top:0;
+}
+
+.muted{
+color:#64748b;
+}
+
+
+/* QUIZ */
+
+.quiz-question{
+
+padding:18px 0;
+
+border-bottom:1px solid #e5e7eb;
+}
+
+.quiz-question:last-child{
+border-bottom:0;
+}
+
+.option{
+
+display:block;
+
+padding:11px 12px;
+
+border:1px solid #e2e8f0;
+
+border-radius:11px;
+
+margin-top:8px;
+
+cursor:pointer;
+
+transition:.2s;
+}
+
+.option:hover{
+background:#f8fafc;
+}
+
+.option input{
+margin-right:7px;
+}
+
+.feedback{
+
+padding:11px 13px;
+
+border-radius:10px;
+
+margin-top:8px;
+
+font-size:13px;
+
+font-weight:800;
+}
+
+.correct{
+
+background:#dcfce7;
+
+color:#166534;
+}
+
+.wrong{
+
+background:#fee2e2;
+
+color:#991b1b;
+}
+
+.score{
+
+font-size:28px;
+
+font-weight:900;
+
+color:#6d28d9;
+}
+
+
+/* FLASHCARD */
+
+.flashcard{
+
+min-height:240px;
+
+display:grid;
+
+place-items:center;
+
+text-align:center;
+
+background:
+linear-gradient(
+135deg,
+#eff6ff,
+#fdf4ff
+);
+
+border-radius:20px;
+
+padding:25px;
+
+font-size:22px;
+
+font-weight:900;
+}
+
+
+/* PROGRESS */
+
+.progressbar{
+
+height:12px;
+
+background:#e2e8f0;
+
+border-radius:20px;
+
+overflow:hidden;
+}
+
+.progressbar span{
+
+display:block;
+
+height:100%;
+
+background:
+linear-gradient(
+90deg,
+#7c3aed,
+#38bdf8
+);
+
+border-radius:20px;
+
+transition:width .5s;
+}
+
+
+/* MOBILE */
+
+.mobile-menu{
+
+display:none;
+
+border:0;
+
+background:white;
+
+border-radius:10px;
+
+padding:9px;
+
+font-size:22px;
+}
+
+.toast{
+
+position:fixed;
+
+right:22px;
+
+bottom:22px;
+
+z-index:100;
+
+padding:13px 16px;
+
+background:#172554;
+
+color:white;
+
+border-radius:13px;
+
+box-shadow:
+0 12px 30px rgba(0,0,0,.2);
+
+display:none;
+}
+
+
+/* RESPONSIVE */
+
+@media(max-width:1050px){
+
+.stats{
+
+grid-template-columns:
+repeat(3,1fr);
+}
+
+.lower{
+
+grid-template-columns:
+1fr 1fr;
+}
+
+.login-wrap{
+
+grid-template-columns:1fr;
+}
+
+.login-art{
+display:none;
+}
+
+}
+
+@media(max-width:760px){
+
+.sidebar{
+
+transform:
+translateX(-100%);
+
+transition:.25s;
+}
+
+.sidebar.open{
+
+transform:
+translateX(0);
+}
+
+.main{
+
+margin-left:0;
+
+padding:15px;
+}
+
+.mobile-menu{
+display:block;
+}
+
+.topbar{
+
+align-items:flex-start;
+}
+
+.top-actions .lang{
+display:none;
+}
+
+.grid3,
+.lower{
+
+grid-template-columns:1fr;
+}
+
+.stats{
+
+grid-template-columns:
+repeat(2,1fr);
+}
+
+.hero-art{
+
+opacity:.25;
+}
+
+.form-grid,
+.panel .row{
+
+grid-template-columns:1fr;
+}
+
+.full{
+grid-column:auto;
+}
+
+.login-card{
+
+padding:22px;
+
+border-radius:22px;
+
+max-height:none;
+}
+
+.login-screen{
+padding:12px;
+}
+
+.hello h1{
+font-size:23px;
+}
+
+}
+
+
+/* CELEBRATION */
+
+.celebrate{
+
+position:fixed;
+
+inset:0;
+
+pointer-events:none;
+
+z-index:999;
+
+display:none;
+}
+
+.confetti{
+
+position:absolute;
+
+font-size:28px;
+
+animation:
+fall 1.5s ease-out forwards;
+}
+
+@keyframes fall{
+
+0%{
+
+transform:
+translateY(-50px)
+rotate(0deg);
+
+opacity:1;
+}
+
+100%{
+
+transform:
+translateY(100vh)
+rotate(720deg);
+
+opacity:0;
+}
+
+}
+
 </style>
 </head>
+
+
 <body>
 
-<!-- PRIMARY STUDENT LOGIN -->
+
+<!-- =====================================================
+LOGIN SCREEN
+===================================================== -->
+
 <section id="loginScreen" class="login-screen">
-  <div class="login-wrap">
-    <div class="login-art">
-      <div style="font-size:20px;font-weight:900;color:#475569">🎓 Learn in your language</div>
-      <h1>Vernacular<br>EduAI</h1>
-      <p>A happy, colourful AI learning space made especially for <b>Primary Students – Grades 1 to 5</b>.</p>
-      <div class="big-kids">👧🏽📚🧒🏽</div>
-      <div class="cloud c1">☁️</div><div class="cloud c2">☁️</div><div class="rainbow">🌈</div>
-      <div style="margin-top:auto;font-weight:800;color:#475569">🌟 Learn • Play • Practice • Grow</div>
-    </div>
 
-    <div class="login-card">
-      <div class="brand">
-        <div class="brand-logo">🎓📚</div>
-        <h2>Welcome, Young Learner!</h2>
-        <p>Create your primary student profile to start learning.</p>
-      </div>
+<div class="login-wrap">
 
-      <form id="studentForm" onsubmit="submitLogin(event)">
-        <div class="form-grid">
-          <div class="field full">
-            <label>Student Name *</label>
-            <input id="name" required maxlength="60" placeholder="Enter your name">
-          </div>
 
-          <div class="field">
-            <label>Grade *</label>
-            <select id="grade" required>
-              <option value="">Select grade</option>
-              <option value="1st">1st Grade</option>
-              <option value="2nd">2nd Grade</option>
-              <option value="3rd">3rd Grade</option>
-              <option value="4th">4th Grade</option>
-              <option value="5th">5th Grade</option>
-            </select>
-          </div>
+<div class="login-art">
 
-          <div class="field">
-            <label>Age *</label>
-            <input id="age" type="number" min="5" max="12" required placeholder="5–12">
-          </div>
+<div style="
+font-size:20px;
+font-weight:900;
+color:#475569;
+">
+🎓 Learn • Play • Grow
+</div>
 
-          <div class="field">
-            <label>Mother Tongue *</label>
-            <select id="motherTongue" required>
-              <option value="">Select language</option>
-              <option>Tamil</option><option>English</option><option>Telugu</option>
-              <option>Malayalam</option><option>Kannada</option><option>Hindi</option>
-            </select>
-          </div>
+<h1>
+Vernacular<br>
+EduAI
+</h1>
 
-          <div class="field">
-            <label>Syllabus *</label>
-            <select id="syllabus" required>
-              <option value="">Select syllabus</option>
-              <option>State</option><option>Central</option><option>ICSE</option>
-              <option>NIOS</option><option>IGCSE</option>
-            </select>
-          </div>
+<p>
 
-          <div class="field">
-            <label>Parent / Guardian Name *</label>
-            <input id="parentName" required placeholder="Parent or guardian name">
-          </div>
+A colourful AI learning world created especially
+for <b>Primary Students – Grades 1 to 5</b>.
 
-          <div class="field">
-            <label>Parent Contact No. *</label>
-            <input id="parentContact" type="tel" required pattern="[0-9+ ()-]{7,20}" placeholder="Mobile number">
-          </div>
+Learn school topics, ask questions,
+play quizzes and learn in your mother tongue! 🌈
 
-          <div class="field">
-            <label>Parent Email *</label>
-            <input id="parentEmail" type="email" required placeholder="parent@example.com">
-          </div>
+</p>
 
-          <div class="field">
-            <label>Main Subject *</label>
-            <select id="subject" required>
-              <option value="">Select subject</option>
-              <option>Mathematics</option><option>English</option><option>Science</option>
-              <option>Environmental Studies</option><option>General Knowledge</option>
-              <option>Language</option>
-            </select>
-          </div>
+<div class="kids">
+👧🏽📚🧒🏽
+</div>
 
-          <div class="field">
-            <label>State *</label>
-            <select id="state" required>
-              <option value="">Select state / UT</option>
-              <option>Andhra Pradesh</option><option>Arunachal Pradesh</option><option>Assam</option>
-              <option>Bihar</option><option>Chhattisgarh</option><option>Goa</option><option>Gujarat</option>
-              <option>Haryana</option><option>Himachal Pradesh</option><option>Jharkhand</option>
-              <option>Karnataka</option><option>Kerala</option><option>Madhya Pradesh</option>
-              <option>Maharashtra</option><option>Manipur</option><option>Meghalaya</option>
-              <option>Mizoram</option><option>Nagaland</option><option>Odisha</option>
-              <option>Punjab</option><option>Rajasthan</option><option>Sikkim</option>
-              <option>Tamil Nadu</option><option>Telangana</option><option>Tripura</option>
-              <option>Uttar Pradesh</option><option>Uttarakhand</option><option>West Bengal</option>
-              <option>Andaman and Nicobar Islands</option><option>Chandigarh</option>
-              <option>Dadra and Nagar Haveli and Daman and Diu</option><option>Delhi</option>
-              <option>Jammu and Kashmir</option><option>Ladakh</option><option>Lakshadweep</option>
-              <option>Puducherry</option>
-            </select>
-          </div>
+<div class="cloud one">☁️</div>
+<div class="cloud two">☁️</div>
 
-          <div class="field">
-            <label>Country *</label>
-            <input id="country" value="India" required>
-          </div>
+<div class="rainbow">🌈</div>
 
-          <div class="full check">
-            <input id="terms" type="checkbox" required>
-            <span>I agree to the Terms &amp; Conditions and allow my learning profile to be used for educational progress tracking.</span>
-          </div>
+<div style="
+margin-top:auto;
+font-weight:900;
+color:#475569;
+">
 
-          <div class="full">
-            <button id="loginBtn" class="primary-btn" type="submit" style="width:100%">🚀 Start Learning</button>
-            <div id="loginMessage"></div>
-            <div id="backendStatus" class="backend-status">Checking EduAI backend…</div>
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
+⭐ Learn &nbsp; • &nbsp;
+🎮 Play &nbsp; • &nbsp;
+🧠 Practice &nbsp; • &nbsp;
+🏆 Win
+
+</div>
+
+</div>
+
+
+<div class="login-card">
+
+<div class="brand">
+
+<div class="brand-logo">
+🎓📚🌈
+</div>
+
+<h2>
+Welcome, Young Learner!
+</h2>
+
+<p>
+Create your Primary Education profile
+</p>
+
+</div>
+
+
+<form id="studentForm"
+onsubmit="submitLogin(event)">
+
+<div class="form-grid">
+
+
+<div class="field full">
+
+<label>
+👧 Student Name *
+</label>
+
+<input
+id="name"
+required
+maxlength="60"
+placeholder="Enter your name"
+>
+
+</div>
+
+
+<div class="field">
+
+<label>
+🎒 Grade *
+</label>
+
+<select id="grade" required>
+
+<option value="">
+Choose your grade
+</option>
+
+<option value="1st">
+🌟 1st Grade
+</option>
+
+<option value="2nd">
+🌟 2nd Grade
+</option>
+
+<option value="3rd">
+🌟 3rd Grade
+</option>
+
+<option value="4th">
+🌟 4th Grade
+</option>
+
+<option value="5th">
+🌟 5th Grade
+</option>
+
+</select>
+
+</div>
+
+
+<div class="field">
+
+<label>
+🎂 Age *
+</label>
+
+<input
+id="age"
+type="number"
+min="5"
+max="12"
+required
+placeholder="5 – 12"
+>
+
+</div>
+
+
+<div class="field">
+
+<label>
+🗣️ Mother Tongue *
+</label>
+
+<select
+id="motherTongue"
+required
+>
+
+<option value="">
+Choose language
+</option>
+
+<option>Tamil</option>
+<option>English</option>
+<option>Telugu</option>
+<option>Malayalam</option>
+<option>Kannada</option>
+<option>Hindi</option>
+
+</select>
+
+</div>
+
+
+<div class="field">
+
+<label>
+📘 Syllabus *
+</label>
+
+<select
+id="syllabus"
+required
+>
+
+<option value="">
+Choose syllabus
+</option>
+
+<option>State</option>
+<option>Central</option>
+<option>ICSE</option>
+<option>NIOS</option>
+<option>IGCSE</option>
+
+</select>
+
+</div>
+
+
+<div class="field">
+
+<label>
+👨‍👩‍👧 Parent / Guardian *
+</label>
+
+<input
+id="parentName"
+required
+placeholder="Parent name"
+>
+
+</div>
+
+
+<div class="field">
+
+<label>
+📞 Parent Contact *
+</label>
+
+<input
+id="parentContact"
+type="tel"
+required
+pattern="[0-9+ ()-]{7,20}"
+placeholder="Mobile number"
+>
+
+</div>
+
+
+<div class="field">
+
+<label>
+📧 Parent Email *
+</label>
+
+<input
+id="parentEmail"
+type="email"
+required
+placeholder="parent@example.com"
+>
+
+</div>
+
+
+<div class="field">
+
+<label>
+📚 Favourite Subject *
+</label>
+
+<select id="subject" required>
+
+<option value="">
+Choose subject
+</option>
+
+<option>Mathematics</option>
+<option>English</option>
+<option>Science</option>
+<option>Environmental Studies</option>
+<option>General Knowledge</option>
+<option>Language</option>
+
+</select>
+
+</div>
+
+
+<div class="field">
+
+<label>
+📍 State *
+</label>
+
+<select id="state" required>
+
+<option value="">
+Choose state / UT
+</option>
+
+<option>Andhra Pradesh</option>
+<option>Arunachal Pradesh</option>
+<option>Assam</option>
+<option>Bihar</option>
+<option>Chhattisgarh</option>
+<option>Goa</option>
+<option>Gujarat</option>
+<option>Haryana</option>
+<option>Himachal Pradesh</option>
+<option>Jharkhand</option>
+<option>Karnataka</option>
+<option>Kerala</option>
+<option>Madhya Pradesh</option>
+<option>Maharashtra</option>
+<option>Manipur</option>
+<option>Meghalaya</option>
+<option>Mizoram</option>
+<option>Nagaland</option>
+<option>Odisha</option>
+<option>Punjab</option>
+<option>Rajasthan</option>
+<option>Sikkim</option>
+<option>Tamil Nadu</option>
+<option>Telangana</option>
+<option>Tripura</option>
+<option>Uttar Pradesh</option>
+<option>Uttarakhand</option>
+<option>West Bengal</option>
+<option>Andaman and Nicobar Islands</option>
+<option>Chandigarh</option>
+<option>Dadra and Nagar Haveli and Daman and Diu</option>
+<option>Delhi</option>
+<option>Jammu and Kashmir</option>
+<option>Ladakh</option>
+<option>Lakshadweep</option>
+<option>Puducherry</option>
+
+</select>
+
+</div>
+
+
+<div class="field">
+
+<label>
+🌍 Country *
+</label>
+
+<input
+id="country"
+value="India"
+required
+>
+
+</div>
+
+
+<div class="full check">
+
+<input
+id="terms"
+type="checkbox"
+required
+>
+
+<span>
+
+I agree to the Terms & Conditions
+and allow my learning profile to be used
+for educational progress tracking.
+
+</span>
+
+</div>
+
+
+<div class="full">
+
+<button
+id="loginBtn"
+class="primary-btn"
+type="submit"
+style="width:100%;font-size:16px"
+>
+
+🚀 Start My Learning Adventure!
+
+</button>
+
+<div id="loginMessage"></div>
+
+<div
+id="backendStatus"
+class="backend-status"
+>
+Checking EduAI backend…
+</div>
+
+</div>
+
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
 </section>
 
-<!-- APP -->
-<section id="appScreen" class="app hidden">
-  <aside id="sidebar" class="sidebar">
-    <div class="side-brand"><div class="logo">🎓</div><div><strong>Vernacular<br>EduAI</strong><small>Primary Learning ❤️</small></div></div>
-    <nav class="nav">
-      <button class="active" data-tab="dashboard" onclick="openTab('dashboard',this)">🏠 Dashboard</button>
-      <button data-tab="lessons" onclick="openTab('lessons',this)">📚 My Lessons</button>
-      <button data-tab="tutor" onclick="openTab('tutor',this)">🤖 AI Tutor</button>
-      <button data-tab="quiz" onclick="openTab('quiz',this)">📝 Quiz Time</button>
-      <button data-tab="translator" onclick="openTab('translator',this)">🌍 Translator</button>
-      <button data-tab="flashcards" onclick="openTab('flashcards',this)">🃏 Flashcards</button>
-      <button data-tab="notes" onclick="openTab('notes',this)">📝 My Notes</button>
-      <button data-tab="progress" onclick="openTab('progress',this)">📈 My Progress</button>
-      <button data-tab="achievements" onclick="openTab('achievements',this)">🏆 Achievements</button>
-      <button data-tab="parent" onclick="openTab('parent',this)">👨‍👩‍👧 Parent Corner</button>
-      <button data-tab="settings" onclick="openTab('settings',this)">⚙️ Settings</button>
-      <button onclick="logout()">🚪 Logout</button>
-    </nav>
-    <div class="side-quote">🌱 <b>Learning is an adventure!</b><br>Every little step makes you smarter.</div>
-  </aside>
 
-  <main class="main">
-    <div class="topbar">
-      <div style="display:flex;gap:10px;align-items:flex-start">
-        <button class="mobile-menu" onclick="toggleSidebar()">☰</button>
-        <div class="hello"><h1>Hello, <span id="studentName">Learner</span>! 👋</h1><p>Let's make today a great learning day!</p></div>
-      </div>
-      <div class="top-actions">
-        <select id="topLanguage" class="lang" onchange="changeLanguage()">
-          <option>English</option><option>Tamil</option><option>Telugu</option><option>Malayalam</option><option>Kannada</option><option>Hindi</option>
-        </select>
-        <div class="profile-pill"><div class="avatar">🧒</div><b id="topGrade">Grade 1</b></div>
-      </div>
-    </div>
 
-    <!-- DASHBOARD -->
-    <div id="dashboard" class="tab active">
-      <div class="hero"><h2>Keep Learning, Keep Growing! 🌱⭐</h2><p>Learn with fun AI lessons, ask questions in your language and practise with friendly quizzes.</p><div class="hero-art">👧📖🌈</div></div>
+<!-- =====================================================
+MAIN APP
+===================================================== -->
 
-      <div class="stats">
-        <div class="stat"><div class="ico">🏆</div><b id="points">0</b><span>Points</span></div>
-        <div class="stat"><div class="ico">🔥</div><b id="streak">0</b><span>Day Streak</span></div>
-        <div class="stat"><div class="ico">📝</div><b id="quizzes">0</b><span>Quizzes</span></div>
-        <div class="stat"><div class="ico">🏅</div><b id="badges">0</b><span>Badges</span></div>
-        <div class="stat"><div class="ico">📊</div><b id="score">0%</b><span>Average Score</span></div>
-      </div>
+<section
+id="appScreen"
+class="app hidden"
+>
 
-      <div class="grid3">
-        <div class="feature blue" onclick="openTab('tutor')"><div class="ficon">🤖</div><h3>AI Tutor</h3><p>Ask doubts and get friendly answers</p></div>
-        <div class="feature green" onclick="openTab('lessons')"><div class="ficon">📚</div><h3>AI Lessons</h3><p>Learn with simple explanations</p></div>
-        <div class="feature yellow" onclick="openTab('quiz')"><div class="ficon">❓</div><h3>Quiz Time</h3><p>Test your knowledge and earn points</p></div>
-        <div class="feature purple" onclick="openTab('flashcards')"><div class="ficon">🃏</div><h3>Flashcards</h3><p>Quick cards for easy revision</p></div>
-        <div class="feature pink" onclick="openTab('notes')"><div class="ficon">📒</div><h3>My Notes</h3><p>Write and save what you learn</p></div>
-        <div class="feature cyan" onclick="openTab('translator')"><div class="ficon">🌍</div><h3>Translator</h3><p>Learn in your mother tongue</p></div>
-      </div>
 
-      <div class="lower">
-        <div class="card"><h3>📅 Today's Plan</h3><div class="schedule">
-          <div><b>09:00 AM</b><span>➕ Maths</span></div><div><b>10:30 AM</b><span>🌱 Science / EVS</span></div>
-          <div><b>12:00 PM</b><span>🔤 English</span></div><div><b>02:00 PM</b><span>🐯 GK</span></div>
-        </div></div>
-        <div class="card"><h3>🏆 Leaderboard</h3><div id="leaderboard" class="leader"><div><b>Loading…</b><span>—</span></div></div></div>
-        <div class="card"><h3>🎖️ Achievements</h3><div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px">
-          <div style="text-align:center">🌟<br><b>Quick Learner</b></div><div style="text-align:center">🔥<br><b>Streak Star</b></div><div style="text-align:center">🏆<br><b>Quiz Master</b></div>
-        </div></div>
-      </div>
-      <div class="tip"><div class="tipicon">💡</div><div><b>Today's Tip</b><p>Practice a little every day and you will become better and better!</p></div></div>
-    </div>
+<aside
+id="sidebar"
+class="sidebar"
+>
 
-    <!-- LESSONS -->
-    <div id="lessons" class="tab">
-      <div class="section-head"><div><h2>📚 AI Lessons</h2><p>Ask EduAI to create a primary-friendly lesson.</p></div></div>
-      <div class="panel">
-        <div class="row">
-          <div class="field"><label>Topic *</label><input id="lectureTopic" placeholder="Example: Plants, Addition, Animals"></div>
-          <div class="field"><label>Subject *</label><input id="lectureSubject" placeholder="Example: Science"></div>
-        </div>
-        <button class="primary-btn" id="lectureBtn" onclick="generateLecture()">🎬 Generate Lesson</button>
-        <div id="lectureResult"></div>
-      </div>
-    </div>
+<div class="side-brand">
 
-    <!-- TUTOR -->
-    <div id="tutor" class="tab">
-      <div class="section-head"><div><h2>🤖 AI Tutor</h2><p>Ask your doubt and receive an easy explanation in your selected language.</p></div></div>
-      <div class="panel">
-        <div class="row">
-          <div class="field"><label>Subject *</label><input id="tutorSubject" placeholder="Example: Maths"></div>
-          <div class="field"><label>Topic *</label><input id="tutorTopic" placeholder="Example: Addition"></div>
-        </div>
-        <div class="field" style="margin-top:14px"><label>What do you want to ask? *</label><textarea id="tutorQuestion" placeholder="Type your doubt here…"></textarea></div>
-        <button class="primary-btn" id="tutorBtn" onclick="askTutor()">💬 Ask Tutor</button>
-        <div id="tutorResult"></div>
-      </div>
-    </div>
+<div class="logo">
+🎓
+</div>
 
-    <!-- QUIZ -->
-    <div id="quiz" class="tab">
-      <div class="section-head"><div><h2>📝 Quiz Time</h2><p>Primary-level practice with instant feedback and scoring.</p></div></div>
-      <div class="panel" id="quizSetup">
-        <div class="row">
-          <div class="field"><label>Subject *</label><input id="quizSubject" placeholder="Example: Science"></div>
-          <div class="field"><label>Topic *</label><input id="quizTopic" placeholder="Example: Parts of a Plant"></div>
-        </div>
-        <div class="field" style="margin-top:14px"><label>Number of Questions</label><select id="questionCount"><option>5</option><option>10</option><option>15</option></select></div>
-        <button class="primary-btn" id="quizBtn" onclick="generateQuiz()">📝 Generate Quiz</button>
-      </div>
-      <div id="quizResult"></div>
-    </div>
+<div>
 
-    <!-- TRANSLATOR -->
-    <div id="translator" class="tab">
-      <div class="section-head"><div><h2>🌍 Live Translator</h2><p>Translate learning text into a familiar language.</p></div></div>
-      <div class="panel">
-        <div class="row">
-          <div class="field"><label>From</label><select id="sourceLang"><option>English</option><option>Tamil</option><option>Telugu</option><option>Malayalam</option><option>Kannada</option><option>Hindi</option></select></div>
-          <div class="field"><label>To</label><select id="targetLang"><option>Tamil</option><option>English</option><option>Telugu</option><option>Malayalam</option><option>Kannada</option><option>Hindi</option></select></div>
-        </div>
-        <div class="field" style="margin-top:14px"><label>Text *</label><textarea id="translateText" placeholder="Type a sentence or lesson text…"></textarea></div>
-        <button class="primary-btn" id="translateBtn" onclick="translateText()">🌐 Translate</button>
-        <button class="primary-btn" style="margin-left:8px;background:#e2e8f0;color:#334155;box-shadow:none" onclick="swapLanguages()">↔ Swap</button>
-        <div id="translationResult"></div>
-      </div>
-    </div>
+<strong>
+Vernacular<br>
+EduAI
+</strong>
 
-    <!-- FLASHCARDS -->
-    <div id="flashcards" class="tab">
-      <div class="section-head"><div><h2>🃏 Flashcards</h2><p>Simple revision cards for primary learners.</p></div></div>
-      <div class="panel">
-        <div class="field"><label>Topic</label><input id="flashTopic" value="Plants" placeholder="Enter a topic"></div>
-        <button class="primary-btn" style="margin-top:14px" onclick="makeFlashcard()">✨ Make a Card</button>
-        <div id="flashcardBox" class="flashcard" style="margin-top:16px">🌱 Click “Make a Card” to start!</div>
-      </div>
-    </div>
+<small>
+Primary Learning ❤️
+</small>
 
-    <!-- NOTES -->
-    <div id="notes" class="tab">
-      <div class="section-head"><div><h2>📝 My Notes</h2><p>Your quick personal revision notebook.</p></div></div>
-      <div class="panel">
-        <div class="field"><label>Topic</label><input id="noteTopic" placeholder="Example: Plants"></div>
-        <div class="field" style="margin-top:14px"><label>My note</label><textarea id="noteContent" placeholder="Write what you learned…"></textarea></div>
-        <button class="primary-btn" onclick="saveNote()">💾 Save Note</button>
-        <div id="notesList" style="margin-top:18px"></div>
-      </div>
-    </div>
+</div>
 
-    <!-- PROGRESS -->
-    <div id="progress" class="tab">
-      <div class="section-head"><div><h2>📈 My Progress</h2><p>See how your learning is growing.</p></div></div>
-      <div class="panel">
-        <h3>🌟 Learning Level</h3>
-        <div style="display:flex;justify-content:space-between"><b>Level <span id="level">1</span></b><span id="progressText">0 / 100 XP</span></div>
-        <div class="progressbar" style="margin-top:9px"><span id="progressBar" style="width:0%"></span></div>
-      </div>
-      <div class="grid3">
-        <div class="card"><h3>🏆 Points</h3><div class="score" id="progressPoints">0</div></div>
-        <div class="card"><h3>🔥 Streak</h3><div class="score" id="progressStreak">0 days</div></div>
-        <div class="card"><h3>📝 Quizzes</h3><div class="score" id="progressQuizzes">0</div></div>
-      </div>
-    </div>
+</div>
 
-    <!-- ACHIEVEMENTS -->
-    <div id="achievements" class="tab">
-      <div class="section-head"><div><h2>🏆 Achievements</h2><p>Celebrate every learning milestone!</p></div></div>
-      <div class="grid3">
-        <div class="feature yellow"><div class="ficon">🌟</div><h3>Quick Learner</h3><p>Keep learning every day</p></div>
-        <div class="feature pink"><div class="ficon">🔥</div><h3>Streak Star</h3><p>Build your daily streak</p></div>
-        <div class="feature purple"><div class="ficon">🏆</div><h3>Quiz Master</h3><p>Complete practice quizzes</p></div>
-      </div>
-    </div>
 
-    <!-- PARENT -->
-    <div id="parent" class="tab">
-      <div class="section-head"><div><h2>👨‍👩‍👧 Parent Corner</h2><p>Student profile information and learning summary.</p></div></div>
-      <div class="panel" id="parentInfo"></div>
-    </div>
+<nav class="nav">
 
-    <!-- SETTINGS -->
-    <div id="settings" class="tab">
-      <div class="section-head"><div><h2>⚙️ Settings</h2><p>Your learning preferences.</p></div></div>
-      <div class="panel">
-        <div class="row">
-          <div class="field"><label>Student Name</label><input id="settingName"></div>
-          <div class="field"><label>Grade</label><select id="settingGrade"><option>1st</option><option>2nd</option><option>3rd</option><option>4th</option><option>5th</option></select></div>
-        </div>
-        <div class="field" style="margin-top:14px"><label>Learning Language</label><select id="settingLanguage" onchange="changeLanguage()"><option>English</option><option>Tamil</option><option>Telugu</option><option>Malayalam</option><option>Kannada</option><option>Hindi</option></select></div>
-        <button class="primary-btn" style="margin-top:14px" onclick="saveSettings()">💾 Save Settings</button>
-        <div id="settingsResult"></div>
-      </div>
-    </div>
+<button
+class="active"
+data-tab="dashboard"
+onclick="openTab('dashboard',this)"
+>
+🏠 Dashboard
+</button>
 
-    <footer style="text-align:center;color:#94a3b8;font-size:12px;padding:24px 0 5px">© 2026 Vernacular EduAI • Made with ❤️ for Primary Students</footer>
-  </main>
+<button
+data-tab="lessons"
+onclick="openTab('lessons',this)"
+>
+📚 AI Lessons
+</button>
+
+<button
+data-tab="tutor"
+onclick="openTab('tutor',this)"
+>
+🤖 AI Tutor
+</button>
+
+<button
+data-tab="quiz"
+onclick="openTab('quiz',this)"
+>
+📝 Quiz Time
+</button>
+
+<button
+data-tab="translator"
+onclick="openTab('translator',this)"
+>
+🌍 Translator
+</button>
+
+<button
+data-tab="flashcards"
+onclick="openTab('flashcards',this)"
+>
+🃏 Flashcards
+</button>
+
+<button
+data-tab="notes"
+onclick="openTab('notes',this)"
+>
+📒 My Notes
+</button>
+
+<button
+data-tab="progress"
+onclick="openTab('progress',this)"
+>
+📈 My Progress
+</button>
+
+<button
+data-tab="achievements"
+onclick="openTab('achievements',this)"
+>
+🏆 Achievements
+</button>
+
+<button
+data-tab="parent"
+onclick="openTab('parent',this)"
+>
+👨‍👩‍👧 Parent Corner
+</button>
+
+<button
+data-tab="settings"
+onclick="openTab('settings',this)"
+>
+⚙️ Settings
+</button>
+
+<button onclick="logout()">
+🚪 Logout
+</button>
+
+</nav>
+
+
+<div class="side-quote">
+
+🌱 <b>Learning is an adventure!</b>
+
+<br>
+
+Every little step makes
+you smarter.
+
+</div>
+
+</aside>
+
+
+
+<main class="main">
+
+
+<div class="topbar">
+
+<div style="
+display:flex;
+gap:10px;
+align-items:flex-start;
+">
+
+<button
+class="mobile-menu"
+onclick="toggleSidebar()"
+>
+☰
+</button>
+
+<div class="hello">
+
+<h1>
+Hello,
+<span id="studentName">
+Learner
+</span>!
+👋
+</h1>
+
+<p>
+Let's make today a great learning day!
+</p>
+
+</div>
+
+</div>
+
+
+<div class="top-actions">
+
+<select
+id="topLanguage"
+class="lang"
+onchange="changeLanguage()"
+>
+
+<option>English</option>
+<option>Tamil</option>
+<option>Telugu</option>
+<option>Malayalam</option>
+<option>Kannada</option>
+<option>Hindi</option>
+
+</select>
+
+
+<div class="profile-pill">
+
+<div class="avatar">
+🧒
+</div>
+
+<b id="topGrade">
+Grade 1
+</b>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<!-- =====================================================
+DASHBOARD
+===================================================== -->
+
+<div
+id="dashboard"
+class="tab active"
+>
+
+<div class="hero">
+
+<h2>
+🚀 Welcome to your Learning Adventure!
+</h2>
+
+<p>
+
+Today you can learn something new,
+ask your AI Tutor,
+take a quiz,
+earn XP and become a Learning Star! ⭐
+
+</p>
+
+<div class="hero-art">
+👧📚🌈
+</div>
+
+</div>
+
+
+<div class="stats">
+
+<div class="stat">
+
+<div class="ico">🏆</div>
+
+<b id="points">
+0
+</b>
+
+<span>
+XP Points
+</span>
+
+</div>
+
+
+<div class="stat">
+
+<div class="ico">🔥</div>
+
+<b id="streak">
+0
+</b>
+
+<span>
+Day Streak
+</span>
+
+</div>
+
+
+<div class="stat">
+
+<div class="ico">📝</div>
+
+<b id="quizzes">
+0
+</b>
+
+<span>
+Quizzes
+</span>
+
+</div>
+
+
+<div class="stat">
+
+<div class="ico">🏅</div>
+
+<b id="badges">
+0
+</b>
+
+<span>
+Badges
+</span>
+
+</div>
+
+
+<div class="stat">
+
+<div class="ico">📊</div>
+
+<b id="score">
+0%
+</b>
+
+<span>
+Average Score
+</span>
+
+</div>
+
+</div>
+
+
+<div class="grid3">
+
+
+<div
+class="feature blue"
+onclick="openTab('tutor')"
+>
+
+<div class="ficon">
+🤖
+</div>
+
+<h3>
+AI Tutor
+</h3>
+
+<p>
+Ask anything you don't understand
+</p>
+
+</div>
+
+
+<div
+class="feature green"
+onclick="openTab('lessons')"
+>
+
+<div class="ficon">
+📚
+</div>
+
+<h3>
+AI Lessons
+</h3>
+
+<p>
+Learn topics in simple words
+</p>
+
+</div>
+
+
+<div
+class="feature yellow"
+onclick="openTab('quiz')"
+>
+
+<div class="ficon">
+❓
+</div>
+
+<h3>
+Quiz Time
+</h3>
+
+<p>
+Answer questions and earn XP
+</p>
+
+</div>
+
+
+<div
+class="feature purple"
+onclick="openTab('flashcards')"
+>
+
+<div class="ficon">
+🃏
+</div>
+
+<h3>
+Flashcards
+</h3>
+
+<p>
+Quick revision made fun
+</p>
+
+</div>
+
+
+<div
+class="feature pink"
+onclick="openTab('notes')"
+>
+
+<div class="ficon">
+📒
+</div>
+
+<h3>
+My Notes
+</h3>
+
+<p>
+Keep your learning notebook
+</p>
+
+</div>
+
+
+<div
+class="feature cyan"
+onclick="openTab('translator')"
+>
+
+<div class="ficon">
+🌍
+</div>
+
+<h3>
+Mother Tongue
+</h3>
+
+<p>
+Learn in your favourite language
+</p>
+
+</div>
+
+</div>
+
+
+<div class="lower">
+
+
+<div class="card">
+
+<h3>
+📅 Today's Learning Plan
+</h3>
+
+<div class="schedule">
+
+<div>
+<b>09:00</b>
+<span>➕ Maths</span>
+</div>
+
+<div>
+<b>10:30</b>
+<span>🌱 Science / EVS</span>
+</div>
+
+<div>
+<b>12:00</b>
+<span>🔤 English</span>
+</div>
+
+<div>
+<b>02:00</b>
+<span>🐯 General Knowledge</span>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h3>
+🏆 Class Leaderboard
+</h3>
+
+<div
+id="leaderboard"
+class="leader"
+>
+
+<div>
+
+<b>
+Loading…
+</b>
+
+<span>
+—
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h3>
+🎖️ Your Badges
+</h3>
+
+<div style="
+display:flex;
+gap:18px;
+flex-wrap:wrap;
+font-size:13px;
+">
+
+<div style="text-align:center">
+🌟
+<br>
+<b>
+Quick Learner
+</b>
+</div>
+
+<div style="text-align:center">
+🔥
+<br>
+<b>
+Streak Star
+</b>
+</div>
+
+<div style="text-align:center">
+🏆
+<br>
+<b>
+Quiz Master
+</b>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="tip">
+
+<div class="tipicon">
+💡
+</div>
+
+<div>
+
+<b>
+Today's Super Tip
+</b>
+
+<p>
+Practice a little every day.
+Small steps create BIG success! 🚀
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<!-- =====================================================
+AI LESSON
+===================================================== -->
+
+<div
+id="lessons"
+class="tab"
+>
+
+<div class="section-head">
+
+<div>
+
+<h2>
+📚 AI Lesson Maker
+</h2>
+
+<p>
+Tell EduAI what you want to learn!
+</p>
+
+</div>
+
+</div>
+
+
+<div class="panel">
+
+<div class="row">
+
+<div class="field">
+
+<label>
+📖 Topic
+</label>
+
+<input
+id="lectureTopic"
+placeholder="Example: Plants"
+>
+
+</div>
+
+
+<div class="field">
+
+<label>
+📚 Subject
+</label>
+
+<input
+id="lectureSubject"
+placeholder="Example: Science"
+>
+
+</div>
+
+</div>
+
+
+<button
+class="primary-btn"
+id="lectureBtn"
+onclick="generateLecture()"
+style="margin-top:15px"
+>
+
+🎬 Create My Lesson
+
+</button>
+
+
+<div id="lectureResult"></div>
+
+</div>
+
+</div>
+
+
+
+<!-- =====================================================
+AI TUTOR
+===================================================== -->
+
+<div
+id="tutor"
+class="tab"
+>
+
+<div class="section-head">
+
+<div>
+
+<h2>
+🤖 AI Tutor
+</h2>
+
+<p>
+Ask your doubt — your AI teacher is ready!
+</p>
+
+</div>
+
+</div>
+
+
+<div class="panel">
+
+<div class="row">
+
+<div class="field">
+
+<label>
+📚 Subject
+</label>
+
+<input
+id="tutorSubject"
+placeholder="Example: Maths"
+>
+
+</div>
+
+
+<div class="field">
+
+<label>
+📖 Topic
+</label>
+
+<input
+id="tutorTopic"
+placeholder="Example: Addition"
+>
+
+</div>
+
+</div>
+
+
+<div
+class="field"
+style="margin-top:14px"
+>
+
+<label>
+💭 What do you want to ask?
+</label>
+
+<textarea
+id="tutorQuestion"
+placeholder="Type your doubt here..."
+></textarea>
+
+</div>
+
+
+<button
+class="primary-btn"
+id="tutorBtn"
+onclick="askTutor()"
+>
+
+💬 Ask My AI Tutor
+
+</button>
+
+
+<div id="tutorResult"></div>
+
+</div>
+
+</div>
+
+
+
+<!-- =====================================================
+QUIZ
+===================================================== -->
+
+<div
+id="quiz"
+class="tab"
+>
+
+<div class="section-head">
+
+<div>
+
+<h2>
+📝 Quiz Time!
+</h2>
+
+<p>
+Test yourself and become a Quiz Champion! 🏆
+</p>
+
+</div>
+
+</div>
+
+
+<div
+class="panel"
+id="quizSetup"
+>
+
+<div class="row">
+
+<div class="field">
+
+<label>
+📚 Subject
+</label>
+
+<input
+id="quizSubject"
+placeholder="Example: Science"
+>
+
+</div>
+
+
+<div class="field">
+
+<label>
+📖 Topic
+</label>
+
+<input
+id="quizTopic"
+placeholder="Example: Parts of a Plant"
+>
+
+</div>
+
+</div>
+
+
+<div
+class="field"
+style="margin-top:14px"
+>
+
+<label>
+🔢 Number of Questions
+</label>
+
+<select id="questionCount">
+
+<option value="5">
+5 Questions ⭐
+</option>
+
+<option value="10">
+10 Questions 🌟
+</option>
+
+<option value="15">
+15 Questions 🏆
+</option>
+
+</select>
+
+</div>
+
+
+<button
+class="primary-btn"
+id="quizBtn"
+onclick="generateQuiz()"
+style="margin-top:15px"
+>
+
+🚀 Start Quiz
+
+</button>
+
+</div>
+
+
+<div id="quizResult"></div>
+
+</div>
+
+
+
+<!-- =====================================================
+TRANSLATOR
+===================================================== -->
+
+<div
+id="translator"
+class="tab"
+>
+
+<div class="section-head">
+
+<div>
+
+<h2>
+🌍 Mother Tongue Translator
+</h2>
+
+<p>
+Understand lessons in a language you love.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="panel">
+
+<div class="row">
+
+<div class="field">
+
+<label>
+From
+</label>
+
+<select id="sourceLang">
+
+<option>English</option>
+<option>Tamil</option>
+<option>Telugu</option>
+<option>Malayalam</option>
+<option>Kannada</option>
+<option>Hindi</option>
+
+</select>
+
+</div>
+
+
+<div class="field">
+
+<label>
+To
+</label>
+
+<select id="targetLang">
+
+<option>Tamil</option>
+<option>English</option>
+<option>Telugu</option>
+<option>Malayalam</option>
+<option>Kannada</option>
+<option>Hindi</option>
+
+</select>
+
+</div>
+
+</div>
+
+
+<div
+class="field"
+style="margin-top:14px"
+>
+
+<label>
+✍️ Text
+</label>
+
+<textarea
+id="translateText"
+placeholder="Type something you want to understand..."
+></textarea>
+
+</div>
+
+
+<button
+class="primary-btn"
+id="translateBtn"
+onclick="translateText()"
+>
+
+🌐 Translate
+
+</button>
+
+
+<button
+class="primary-btn"
+style="
+margin-left:8px;
+background:#e2e8f0;
+color:#334155;
+box-shadow:none;
+"
+onclick="swapLanguages()"
+>
+
+↔ Swap
+
+</button>
+
+
+<div id="translationResult"></div>
+
+</div>
+
+</div>
+
+
+
+<!-- =====================================================
+FLASHCARDS
+===================================================== -->
+
+<div
+id="flashcards"
+class="tab"
+>
+
+<div class="section-head">
+
+<div>
+
+<h2>
+🃏 Flashcards
+</h2>
+
+<p>
+Learn one tiny fact at a time!
+</p>
+
+</div>
+
+</div>
+
+
+<div class="panel">
+
+<div class="field">
+
+<label>
+📖 Topic
+</label>
+
+<input
+id="flashTopic"
+value="Plants"
+placeholder="Example: Animals"
+>
+
+</div>
+
+
+<button
+class="primary-btn"
+style="margin-top:14px"
+onclick="makeFlashcard()"
+>
+
+✨ Show My Card
+
+</button>
+
+
+<div
+id="flashcardBox"
+class="flashcard"
+style="margin-top:16px"
+>
+
+<div>
+
+<div style="font-size:60px">
+🌱
+</div>
+
+<div>
+Click the button to discover
+a cool fact!
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<!-- =====================================================
+NOTES
+===================================================== -->
+
+<div
+id="notes"
+class="tab"
+>
+
+<div class="section-head">
+
+<div>
+
+<h2>
+📒 My Learning Notebook
+</h2>
+
+<p>
+Save your favourite learning points.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="panel">
+
+<div class="field">
+
+<label>
+📌 Topic
+</label>
+
+<input
+id="noteTopic"
+placeholder="Example: Plants"
+>
+
+</div>
+
+
+<div
+class="field"
+style="margin-top:14px"
+>
+
+<label>
+✍️ My Note
+</label>
+
+<textarea
+id="noteContent"
+placeholder="Write what you learned..."
+></textarea>
+
+</div>
+
+
+<button
+class="primary-btn"
+onclick="saveNote()"
+>
+
+💾 Save My Note
+
+</button>
+
+
+<div
+id="notesList"
+style="margin-top:18px"
+></div>
+
+</div>
+
+</div>
+
+
+
+<!-- =====================================================
+PROGRESS
+===================================================== -->
+
+<div
+id="progress"
+class="tab"
+>
+
+<div class="section-head">
+
+<div>
+
+<h2>
+📈 My Progress
+</h2>
+
+<p>
+Look how much you are growing! 🌱
+</p>
+
+</div>
+
+</div>
+
+
+<div class="panel">
+
+<h3>
+🌟 Learning Level
+</h3>
+
+<div style="
+display:flex;
+justify-content:space-between;
+">
+
+<b>
+Level
+<span id="level">
+1
+</span>
+</b>
+
+<span id="progressText">
+0 / 100 XP
+</span>
+
+</div>
+
+
+<div
+class="progressbar"
+style="margin-top:9px"
+>
+
+<span
+id="progressBar"
+style="width:0%"
+></span>
+
+</div>
+
+</div>
+
+
+<div class="grid3">
+
+<div class="card">
+
+<h3>
+🏆 XP Points
+</h3>
+
+<div
+class="score"
+id="progressPoints"
+>
+0
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h3>
+🔥 Streak
+</h3>
+
+<div
+class="score"
+id="progressStreak"
+>
+0 days
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h3>
+📝 Quizzes
+</h3>
+
+<div
+class="score"
+id="progressQuizzes"
+>
+0
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<!-- =====================================================
+ACHIEVEMENTS
+===================================================== -->
+
+<div
+id="achievements"
+class="tab"
+>
+
+<div class="section-head">
+
+<div>
+
+<h2>
+🏆 Achievements
+</h2>
+
+<p>
+Every little achievement matters!
+</p>
+
+</div>
+
+</div>
+
+
+<div class="grid3">
+
+<div class="feature yellow">
+
+<div class="ficon">
+🌟
+</div>
+
+<h3>
+Quick Learner
+</h3>
+
+<p>
+Keep learning every day
+</p>
+
+</div>
+
+
+<div class="feature pink">
+
+<div class="ficon">
+🔥
+</div>
+
+<h3>
+Streak Star
+</h3>
+
+<p>
+Build your learning streak
+</p>
+
+</div>
+
+
+<div class="feature purple">
+
+<div class="ficon">
+🏆
+</div>
+
+<h3>
+Quiz Master
+</h3>
+
+<p>
+Complete practice quizzes
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<!-- =====================================================
+PARENT
+===================================================== -->
+
+<div
+id="parent"
+class="tab"
+>
+
+<div class="section-head">
+
+<div>
+
+<h2>
+👨‍👩‍👧 Parent Corner
+</h2>
+
+<p>
+Student profile and learning information.
+</p>
+
+</div>
+
+</div>
+
+
+<div
+class="panel"
+id="parentInfo"
+></div>
+
+</div>
+
+
+
+<!-- =====================================================
+SETTINGS
+===================================================== -->
+
+<div
+id="settings"
+class="tab"
+>
+
+<div class="section-head">
+
+<div>
+
+<h2>
+⚙️ Settings
+</h2>
+
+<p>
+Personalise your learning experience.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="panel">
+
+<div class="row">
+
+<div class="field">
+
+<label>
+Student Name
+</label>
+
+<input id="settingName">
+
+</div>
+
+
+<div class="field">
+
+<label>
+Grade
+</label>
+
+<select id="settingGrade">
+
+<option>1st</option>
+<option>2nd</option>
+<option>3rd</option>
+<option>4th</option>
+<option>5th</option>
+
+</select>
+
+</div>
+
+</div>
+
+
+<div
+class="field"
+style="margin-top:14px"
+>
+
+<label>
+Learning Language
+</label>
+
+<select
+id="settingLanguage"
+onchange="changeLanguage()"
+>
+
+<option>English</option>
+<option>Tamil</option>
+<option>Telugu</option>
+<option>Malayalam</option>
+<option>Kannada</option>
+<option>Hindi</option>
+
+</select>
+
+</div>
+
+
+<button
+class="primary-btn"
+style="margin-top:14px"
+onclick="saveSettings()"
+>
+
+💾 Save Settings
+
+</button>
+
+
+<div id="settingsResult"></div>
+
+</div>
+
+</div>
+
+
+<footer style="
+text-align:center;
+color:#94a3b8;
+font-size:12px;
+padding:24px 0 5px;
+">
+
+© 2026 Vernacular EduAI
+<br>
+Made with ❤️ for Primary Students
+
+</footer>
+
+
+</main>
+
 </section>
 
-<div id="toast" class="toast"></div>
+
+<div
+id="toast"
+class="toast"
+></div>
+
+<div
+id="celebrate"
+class="celebrate"
+></div>
+
+
 
 <script>
-/* ================= BACKEND CONFIG ================= */
-const BACKEND_URL = "https://script.google.com/macros/s/AKfycbyrFuw61nnDjCpQBj6wW17PINxW3_hvWXXkfA2mHyxq2b5XWSH04nAArbWldeD-kOyZKQ/exec";
 
-/* ================= APP STATE ================= */
+
+/* =====================================================
+IMPORTANT BACKEND URL
+===================================================== */
+
+const BACKEND_URL =
+"https://script.google.com/macros/s/AKfycbyrFuw61nnDjCpQBj6wW17PINxW3_hvWXXkfA2mHyxq2b5XWSH04nAArbWldeD-kOyZKQ/exec";
+
+
+/* =====================================================
+APP STATE
+===================================================== */
+
 let currentStudent = null;
-let currentLanguage = "English";
-let currentQuiz = null;
-let notes = JSON.parse(localStorage.getItem("vernacularEduAINotes") || "[]");
 
-/* Generic Apps Script POST.
-   We intentionally send JSON as text/plain so the browser does not create
-   a CORS preflight request; the backend already parses e.postData.contents. */
-async function api(action, payload = {}) {
-  const response = await fetch(BACKEND_URL, {
-    method: "POST",
-    headers: {"Content-Type":"text/plain;charset=utf-8"},
-    body: JSON.stringify({action, ...payload})
-  });
-  const text = await response.text();
-  let data;
-  try { data = JSON.parse(text); }
-  catch { throw new Error("Backend returned an invalid response."); }
-  if (!response.ok) throw new Error("Backend HTTP error: " + response.status);
-  if (data && data.success === false) throw new Error(data.error || data.message || "Request failed");
-  return data;
+let currentLanguage = "English";
+
+let currentQuiz = null;
+
+let notes =
+JSON.parse(
+localStorage.getItem(
+"vernacularEduAINotes"
+) || "[]"
+);
+
+
+/* =====================================================
+GENERIC API
+===================================================== */
+
+async function api(action,payload={}){
+
+const response =
+await fetch(
+BACKEND_URL,
+{
+method:"POST",
+
+headers:{
+"Content-Type":
+"text/plain;charset=utf-8"
+},
+
+body:
+JSON.stringify({
+action,
+...payload
+})
 }
+);
+
+const text =
+await response.text();
+
+let data;
+
+try{
+
+data=JSON.parse(text);
+
+}catch{
+
+throw new Error(
+"Backend returned an invalid response."
+);
+
+}
+
+if(
+!response.ok
+){
+
+throw new Error(
+"Backend HTTP error: "
++
+response.status
+);
+
+}
+
+if(
+data &&
+data.success===false
+){
+
+throw new Error(
+data.error ||
+data.message ||
+"Request failed"
+);
+
+}
+
+return data;
+
+}
+
+
+/* =====================================================
+BACKEND HEALTH
+===================================================== */
 
 async function checkBackend(){
-  const el = document.getElementById("backendStatus");
-  try{
-    const r = await fetch(BACKEND_URL + "?action=health", {method:"GET"});
-    const d = await r.json();
-    el.textContent = d.success ? "🟢 Backend connected" : "🟠 Backend responded";
-    el.style.color = d.success ? "#15803d" : "#a16207";
-  }catch(e){
-    el.textContent = "🔴 Backend connection unavailable";
-    el.style.color = "#b91c1c";
-  }
+
+const el =
+document.getElementById(
+"backendStatus"
+);
+
+try{
+
+const response =
+await fetch(
+BACKEND_URL+
+"?action=health"
+);
+
+const data =
+await response.json();
+
+if(data.success){
+
+el.textContent =
+"🟢 EduAI backend connected";
+
+el.style.color =
+"#15803d";
+
+}else{
+
+el.textContent =
+"🟠 Backend responded";
+
 }
+
+}catch(error){
+
+el.textContent =
+"🔴 Backend connection unavailable";
+
+el.style.color =
+"#b91c1c";
+
+}
+
+}
+
 checkBackend();
 
-/* ================= LOGIN / REGISTRATION ================= */
+
+/* =====================================================
+LOGIN
+===================================================== */
+
 async function submitLogin(event){
-  event.preventDefault();
-  const btn = document.getElementById("loginBtn");
-  const msg = document.getElementById("loginMessage");
-  msg.innerHTML = "";
-  const name = val("name"), grade = val("grade"), age = val("age"),
-        motherTongue = val("motherTongue"), syllabus = val("syllabus"),
-        parentName = val("parentName"), parentContact = val("parentContact"),
-        parentEmail = val("parentEmail"), subject = val("subject"),
-        state = val("state"), country = val("country"),
-        termsAccepted = document.getElementById("terms").checked;
 
-  if(!name || !grade || !age || !motherTongue || !syllabus || !parentName ||
-     !parentContact || !parentEmail || !subject || !state || !country || !termsAccepted){
-    msg.innerHTML = '<div class="error-box">❌ Please complete all required fields and accept the Terms & Conditions.</div>';
-    return;
-  }
-  const ageNumber = Number(age);
-  if(ageNumber < 5 || ageNumber > 12){
-    msg.innerHTML = '<div class="error-box">❌ Primary student age should be between 5 and 12.</div>';
-    return;
-  }
+event.preventDefault();
 
-  btn.disabled = true;
-  btn.innerHTML = '<span class="loading"></span> Saving profile…';
+const btn =
+document.getElementById(
+"loginBtn"
+);
 
-  try{
-    // URLSearchParams is also supported by the backend and keeps all fields
-    // available through Apps Script e.parameter.
-    const formData = new URLSearchParams();
-    const payload = {
-      action:"registerStudent", name, studentName:name, grade, age,
-      parentName, parentContact, subject, parentEmail, motherTongue,
-      syllabus, state, country, termsAccepted:"true"
-    };
-    Object.entries(payload).forEach(([k,v]) => formData.append(k,v));
+const msg =
+document.getElementById(
+"loginMessage"
+);
 
-    const response = await fetch(BACKEND_URL,{
-      method:"POST",
-      headers:{"Content-Type":"application/x-www-form-urlencoded;charset=UTF-8"},
-      body:formData.toString()
-    });
-    const data = await response.json();
+msg.innerHTML="";
 
-    if(!data.success) throw new Error(data.error || data.message || "Registration failed");
 
-    currentStudent = {
-      id:data.studentId || ("STU"+Date.now()), name, grade, age, parentName,
-      parentContact, subject, parentEmail, motherTongue, syllabus, state, country
-    };
-    currentLanguage = motherTongue || "English";
-    document.getElementById("topLanguage").value = currentLanguage;
-    showApp();
-    toast("🎉 Welcome, " + name + "! Your profile is saved.");
-  }catch(error){
-    console.error(error);
-    msg.innerHTML = '<div class="error-box">❌ '+escapeHtml(error.message)+'</div>';
-  }finally{
-    btn.disabled = false;
-    btn.innerHTML = "🚀 Start Learning";
-  }
+const name =
+val("name");
+
+const grade =
+val("grade");
+
+const age =
+val("age");
+
+const motherTongue =
+val("motherTongue");
+
+const syllabus =
+val("syllabus");
+
+const parentName =
+val("parentName");
+
+const parentContact =
+val("parentContact");
+
+const parentEmail =
+val("parentEmail");
+
+const subject =
+val("subject");
+
+const state =
+val("state");
+
+const country =
+val("country");
+
+const termsAccepted =
+document.getElementById(
+"terms"
+).checked;
+
+
+if(
+!name ||
+!grade ||
+!age ||
+!motherTongue ||
+!syllabus ||
+!parentName ||
+!parentContact ||
+!parentEmail ||
+!subject ||
+!state ||
+!country ||
+!termsAccepted
+){
+
+msg.innerHTML=
+'<div class="error-box">'+
+'❌ Please complete all required fields.'+
+'</div>';
+
+return;
+
 }
+
+
+const ageNumber =
+Number(age);
+
+
+if(
+ageNumber<5 ||
+ageNumber>12
+){
+
+msg.innerHTML=
+'<div class="error-box">'+
+'❌ Primary student age should be between 5 and 12.'+
+'</div>';
+
+return;
+
+}
+
+
+btn.disabled=true;
+
+btn.innerHTML=
+'<span class="loading"></span> Creating your learning world...';
+
+
+try{
+
+const formData =
+new URLSearchParams();
+
+
+const payload={
+
+action:"registerStudent",
+
+name:name,
+
+studentName:name,
+
+grade:grade,
+
+age:age,
+
+parentName:parentName,
+
+parentContact:parentContact,
+
+subject:subject,
+
+parentEmail:parentEmail,
+
+motherTongue:motherTongue,
+
+syllabus:syllabus,
+
+state:state,
+
+country:country,
+
+termsAccepted:"true"
+
+};
+
+
+Object
+.entries(payload)
+.forEach(
+([key,value])=>
+formData.append(
+key,value
+)
+);
+
+
+const response =
+await fetch(
+BACKEND_URL,
+{
+
+method:"POST",
+
+headers:{
+"Content-Type":
+"application/x-www-form-urlencoded;charset=UTF-8"
+},
+
+body:
+formData.toString()
+
+}
+);
+
+
+const data =
+await response.json();
+
+
+if(
+!data.success
+){
+
+throw new Error(
+data.error ||
+data.message ||
+"Registration failed"
+);
+
+}
+
+
+currentStudent={
+
+id:
+data.studentId ||
+("STU"+Date.now()),
+
+name,
+
+grade,
+
+age,
+
+parentName,
+
+parentContact,
+
+subject,
+
+parentEmail,
+
+motherTongue,
+
+syllabus,
+
+state,
+
+country
+
+};
+
+
+currentLanguage =
+motherTongue ||
+"English";
+
+
+localStorage.setItem(
+"vernacularEduAIStudent",
+JSON.stringify(
+currentStudent
+)
+);
+
+
+localStorage.setItem(
+"vernacularEduAILanguage",
+currentLanguage
+);
+
+
+showApp();
+
+celebrate();
+
+toast(
+"🎉 Welcome "+name+"! Your learning adventure begins!"
+);
+
+
+}catch(error){
+
+console.error(error);
+
+msg.innerHTML=
+'<div class="error-box">'+
+'❌ '+
+escapeHtml(error.message)+
+'</div>';
+
+}finally{
+
+btn.disabled=false;
+
+btn.innerHTML=
+"🚀 Start My Learning Adventure!";
+
+}
+
+}
+
+
+/* =====================================================
+RESTORE SESSION
+===================================================== */
+
+function restoreSession(){
+
+try{
+
+const saved =
+localStorage.getItem(
+"vernacularEduAIStudent"
+);
+
+if(!saved)return;
+
+const student =
+JSON.parse(saved);
+
+if(
+student &&
+student.name &&
+student.grade
+){
+
+currentStudent=student;
+
+currentLanguage =
+localStorage.getItem(
+"vernacularEduAILanguage"
+)
+||
+student.motherTongue
+||
+"English";
+
+showApp();
+
+}
+
+}catch(error){
+
+console.warn(
+"Session restore failed",
+error
+);
+
+}
+
+}
+
+
+/* =====================================================
+SHOW APP
+===================================================== */
 
 function showApp(){
-  document.getElementById("loginScreen").classList.add("hidden");
-  document.getElementById("appScreen").classList.remove("hidden");
-  document.getElementById("studentName").textContent = currentStudent.name;
-  document.getElementById("topGrade").textContent = "Grade " + currentStudent.grade.replace("st","").replace("nd","").replace("rd","").replace("th","");
-  document.getElementById("settingName").value = currentStudent.name;
-  document.getElementById("settingGrade").value = currentStudent.grade;
-  document.getElementById("settingLanguage").value = currentLanguage;
-  renderParent();
-  renderNotes();
-  loadDashboard();
+
+document
+.getElementById(
+"loginScreen"
+)
+.classList.add("hidden");
+
+
+document
+.getElementById(
+"appScreen"
+)
+.classList.remove("hidden");
+
+
+document
+.getElementById(
+"studentName"
+)
+.textContent =
+currentStudent.name;
+
+
+document
+.getElementById(
+"topGrade"
+)
+.textContent =
+"Grade "+
+currentStudent.grade.replace(
+/\D/g,
+""
+);
+
+
+document
+.getElementById(
+"topLanguage"
+)
+.value =
+currentLanguage;
+
+
+document
+.getElementById(
+"settingName"
+)
+.value =
+currentStudent.name;
+
+
+document
+.getElementById(
+"settingGrade"
+)
+.value =
+currentStudent.grade;
+
+
+document
+.getElementById(
+"settingLanguage"
+)
+.value =
+currentLanguage;
+
+
+renderParent();
+
+renderNotes();
+
+loadDashboard();
+
 }
+
+
+/* =====================================================
+LOGOUT
+===================================================== */
 
 function logout(){
-  currentStudent = null;
-  currentQuiz = null;
-  document.getElementById("appScreen").classList.add("hidden");
-  document.getElementById("loginScreen").classList.remove("hidden");
-  document.getElementById("studentForm").reset();
-  document.getElementById("country").value = "India";
-  document.getElementById("loginMessage").innerHTML = "";
+
+if(
+!confirm(
+"Do you want to logout?"
+)
+)return;
+
+
+currentStudent=null;
+
+currentQuiz=null;
+
+localStorage.removeItem(
+"vernacularEduAIStudent"
+);
+
+localStorage.removeItem(
+"vernacularEduAILanguage"
+);
+
+
+document
+.getElementById(
+"appScreen"
+)
+.classList.add("hidden");
+
+
+document
+.getElementById(
+"loginScreen"
+)
+.classList.remove("hidden");
+
+
+document
+.getElementById(
+"studentForm"
+)
+.reset();
+
+
+document
+.getElementById(
+"country"
+)
+.value="India";
+
 }
 
-/* ================= DASHBOARD ================= */
+
+/* =====================================================
+DASHBOARD
+===================================================== */
+
 async function loadDashboard(){
-  if(!currentStudent) return;
-  try{
-    const data = await api("getDashboard",{studentId:currentStudent.id});
-    const d = data.data || data.dashboard || data;
-    setText("points", d.points ?? 0);
-    setText("streak", d.streak ?? 0);
-    setText("quizzes", d.quizzesTaken ?? d.quizzes ?? 0);
-    setText("badges", d.badges ?? 0);
-    const avg = d.averageScore ?? d.average ?? d.score ?? 0;
-    setText("score", (String(avg).includes("%") ? avg : Number(avg||0) + "%"));
-    setText("progressPoints", d.points ?? 0);
-    setText("progressStreak", (d.streak ?? 0) + " days");
-    setText("progressQuizzes", d.quizzesTaken ?? d.quizzes ?? 0);
-    setText("level", d.level ?? 1);
-    const xp = Number(d.xp ?? d.points ?? 0);
-    setText("progressText", Math.min(xp,100) + " / 100 XP");
-    document.getElementById("progressBar").style.width = Math.min(xp,100) + "%";
-    if(Array.isArray(d.leaderboard)) renderLeaderboard(d.leaderboard);
-  }catch(e){
-    console.warn("Dashboard data unavailable:",e.message);
-  }
 
-  // The backend has a dedicated GET leaderboard endpoint.
-  try{
-    const r = await fetch(BACKEND_URL+"?action=getLeaderboard&limit=5");
-    const d = await r.json();
-    if(d.success && Array.isArray(d.data)) renderLeaderboard(d.data);
-  }catch(e){ console.warn("Leaderboard unavailable:",e.message); }
+if(!currentStudent)return;
+
+
+try{
+
+const data =
+await api(
+"getDashboard",
+{
+studentId:
+currentStudent.id
 }
+);
+
+
+const d =
+data.data ||
+data.dashboard ||
+data;
+
+
+setText(
+"points",
+d.points ?? 0
+);
+
+setText(
+"streak",
+d.streak ?? 0
+);
+
+setText(
+"quizzes",
+d.quizzesTaken ??
+d.quizzes ??
+0
+);
+
+setText(
+"badges",
+d.badges ??
+0
+);
+
+
+const avg =
+d.averageScore ??
+d.average ??
+d.score ??
+0;
+
+
+setText(
+"score",
+
+String(avg).includes("%")
+?
+avg
+:
+Number(avg||0)+"%"
+);
+
+
+setText(
+"progressPoints",
+d.points ?? 0
+);
+
+setText(
+"progressStreak",
+(d.streak ?? 0)+
+" days"
+);
+
+setText(
+"progressQuizzes",
+d.quizzesTaken ??
+d.quizzes ??
+0
+);
+
+
+const level =
+d.level ??
+1;
+
+
+setText(
+"level",
+level
+);
+
+
+const xp =
+Number(
+d.xp ??
+d.points ??
+0
+);
+
+
+const xpInLevel =
+xp%100;
+
+
+setText(
+"progressText",
+xpInLevel+
+" / 100 XP"
+);
+
+
+document
+.getElementById(
+"progressBar"
+)
+.style.width =
+xpInLevel+"%";
+
+
+if(
+Array.isArray(
+d.leaderboard
+)
+){
+
+renderLeaderboard(
+d.leaderboard
+);
+
+}
+
+}catch(error){
+
+console.warn(
+"Dashboard unavailable:",
+error.message
+);
+
+}
+
+
+try{
+
+const response =
+await fetch(
+BACKEND_URL+
+"?action=getLeaderboard&limit=5"
+);
+
+const data =
+await response.json();
+
+
+if(
+data.success &&
+Array.isArray(data.data)
+){
+
+renderLeaderboard(
+data.data
+);
+
+}
+
+}catch(error){
+
+console.warn(
+"Leaderboard unavailable"
+);
+
+}
+
+}
+
+
+/* =====================================================
+LEADERBOARD
+===================================================== */
 
 function renderLeaderboard(list){
-  document.getElementById("leaderboard").innerHTML = list.slice(0,5).map((s,i)=>
-    `<div><b>${["🥇","🥈","🥉"][i] || (i+1)+". "} ${escapeHtml(s.name || s.studentName || "Learner")}</b><span>${Number(s.points||0)} pts</span></div>`
-  ).join("");
+
+document
+.getElementById(
+"leaderboard"
+)
+.innerHTML =
+list
+.slice(0,5)
+.map(
+(s,i)=>`
+
+<div>
+
+<b>
+${
+["🥇","🥈","🥉"][i]
+||
+(i+1)+"."
 }
 
-/* ================= TAB NAVIGATION ================= */
-function openTab(id, button){
-  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
-  const target=document.getElementById(id);
-  if(target) target.classList.add("active");
-  document.querySelectorAll(".nav button[data-tab]").forEach(x=>x.classList.remove("active"));
-  const navButton = button || document.querySelector('.nav button[data-tab="'+id+'"]');
-  if(navButton) navButton.classList.add("active");
-  document.getElementById("sidebar").classList.remove("open");
-  window.scrollTo({top:0,behavior:"smooth"});
-}
-function toggleSidebar(){document.getElementById("sidebar").classList.toggle("open")}
+${escapeHtml(
+s.name ||
+s.studentName ||
+"Learner"
+)}
 
-/* ================= AI LESSON ================= */
+</b>
+
+<span>
+${Number(s.points||0)} XP
+</span>
+
+</div>
+
+`
+)
+.join("");
+
+}
+
+
+/* =====================================================
+TAB NAVIGATION
+===================================================== */
+
+function openTab(
+id,
+button
+){
+
+document
+.querySelectorAll(
+".tab"
+)
+.forEach(
+x=>
+x.classList.remove(
+"active"
+)
+);
+
+
+const target =
+document.getElementById(id);
+
+
+if(target){
+
+target.classList.add(
+"active"
+);
+
+}
+
+
+document
+.querySelectorAll(
+".nav button[data-tab]"
+)
+.forEach(
+x=>
+x.classList.remove(
+"active"
+)
+);
+
+
+const navButton =
+button ||
+document.querySelector(
+'.nav button[data-tab="'+id+'"]'
+);
+
+
+if(navButton){
+
+navButton.classList.add(
+"active"
+);
+
+}
+
+
+document
+.getElementById(
+"sidebar"
+)
+.classList.remove(
+"open"
+);
+
+
+window.scrollTo({
+top:0,
+behavior:"smooth"
+});
+
+}
+
+
+function toggleSidebar(){
+
+document
+.getElementById(
+"sidebar"
+)
+.classList.toggle(
+"open"
+);
+
+}
+
+
+/* =====================================================
+AI LESSON
+===================================================== */
+
 async function generateLecture(){
-  const topic=val("lectureTopic"), subject=val("lectureSubject"), btn=document.getElementById("lectureBtn");
-  if(!topic || !subject){showResult("lectureResult",false,"❌ Please enter a topic and subject.");return}
-  btn.disabled=true;btn.innerHTML='<span class="loading"></span> Creating lesson…';
-  try{
-    const d=await api("generateLecture",{studentId:currentStudent.id,topic,subject,grade:currentStudent.grade,language:currentLanguage,syllabus:currentStudent.syllabus});
-    const content=d.lectureContent || d.content || d.lecture || "Lesson created successfully.";
-    showResult("lectureResult",true,`<h3>📚 ${escapeHtml(topic)}</h3><p><b>Subject:</b> ${escapeHtml(subject)} &nbsp; <b>Grade:</b> ${escapeHtml(currentStudent.grade)}</p><div>${formatText(content)}</div>`);
-    logActivity("AI Lesson",subject,1,5);
-  }catch(e){showResult("lectureResult",false,"❌ "+escapeHtml(e.message))}
-  finally{btn.disabled=false;btn.innerHTML="🎬 Generate Lesson"}
+
+const topic =
+val("lectureTopic");
+
+const subject =
+val("lectureSubject");
+
+const btn =
+document.getElementById(
+"lectureBtn"
+);
+
+
+if(
+!topic ||
+!subject
+){
+
+showResult(
+"lectureResult",
+false,
+"❌ Please enter topic and subject."
+);
+
+return;
+
 }
 
-/* ================= AI TUTOR ================= */
+
+btn.disabled=true;
+
+btn.innerHTML=
+'<span class="loading"></span> Creating your lesson...';
+
+
+try{
+
+const data =
+await api(
+"generateLecture",
+{
+
+studentId:
+currentStudent.id,
+
+topic,
+
+subject,
+
+grade:
+currentStudent.grade,
+
+language:
+currentLanguage,
+
+syllabus:
+currentStudent.syllabus
+
+}
+);
+
+
+const content =
+data.lectureContent ||
+data.content ||
+data.lecture ||
+"Lesson created successfully!";
+
+
+showResult(
+"lectureResult",
+true,
+
+`
+<h3>
+📚 ${escapeHtml(topic)}
+</h3>
+
+<p>
+
+<b>Subject:</b>
+${escapeHtml(subject)}
+
+&nbsp;
+
+<b>Grade:</b>
+${escapeHtml(
+currentStudent.grade
+)}
+
+</p>
+
+<hr>
+
+<div>
+${formatText(content)}
+</div>
+
+`
+
+);
+
+
+logActivity(
+"AI Lesson",
+subject,
+1,
+5
+);
+
+
+celebrate();
+
+
+}catch(error){
+
+showResult(
+"lectureResult",
+false,
+"❌ "+
+escapeHtml(
+error.message
+)
+);
+
+}finally{
+
+btn.disabled=false;
+
+btn.innerHTML=
+"🎬 Create My Lesson";
+
+}
+
+}
+
+
+/* =====================================================
+AI TUTOR
+===================================================== */
+
 async function askTutor(){
-  const subject=val("tutorSubject"),topic=val("tutorTopic"),doubt=val("tutorQuestion"),btn=document.getElementById("tutorBtn");
-  if(!subject||!topic||!doubt){showResult("tutorResult",false,"❌ Please fill the subject, topic and doubt.");return}
-  btn.disabled=true;btn.innerHTML='<span class="loading"></span> Thinking…';
-  try{
-    const d=await api("askDoubt",{studentId:currentStudent.id,subject,topic,doubt,language:currentLanguage});
-    const answer=d.answer || d.response || "I could not generate an answer right now.";
-    showResult("tutorResult",true,`<h3>🤖 AI Tutor</h3><p><b>Your doubt:</b> ${escapeHtml(doubt)}</p><p><b>Easy explanation:</b></p><div>${formatText(answer)}</div>${d.pointsEarned?`<p><b>🎉 +${d.pointsEarned} points!</b></p>`:""}`);
-    document.getElementById("tutorQuestion").value="";
-    logActivity("AI Tutor",subject,1,Number(d.pointsEarned||2));
-  }catch(e){showResult("tutorResult",false,"❌ "+escapeHtml(e.message))}
-  finally{btn.disabled=false;btn.innerHTML="💬 Ask Tutor"}
+
+const subject =
+val("tutorSubject");
+
+const topic =
+val("tutorTopic");
+
+const doubt =
+val("tutorQuestion");
+
+const btn =
+document.getElementById(
+"tutorBtn"
+);
+
+
+if(
+!subject ||
+!topic ||
+!doubt
+){
+
+showResult(
+"tutorResult",
+false,
+"❌ Please fill subject, topic and your doubt."
+);
+
+return;
+
 }
 
-/* ================= TRANSLATOR ================= */
+
+btn.disabled=true;
+
+btn.innerHTML=
+'<span class="loading"></span> Your AI Tutor is thinking...';
+
+
+try{
+
+const data =
+await api(
+"askDoubt",
+{
+
+studentId:
+currentStudent.id,
+
+subject,
+
+topic,
+
+doubt,
+
+language:
+currentLanguage
+
+}
+);
+
+
+const answer =
+data.answer ||
+data.response ||
+"I couldn't generate an answer right now.";
+
+
+showResult(
+"tutorResult",
+true,
+
+`
+<h3>
+🤖 Your AI Tutor
+</h3>
+
+<p>
+<b>Your question:</b>
+${escapeHtml(doubt)}
+</p>
+
+<hr>
+
+<p>
+<b>💡 Easy explanation:</b>
+</p>
+
+<div>
+${formatText(answer)}
+</div>
+
+${
+
+data.pointsEarned
+
+?
+
+`
+<p>
+<b>
+🎉 +${data.pointsEarned} XP!
+</b>
+</p>
+`
+
+:""
+
+}
+
+`
+
+);
+
+
+document
+.getElementById(
+"tutorQuestion"
+)
+.value="";
+
+
+logActivity(
+"AI Tutor",
+subject,
+1,
+Number(
+data.pointsEarned||2
+)
+);
+
+
+}catch(error){
+
+showResult(
+"tutorResult",
+false,
+"❌ "+
+escapeHtml(
+error.message
+)
+);
+
+}finally{
+
+btn.disabled=false;
+
+btn.innerHTML=
+"💬 Ask My AI Tutor";
+
+}
+
+}
+
+
+/* =====================================================
+TRANSLATOR
+===================================================== */
+
 function swapLanguages(){
-  const a=document.getElementById("sourceLang"),b=document.getElementById("targetLang");[a.value,b.value]=[b.value,a.value];
+
+const a =
+document.getElementById(
+"sourceLang"
+);
+
+const b =
+document.getElementById(
+"targetLang"
+);
+
+[
+a.value,
+b.value
+]=[
+b.value,
+a.value
+];
+
 }
+
+
 async function translateText(){
-  const text=val("translateText"),sourceLanguage=val("sourceLang"),targetLanguage=val("targetLang"),btn=document.getElementById("translateBtn");
-  if(!text){showResult("translationResult",false,"❌ Please enter text to translate.");return}
-  btn.disabled=true;btn.innerHTML='<span class="loading"></span> Translating…';
-  try{
-    const d=await api("translateText",{text,sourceLanguage,targetLanguage});
-    showResult("translationResult",true,`<h3>🌐 Translation Complete</h3><p><b>${escapeHtml(sourceLanguage)}:</b> ${escapeHtml(text)}</p><p><b>${escapeHtml(targetLanguage)}:</b></p><div style="font-size:18px;font-weight:900;color:#6d28d9">${escapeHtml(d.translatedText||text)}</div>`);
-  }catch(e){showResult("translationResult",false,"❌ "+escapeHtml(e.message))}
-  finally{btn.disabled=false;btn.innerHTML="🌐 Translate"}
+
+const text =
+val("translateText");
+
+const sourceLanguage =
+val("sourceLang");
+
+const targetLanguage =
+val("targetLang");
+
+const btn =
+document.getElementById(
+"translateBtn"
+);
+
+
+if(!text){
+
+showResult(
+"translationResult",
+false,
+"❌ Please enter text."
+);
+
+return;
+
 }
 
-/* ================= QUIZ ================= */
+
+btn.disabled=true;
+
+btn.innerHTML=
+'<span class="loading"></span> Translating...';
+
+
+try{
+
+const data =
+await api(
+"translateText",
+{
+
+text,
+
+sourceLanguage,
+
+targetLanguage
+
+}
+);
+
+
+showResult(
+"translationResult",
+true,
+
+`
+<h3>
+🌐 Translation Complete
+</h3>
+
+<p>
+
+<b>
+${escapeHtml(sourceLanguage)}:
+</b>
+
+${escapeHtml(text)}
+
+</p>
+
+<hr>
+
+<p>
+<b>
+${escapeHtml(targetLanguage)}:
+</b>
+</p>
+
+<div
+style="
+font-size:19px;
+font-weight:900;
+color:#6d28d9;
+"
+>
+
+${escapeHtml(
+data.translatedText ||
+text
+)}
+
+</div>
+
+`
+
+);
+
+}catch(error){
+
+showResult(
+"translationResult",
+false,
+"❌ "+
+escapeHtml(
+error.message
+)
+);
+
+}finally{
+
+btn.disabled=false;
+
+btn.innerHTML=
+"🌐 Translate";
+
+}
+
+}
+
+
+/* =====================================================
+QUIZ
+===================================================== */
+
 async function generateQuiz(){
-  const topic=val("quizTopic"),subject=val("quizSubject"),count=Number(val("questionCount")),btn=document.getElementById("quizBtn");
-  if(!topic||!subject){showResult("quizResult",false,"❌ Please enter subject and topic.");return}
-  btn.disabled=true;btn.innerHTML='<span class="loading"></span> Making quiz…';
-  try{
-    const d=await api("generateQuiz",{studentId:currentStudent.id,topic,subject,grade:currentStudent.grade,language:currentLanguage,questionCount:count});
-    if(!Array.isArray(d.questions)||!d.questions.length) throw new Error("No quiz questions were returned by the backend.");
-    currentQuiz={quizId:d.quizId||d.id||null,questions:d.questions,subject,topic};
-    renderQuiz();
-  }catch(e){showResult("quizResult",false,"❌ "+escapeHtml(e.message))}
-  finally{btn.disabled=false;btn.innerHTML="📝 Generate Quiz"}
-}
-function renderQuiz(){
-  const q=currentQuiz.questions;
-  document.getElementById("quizSetup").classList.add("hidden");
-  document.getElementById("quizResult").innerHTML=`<div class="panel"><h3>📝 ${escapeHtml(currentQuiz.topic)} Quiz</h3><p class="muted">Choose an answer. You will get instant feedback after each choice.</p><div id="questions">${q.map((x,i)=>`
-    <div class="quiz-question">
-      <b>${i+1}. ${escapeHtml(x.question||"Question")}</b>
-      ${(x.options||[]).map((o,j)=>`<label class="option"><input type="radio" name="q${i}" value="${j}" onchange="instantQuizFeedback(${i},${j})"> ${escapeHtml(o)}</label>`).join("")}
-      <div id="feedback${i}"></div>
-    </div>`).join("")}</div>
-    <button class="primary-btn" style="margin-top:18px" onclick="submitQuiz()">🏁 Finish Quiz</button>
-    <button class="primary-btn" style="margin-top:18px;margin-left:8px;background:#e2e8f0;color:#334155;box-shadow:none" onclick="resetQuiz()">🔄 New Quiz</button>
-    <div id="quizScore"></div></div>`;
-}
-function instantQuizFeedback(i,selected){
-  const q=currentQuiz.questions[i];
-  const correct=Number(q.correctAnswer);
-  const box=document.getElementById("feedback"+i);
-  if(selected===correct) box.innerHTML='<div class="feedback correct">✅ Correct! Great job! 🌟</div>';
-  else{
-    const correctText=(q.options&&q.options[correct])?q.options[correct]:"the correct answer";
-    box.innerHTML='<div class="feedback wrong">❌ Not quite. Correct answer: <b>'+escapeHtml(correctText)+'</b><br><span style="font-weight:600">💡 '+escapeHtml(q.explanation||"Review this topic once more and try again.")+'</span></div>';
-  }
-}
-async function submitQuiz(){
-  if(!currentQuiz)return;
-  const responses=currentQuiz.questions.map((q,i)=>{
-    const checked=document.querySelector('input[name="q'+i+'"]:checked');
-    return checked ? Number(checked.value) : null;
-  });
-  const answered=responses.filter(x=>x!==null).length;
-  if(!answered){alert("Please answer at least one question.");return}
-  let score=0;
-  currentQuiz.questions.forEach((q,i)=>{if(responses[i]!==null && Number(responses[i])===Number(q.correctAnswer))score++});
-  const percent=Math.round(score/currentQuiz.questions.length*100);
-  let serverMsg="";
-  try{
-    if(currentQuiz.quizId){
-      const d=await api("submitResponses",{studentId:currentStudent.id,quizId:currentQuiz.quizId,responses:JSON.stringify(responses)});
-      serverMsg=d.message||"";
-    }
-  }catch(e){console.warn("Quiz response could not be saved:",e.message)}
-  document.getElementById("quizScore").innerHTML=`<div class="result" style="text-align:center"><div class="score">🎉 Score: ${score} / ${currentQuiz.questions.length}</div><p><b>${percent}%</b> — ${percent>=80?"Excellent work! 🌟":percent>=50?"Good job! Keep practising! 💪":"Nice try! Let's learn and try again! 🌱"}</p>${serverMsg?`<p class="muted">${escapeHtml(serverMsg)}</p>`:""}</div>`;
-  logActivity("Quiz",currentQuiz.subject,5,score*2);
-  loadDashboard();
-}
-function resetQuiz(){
-  currentQuiz=null;
-  document.getElementById("quizSetup").classList.remove("hidden");
-  document.getElementById("quizResult").innerHTML="";
+
+const topic =
+val("quizTopic");
+
+const subject =
+val("quizSubject");
+
+const count =
+Number(
+val("questionCount")
+);
+
+const btn =
+document.getElementById(
+"quizBtn"
+);
+
+
+if(
+!topic ||
+!subject
+){
+
+showResult(
+"quizResult",
+false,
+"❌ Please enter subject and topic."
+);
+
+return;
+
 }
 
-/* ================= FLASHCARDS ================= */
-const flashFacts={
-  plants:["Plants need sunlight, water, air and nutrients to grow.","Roots hold the plant in the soil and absorb water.","Leaves help plants make food using sunlight."],
-  maths:["Addition means putting numbers together.","5 + 3 = 8.","A number line can help us add numbers."],
-  animals:["Animals need food, water and air to live.","Herbivores eat plants.","A habitat is the natural home of an animal."],
-  science:["Water can be a solid, liquid or gas.","The Sun gives Earth light and heat.","We use our senses to learn about the world."]
+
+btn.disabled=true;
+
+btn.innerHTML=
+'<span class="loading"></span> Creating your quiz...';
+
+
+try{
+
+const data =
+await api(
+"generateQuiz",
+{
+
+studentId:
+currentStudent.id,
+
+topic,
+
+subject,
+
+grade:
+currentStudent.grade,
+
+language:
+currentLanguage,
+
+questionCount:
+count
+
+}
+);
+
+
+if(
+!Array.isArray(
+data.questions
+)
+||
+!data.questions.length
+){
+
+throw new Error(
+"No quiz questions returned."
+);
+
+}
+
+
+currentQuiz={
+
+quizId:
+data.quizId ||
+data.id ||
+null,
+
+questions:
+data.questions,
+
+subject,
+
+topic
+
 };
+
+
+renderQuiz();
+
+
+}catch(error){
+
+showResult(
+"quizResult",
+false,
+"❌ "+
+escapeHtml(
+error.message
+)
+);
+
+}finally{
+
+btn.disabled=false;
+
+btn.innerHTML=
+"🚀 Start Quiz";
+
+}
+
+}
+
+
+function renderQuiz(){
+
+const q =
+currentQuiz.questions;
+
+
+document
+.getElementById(
+"quizSetup"
+)
+.classList.add(
+"hidden"
+);
+
+
+document
+.getElementById(
+"quizResult"
+)
+.innerHTML=
+
+`
+
+<div class="panel">
+
+<h3>
+📝
+${escapeHtml(
+currentQuiz.topic
+)}
+ Quiz
+</h3>
+
+<p class="muted">
+
+Choose your answer.
+Instant feedback will appear!
+
+</p>
+
+<div id="questions">
+
+${
+
+q.map(
+(x,i)=>`
+
+<div
+class="quiz-question"
+>
+
+<b>
+
+${i+1}.
+${escapeHtml(
+x.question ||
+"Question"
+)}
+
+</b>
+
+
+${
+
+(x.options||[])
+.map(
+(o,j)=>`
+
+<label class="option">
+
+<input
+
+type="radio"
+
+name="q${i}"
+
+value="${j}"
+
+onchange="
+instantQuizFeedback(
+${i},
+${j}
+)
+"
+
+>
+
+${escapeHtml(o)}
+
+</label>
+
+`
+)
+.join("")
+
+}
+
+
+<div
+id="feedback${i}"
+></div>
+
+</div>
+
+`
+)
+.join("")
+
+}
+
+</div>
+
+
+<button
+class="primary-btn"
+style="margin-top:18px"
+onclick="submitQuiz()"
+>
+
+🏁 Finish Quiz
+
+</button>
+
+
+<button
+class="primary-btn"
+style="
+margin-top:18px;
+margin-left:8px;
+background:#e2e8f0;
+color:#334155;
+box-shadow:none;
+"
+onclick="resetQuiz()"
+>
+
+🔄 New Quiz
+
+</button>
+
+
+<div id="quizScore"></div>
+
+</div>
+
+`;
+
+}
+
+
+function instantQuizFeedback(
+i,
+selected
+){
+
+const q =
+currentQuiz.questions[i];
+
+const correct =
+Number(
+q.correctAnswer
+);
+
+const box =
+document.getElementById(
+"feedback"+i
+);
+
+
+if(
+selected===correct
+){
+
+box.innerHTML=
+`
+
+<div
+class="feedback correct"
+>
+
+✅ Correct!
+Amazing work! 🌟
+
+</div>
+
+`;
+
+}else{
+
+const correctText =
+(
+q.options &&
+q.options[correct]
+)
+?
+q.options[correct]
+:
+"the correct answer";
+
+
+box.innerHTML=
+
+`
+
+<div
+class="feedback wrong"
+>
+
+❌ Not quite!
+
+<br>
+
+Correct answer:
+<b>
+${escapeHtml(
+correctText
+)}
+</b>
+
+<br><br>
+
+💡
+${escapeHtml(
+q.explanation ||
+"Review this topic and try again!"
+)}
+
+</div>
+
+`;
+
+}
+
+}
+
+
+async function submitQuiz(){
+
+if(!currentQuiz)return;
+
+
+const responses =
+currentQuiz.questions.map(
+(q,i)=>{
+
+const checked =
+document.querySelector(
+'input[name="q'+i+'"]:checked'
+);
+
+return checked
+?
+Number(checked.value)
+:
+null;
+
+}
+);
+
+
+const answered =
+responses.filter(
+x=>x!==null
+).length;
+
+
+if(!answered){
+
+alert(
+"Please answer at least one question."
+);
+
+return;
+
+}
+
+
+let score=0;
+
+
+currentQuiz.questions.forEach(
+(q,i)=>{
+
+if(
+responses[i]!==null &&
+Number(
+responses[i]
+)===
+Number(
+q.correctAnswer
+)
+){
+
+score++;
+
+}
+
+}
+);
+
+
+const percent =
+Math.round(
+score/
+currentQuiz.questions.length*
+100
+);
+
+
+let serverMsg="";
+
+
+try{
+
+if(
+currentQuiz.quizId
+){
+
+const data =
+await api(
+"submitResponses",
+{
+
+studentId:
+currentStudent.id,
+
+quizId:
+currentQuiz.quizId,
+
+responses:
+JSON.stringify(
+responses
+)
+
+}
+);
+
+
+serverMsg =
+data.message ||
+"";
+
+}
+
+}catch(error){
+
+console.warn(
+"Quiz save failed:",
+error.message
+);
+
+}
+
+
+document
+.getElementById(
+"quizScore"
+)
+.innerHTML=
+
+`
+
+<div
+class="result"
+style="
+text-align:center;
+"
+>
+
+<div
+class="score"
+>
+
+🎉
+Score:
+${score}
+/
+${currentQuiz.questions.length}
+
+</div>
+
+
+<p>
+
+<b>
+${percent}%
+</b>
+
+<br>
+
+${
+percent>=80
+?
+"🌟 Excellent! You are a Quiz Superstar!"
+:
+percent>=50
+?
+"💪 Good job! Keep practising!"
+:
+"🌱 Nice try! Learn, practise and try again!"
+}
+
+</p>
+
+
+${
+serverMsg
+?
+`
+<p class="muted">
+${escapeHtml(serverMsg)}
+</p>
+`
+:
+""
+}
+
+</div>
+
+`;
+
+
+logActivity(
+"Quiz",
+currentQuiz.subject,
+5,
+score*2
+);
+
+
+if(
+percent>=80
+){
+
+celebrate();
+
+toast(
+"🏆 Amazing! Quiz Superstar!"
+);
+
+}else{
+
+toast(
+"🎉 Quiz completed!"
+);
+
+}
+
+
+loadDashboard();
+
+}
+
+
+function resetQuiz(){
+
+currentQuiz=null;
+
+document
+.getElementById(
+"quizSetup"
+)
+.classList.remove(
+"hidden"
+);
+
+document
+.getElementById(
+"quizResult"
+)
+.innerHTML="";
+
+}
+
+
+/* =====================================================
+FLASHCARDS
+===================================================== */
+
+const flashFacts={
+
+plants:[
+
+"🌱 Plants need sunlight, water, air and nutrients to grow.",
+
+"🌿 Roots hold plants in the soil and absorb water.",
+
+"🍃 Leaves help plants make food using sunlight."
+
+],
+
+maths:[
+
+"➕ Addition means putting numbers together.",
+
+"🔢 5 + 3 = 8.",
+
+"📏 A number line can help us add numbers."
+
+],
+
+animals:[
+
+"🐶 Animals need food, water and air to live.",
+
+"🌿 Herbivores eat plants.",
+
+"🏠 A habitat is the natural home of an animal."
+
+],
+
+science:[
+
+"💧 Water can be solid, liquid or gas.",
+
+"☀️ The Sun gives Earth light and heat.",
+
+"👀 We use our senses to learn about the world."
+
+]
+
+};
+
+
 function makeFlashcard(){
-  const topic=val("flashTopic").toLowerCase(), list=flashFacts[topic]||flashFacts.science;
-  const fact=list[Math.floor(Math.random()*list.length)];
-  document.getElementById("flashcardBox").innerHTML=`<div><div style="font-size:50px">🧠✨</div><div style="margin-top:12px">${escapeHtml(fact)}</div><small class="muted">Topic: ${escapeHtml(val("flashTopic"))}</small></div>`;
+
+const topic =
+val("flashTopic")
+.toLowerCase();
+
+
+const list =
+flashFacts[topic] ||
+flashFacts.science;
+
+
+const fact =
+list[
+Math.floor(
+Math.random()*
+list.length
+)
+];
+
+
+document
+.getElementById(
+"flashcardBox"
+)
+.innerHTML=
+
+`
+
+<div>
+
+<div
+style="
+font-size:55px
+"
+>
+🧠✨
+</div>
+
+<div
+style="
+margin-top:12px
+"
+>
+
+${escapeHtml(fact)}
+
+</div>
+
+<small
+class="muted"
+>
+
+Topic:
+${escapeHtml(
+val("flashTopic")
+)}
+
+</small>
+
+</div>
+
+`;
+
 }
 
-/* ================= NOTES ================= */
+
+/* =====================================================
+NOTES
+===================================================== */
+
 function saveNote(){
-  const topic=val("noteTopic"),content=val("noteContent");
-  if(!topic||!content){alert("Please enter a topic and note.");return}
-  notes.unshift({topic,content,time:new Date().toLocaleString()});
-  localStorage.setItem("vernacularEduAINotes",JSON.stringify(notes));
-  document.getElementById("noteTopic").value="";
-  document.getElementById("noteContent").value="";
-  renderNotes();toast("💾 Note saved on this device.");
+
+const topic =
+val("noteTopic");
+
+const content =
+val("noteContent");
+
+
+if(
+!topic ||
+!content
+){
+
+alert(
+"Please enter a topic and note."
+);
+
+return;
+
 }
+
+
+notes.unshift({
+
+topic,
+
+content,
+
+time:
+new Date()
+.toLocaleString()
+
+});
+
+
+localStorage.setItem(
+
+"vernacularEduAINotes",
+
+JSON.stringify(notes)
+
+);
+
+
+document
+.getElementById(
+"noteTopic"
+)
+.value="";
+
+
+document
+.getElementById(
+"noteContent"
+)
+.value="";
+
+
+renderNotes();
+
+toast(
+"💾 Note saved!"
+);
+
+}
+
+
 function renderNotes(){
-  document.getElementById("notesList").innerHTML=notes.length?notes.slice(0,8).map(n=>`<div class="result"><b>📌 ${escapeHtml(n.topic)}</b><small class="muted" style="float:right">${escapeHtml(n.time)}</small><p>${formatText(n.content)}</p></div>`).join(""):'<div class="muted">No notes yet. Your saved notes will appear here.</div>';
+
+document
+.getElementById(
+"notesList"
+)
+.innerHTML =
+
+notes.length
+
+?
+
+notes
+.slice(0,8)
+.map(
+n=>`
+
+<div class="result">
+
+<b>
+📌
+${escapeHtml(n.topic)}
+</b>
+
+<small
+class="muted"
+style="float:right"
+>
+
+${escapeHtml(n.time)}
+
+</small>
+
+<p>
+${formatText(n.content)}
+</p>
+
+</div>
+
+`
+)
+.join("")
+
+:
+
+'<div class="muted">📒 No notes yet. Start your notebook!</div>';
+
 }
 
-/* ================= PROFILE / SETTINGS ================= */
+
+/* =====================================================
+PARENT CORNER
+===================================================== */
+
 function renderParent(){
-  const s=currentStudent;
-  document.getElementById("parentInfo").innerHTML=`<div class="grid3">
-    ${infoCard("👧 Student",s.name)}${infoCard("🎒 Grade",s.grade)}${infoCard("🎂 Age",s.age)}
-    ${infoCard("👨‍👩‍👧 Parent",s.parentName)}${infoCard("📞 Contact",s.parentContact)}${infoCard("📧 Email",s.parentEmail)}
-    ${infoCard("🌐 Mother Tongue",s.motherTongue)}${infoCard("📘 Syllabus",s.syllabus)}${infoCard("📍 State",s.state)}
-  </div>`;
+
+const s =
+currentStudent;
+
+
+document
+.getElementById(
+"parentInfo"
+)
+.innerHTML=
+
+`
+
+<div class="grid3">
+
+${infoCard(
+"👧 Student",
+s.name
+)}
+
+${infoCard(
+"🎒 Grade",
+s.grade
+)}
+
+${infoCard(
+"🎂 Age",
+s.age
+)}
+
+${infoCard(
+"👨‍👩‍👧 Parent",
+s.parentName
+)}
+
+${infoCard(
+"📞 Contact",
+s.parentContact
+)}
+
+${infoCard(
+"📧 Email",
+s.parentEmail
+)}
+
+${infoCard(
+"🌐 Mother Tongue",
+s.motherTongue
+)}
+
+${infoCard(
+"📘 Syllabus",
+s.syllabus
+)}
+
+${infoCard(
+"📍 State",
+s.state
+)}
+
+${infoCard(
+"🌍 Country",
+s.country
+)}
+
+</div>
+
+`;
+
 }
-function infoCard(title,value){return `<div class="card"><b>${title}</b><div style="margin-top:7px">${escapeHtml(String(value||""))}</div></div>`}
+
+
+function infoCard(
+title,
+value
+){
+
+return `
+
+<div class="card">
+
+<b>
+${title}
+</b>
+
+<div
+style="margin-top:7px"
+>
+
+${escapeHtml(
+String(value||"")
+)}
+
+</div>
+
+</div>
+
+`;
+
+}
+
+
+/* =====================================================
+SETTINGS
+===================================================== */
+
 function saveSettings(){
-  const name=val("settingName"),grade=val("settingGrade");
-  if(name)currentStudent.name=name;if(grade)currentStudent.grade=grade;
-  currentLanguage=val("settingLanguage");document.getElementById("studentName").textContent=currentStudent.name;
-  document.getElementById("topGrade").textContent="Grade "+currentStudent.grade.replace(/\D/g,"");
-  document.getElementById("topLanguage").value=currentLanguage;
-  renderParent();document.getElementById("settingsResult").innerHTML='<div class="success-box">✅ Settings updated.</div>';
+
+const name =
+val("settingName");
+
+const grade =
+val("settingGrade");
+
+
+if(name)
+currentStudent.name=name;
+
+
+if(grade)
+currentStudent.grade=grade;
+
+
+currentLanguage =
+val("settingLanguage");
+
+
+localStorage.setItem(
+
+"vernacularEduAIStudent",
+
+JSON.stringify(
+currentStudent
+)
+
+);
+
+
+localStorage.setItem(
+
+"vernacularEduAILanguage",
+
+currentLanguage
+
+);
+
+
+document
+.getElementById(
+"studentName"
+)
+.textContent =
+currentStudent.name;
+
+
+document
+.getElementById(
+"topGrade"
+)
+.textContent =
+"Grade "+
+currentStudent.grade.replace(
+/\D/g,
+""
+);
+
+
+document
+.getElementById(
+"topLanguage"
+)
+.value =
+currentLanguage;
+
+
+renderParent();
+
+
+document
+.getElementById(
+"settingsResult"
+)
+.innerHTML=
+
+`
+
+<div class="success-box">
+
+✅ Settings saved successfully!
+
+</div>
+
+`;
+
 }
+
+
 function changeLanguage(){
-  currentLanguage=document.getElementById("topLanguage").value;
-  document.getElementById("settingLanguage").value=currentLanguage;
+
+currentLanguage =
+document
+.getElementById(
+"topLanguage"
+)
+.value;
+
+
+const setting =
+document
+.getElementById(
+"settingLanguage"
+);
+
+
+if(setting){
+
+setting.value =
+currentLanguage;
+
 }
 
-/* ================= ANALYTICS ================= */
-async function logActivity(activity,subject,duration,points){
-  if(!currentStudent)return;
-  try{await api("logActivity",{studentId:currentStudent.id,activity,subject,duration,points})}catch(e){console.warn("Activity log:",e.message)}
+
+localStorage.setItem(
+
+"vernacularEduAILanguage",
+
+currentLanguage
+
+);
+
 }
 
-/* ================= HELPERS ================= */
-function val(id){return document.getElementById(id).value.trim()}
-function setText(id,value){const e=document.getElementById(id);if(e)e.textContent=value}
-function escapeHtml(value){return String(value??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
-function formatText(value){return escapeHtml(value).replace(/\n/g,"<br>")}
-function showResult(id,ok,html){document.getElementById(id).innerHTML=`<div class="${ok?"result":"error-box"}">${html}</div>`}
-function toast(message){const t=document.getElementById("toast");t.textContent=message;t.style.display="block";clearTimeout(window.__toast);window.__toast=setTimeout(()=>t.style.display="none",2800)}
-window.addEventListener("load",()=>console.log("🎓 Vernacular EduAI Primary frontend ready"));
+
+/* =====================================================
+ACTIVITY LOG
+===================================================== */
+
+async function logActivity(
+activity,
+subject,
+duration,
+points
+){
+
+if(!currentStudent)return;
+
+
+try{
+
+await api(
+"logActivity",
+{
+
+studentId:
+currentStudent.id,
+
+activity,
+
+subject,
+
+duration,
+
+points
+
+}
+);
+
+}catch(error){
+
+console.warn(
+"Activity log:",
+error.message
+);
+
+}
+
+}
+
+
+/* =====================================================
+HELPERS
+===================================================== */
+
+function val(id){
+
+const element =
+document.getElementById(id);
+
+return element
+?
+element.value.trim()
+:
+"";
+
+}
+
+
+function setText(
+id,
+value
+){
+
+const element =
+document.getElementById(id);
+
+if(element){
+
+element.textContent =
+value;
+
+}
+
+}
+
+
+function escapeHtml(value){
+
+return String(
+value ?? ""
+)
+.replace(
+/[&<>"']/g,
+m=>
+({
+
+"&":"&amp;",
+
+"<":"&lt;",
+
+">":"&gt;",
+
+'"':"&quot;",
+
+"'":"&#039;"
+
+}[m])
+);
+
+}
+
+
+function formatText(value){
+
+return escapeHtml(value)
+.replace(
+/\n/g,
+"<br>"
+);
+
+}
+
+
+function showResult(
+id,
+ok,
+html
+){
+
+document
+.getElementById(id)
+.innerHTML=
+
+`
+
+<div class="${
+ok
+?
+"result"
+:
+"error-box"
+}">
+
+${html}
+
+</div>
+
+`;
+
+}
+
+
+function toast(message){
+
+const t =
+document.getElementById(
+"toast"
+);
+
+t.textContent =
+message;
+
+t.style.display =
+"block";
+
+clearTimeout(
+window.__toast
+);
+
+window.__toast =
+setTimeout(
+()=>
+t.style.display="none",
+3000
+);
+
+}
+
+
+/* =====================================================
+CELEBRATION
+===================================================== */
+
+function celebrate(){
+
+const box =
+document.getElementById(
+"celebrate"
+);
+
+box.innerHTML="";
+
+box.style.display="block";
+
+
+const emojis=[
+"🎉",
+"⭐",
+"🌟",
+"🏆",
+"✨",
+"🎈",
+"🚀",
+"💜",
+"📚"
+];
+
+
+for(
+let i=0;
+i<25;
+i++
+){
+
+const item =
+document.createElement(
+"div"
+);
+
+item.className=
+"confetti";
+
+item.textContent=
+emojis[
+Math.floor(
+Math.random()*
+emojis.length
+)
+];
+
+
+item.style.left =
+Math.random()*100+"%";
+
+item.style.animationDelay =
+Math.random()*.5+"s";
+
+
+box.appendChild(item);
+
+}
+
+
+setTimeout(
+()=>{
+
+box.style.display="none";
+
+box.innerHTML="";
+
+},
+1800
+);
+
+}
+
+
+/* =====================================================
+START
+===================================================== */
+
+window.addEventListener(
+"load",
+()=>{
+
+console.log(
+"🎓 Vernacular EduAI Primary Frontend Ready"
+);
+
+restoreSession();
+
+}
+);
+
 </script>
+
 </body>
 </html>
