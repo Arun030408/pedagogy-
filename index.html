@@ -1506,66 +1506,58 @@ function showLoginMessage(message,type){
    API FUNCTION
 ===================================================== */
 
-async function api(action,data={},method="POST"){
+async function api(action,data={}){
 
   const payload = {
-    action:action,
+    action: action,
     ...data
   };
 
+  const url =
+    API_URL +
+    "?" +
+    new URLSearchParams(payload).toString();
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 90000);
 
   try{
+    const response = await fetch(url, {
+      method: "GET",
+      redirect: "follow",
+      cache: "no-store",
+      signal: controller.signal
+    });
 
-    if(method==="GET"){
-
-      const url =
-        API_URL +
-        "?" +
-        new URLSearchParams(payload).toString();
-
-      const response =
-        await fetch(url);
-
-      return await response.json();
-
+    if(!response.ok){
+      throw new Error("Backend HTTP " + response.status);
     }
 
+    const text = await response.text();
+    let result;
 
-    /*
-       text/plain avoids many Apps Script
-       CORS/preflight problems.
-    */
+    try{
+      result = JSON.parse(text);
+    }catch(parseError){
+      console.error("Invalid backend response:", text);
+      throw new Error("Backend returned invalid JSON.");
+    }
 
-    const response =
-      await fetch(
-        API_URL,
-        {
-          method:"POST",
-          headers:{
-            "Content-Type":
-              "text/plain;charset=utf-8"
-          },
-          body:JSON.stringify(payload)
-        }
-      );
+    console.log("API Response:", action, result);
+    return result;
 
+  }catch(error){
+    console.error("API Error:", action, error);
 
-    return await response.json();
+    if(error.name === "AbortError"){
+      throw new Error("The AI request took too long. Please try again.");
+    }
 
+    throw new Error("Cannot connect to backend: " + error.message);
+  }finally{
+    clearTimeout(timeout);
   }
-
-  catch(error){
-
-    console.error(error);
-
-    throw new Error(
-      "Cannot connect to backend. Please check Apps Script deployment."
-    );
-
-  }
-
 }
-
 
 
 /* =====================================================
@@ -2383,93 +2375,98 @@ async function translateText(){
 
 async function generateQuiz(){
 
-  const topic =
-    $("quizTopic")
-    .value
-    .trim();
-
+  const topic = $("quizTopic").value.trim();
 
   if(!topic){
-
-    alert(
-      "Please enter a quiz topic."
-    );
-
+    alert("Please enter a quiz topic.");
     return;
-
   }
 
+  const output = $("quizOutput");
+  const count = Number($("questionCount").value) || 5;
+  const subject = student?.subject || "Science";
+  const grade = student?.grade || "5";
+  const language = student?.motherTongue || "English";
 
-  const output =
-    $("quizOutput");
+  output.classList.remove("hidden");
+  output.textContent = "📝 Preparing your quiz...";
 
+  const cacheKey =
+    "eduaiQuiz:" +
+    [subject, topic, grade, language, count]
+      .map(v => String(v).trim().toLowerCase())
+      .join("|");
 
-  output.classList.remove(
-    "hidden"
-  );
+  /* Previously generated quizzes load immediately. */
+  try{
+    const cached = localStorage.getItem(cacheKey);
 
+    if(cached){
+      const cachedQuiz = JSON.parse(cached);
 
-  output.textContent =
-    "📝 Generating your quiz...";
-
+      if(
+        cachedQuiz &&
+        Array.isArray(cachedQuiz.questions) &&
+        cachedQuiz.questions.length
+      ){
+        output.innerHTML =
+          "<div class='message success'>⚡ Loaded your saved quiz instantly.</div>" +
+          renderQuiz(cachedQuiz);
+        return;
+      }
+    }
+  }catch(cacheError){
+    console.log("Quiz cache unavailable:", cacheError);
+  }
 
   try{
+    output.textContent = "📝 AI is creating your quiz...";
 
-    const result =
-      await api(
-        "generateQuiz",
-        {
-
-          topic:topic,
-
-          subject:
-            student?.subject ||
-            "Science",
-
-          grade:
-            student?.grade ||
-            "5",
-
-          language:
-            student?.motherTongue ||
-            "English",
-
-          questionCount:
-            Number(
-              $("questionCount").value
-            )
-
-        }
-      );
-
+    const result = await api("generateQuiz", {
+      topic: topic,
+      subject: subject,
+      grade: grade,
+      language: language,
+      questionCount: count
+    });
 
     if(!result.success){
-
       throw new Error(
-        result.error ||
-        "Quiz generation failed."
+        result.error || "Quiz generation failed."
       );
-
     }
 
+    if(
+      !Array.isArray(result.questions) ||
+      !result.questions.length
+    ){
+      throw new Error("Gemini returned no quiz questions.");
+    }
 
-    output.innerHTML =
-      renderQuiz(
-        result
+    const quizData = {
+      quizId: result.quizId || "",
+      topic: topic,
+      subject: subject,
+      grade: grade,
+      language: language,
+      questions: result.questions
+    };
+
+    try{
+      localStorage.setItem(
+        cacheKey,
+        JSON.stringify(quizData)
       );
+    }catch(cacheError){
+      console.log("Quiz cache save skipped:", cacheError);
+    }
 
+    output.innerHTML = renderQuiz(quizData);
+
+  }catch(error){
+    output.textContent = "❌ " + error.message;
   }
-
-  catch(error){
-
-    output.textContent =
-      "❌ " +
-      error.message;
-
-  }
-
 }
-
 
 
 /* =====================================================
@@ -2588,7 +2585,7 @@ function renderQuiz(result){
 
     <button
       class="primary"
-      onclick='submitGeneratedQuiz(${JSON.stringify(questions)})'>
+      onclick='submitGeneratedQuiz(${JSON.stringify(questions)}, ${JSON.stringify(quiz.quizId || )})'>
 
       ✅ Submit Quiz
 
@@ -2605,7 +2602,8 @@ function renderQuiz(result){
 ===================================================== */
 
 async function submitGeneratedQuiz(
-  questions
+  questions,
+  quizId = ""
 ){
 
   let correct=0;
