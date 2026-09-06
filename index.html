@@ -2166,6 +2166,19 @@ async function generateLecture(){
     }
 
 
+    try{
+      localStorage.setItem(
+        "eduaiLastLesson",
+        JSON.stringify({
+          topic: topic,
+          language: $("lectureLanguage").value,
+          content: String(result.content || "")
+        })
+      );
+    }catch(storageError){
+      console.log("Lesson context save skipped:", storageError);
+    }
+
     output.textContent =
       formatAIResult(
         result.content
@@ -2482,34 +2495,7 @@ async function generateQuiz(){
     ? "📚 Using your lesson content to create a topic-specific quiz..."
     : "📝 Creating a quiz only about the requested lesson/topic...";
 
-  /* V2 prevents old generic quizzes from localStorage from returning. */
-  const cacheKey =
-    "eduaiQuizV2:" +
-    [subject, topic, grade, language, count, lessonContent ? "lesson" : "topic"]
-      .map(v => String(v).trim().toLowerCase())
-      .join("|");
-
-  try{
-    const cached = localStorage.getItem(cacheKey);
-
-    if(cached){
-      const cachedQuiz = JSON.parse(cached);
-
-      if(
-        cachedQuiz &&
-        Array.isArray(cachedQuiz.questions) &&
-        cachedQuiz.questions.length
-      ){
-        currentGeneratedQuiz = cachedQuiz;
-        output.innerHTML =
-          "<div class='message success'>⚡ Loaded a saved lesson-specific quiz.</div>" +
-          renderQuiz(cachedQuiz);
-        return;
-      }
-    }
-  }catch(cacheError){
-    console.log("Quiz cache unavailable:", cacheError);
-  }
+  /* Always generate a fresh quiz. Never reuse an old cached quiz. */
 
   try{
     output.textContent = "🤖 AI is creating questions from this lesson...";
@@ -2547,14 +2533,7 @@ async function generateQuiz(){
 
     currentGeneratedQuiz = quizData;
 
-    try{
-      localStorage.setItem(
-        cacheKey,
-        JSON.stringify(quizData)
-      );
-    }catch(cacheError){
-      console.log("Quiz cache save skipped:", cacheError);
-    }
+    /* Do not cache quizzes: topic/language/lesson changes must never mix. */
 
     output.innerHTML = renderQuiz(quizData);
 
