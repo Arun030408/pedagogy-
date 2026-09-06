@@ -494,6 +494,26 @@ button{
   font-weight:bold;
 }
 
+.quiz-feedback{
+  margin-top:12px;
+  padding:13px;
+  border-radius:12px;
+  border-left:4px solid #7c3aed;
+  background:#f8fafc;
+  line-height:1.6;
+}
+.quiz-feedback strong{display:block;margin-bottom:5px;}
+.quiz-feedback .voice-btn{
+  margin-top:9px;
+  border:0;
+  border-radius:9px;
+  padding:8px 12px;
+  background:#ede9fe;
+  color:#5b21b6;
+  font-weight:bold;
+  cursor:pointer;
+}
+
 
 /* =========================
    MOBILE
@@ -1174,6 +1194,7 @@ Language
 <option>Telugu</option>
 <option>Malayalam</option>
 <option>Kannada</option>
+<option>Bengali</option>
 
 </select>
 
@@ -1346,6 +1367,7 @@ Source Language
 <option>Telugu</option>
 <option>Malayalam</option>
 <option>Kannada</option>
+<option>Bengali</option>
 
 </select>
 
@@ -1366,6 +1388,7 @@ Target Language
 <option>Telugu</option>
 <option>Malayalam</option>
 <option>Kannada</option>
+<option>Bengali</option>
 
 </select>
 
@@ -2148,6 +2171,20 @@ async function generateLecture(){
         result.content
       );
 
+    try{
+      localStorage.setItem(
+        "eduaiLastLesson",
+        JSON.stringify({
+          topic: topic,
+          content: result.content || "",
+          language: $("lectureLanguage").value,
+          savedAt: Date.now()
+        })
+      );
+    }catch(e){
+      console.log("Lesson cache save skipped:", e);
+    }
+
   }
 
   catch(error){
@@ -2370,15 +2407,66 @@ async function translateText(){
 
 
 /* =====================================================
-   QUIZ
+   QUIZ - LESSON SPECIFIC + MULTILINGUAL PEDAGOGY
 ===================================================== */
+
+let currentGeneratedQuiz = null;
+
+const VOICE_LANGUAGES = {
+  English: "en-IN",
+  Tamil: "ta-IN",
+  Telugu: "te-IN",
+  Kannada: "kn-IN",
+  Malayalam: "ml-IN",
+  Hindi: "hi-IN",
+  Bengali: "bn-IN"
+};
+
+function speakPedagogy(text, languageCode){
+  if(!text) return;
+
+  if(!("speechSynthesis" in window)){
+    alert("Voice assistant is not supported in this browser.");
+    return;
+  }
+
+  window.speechSynthesis.cancel();
+
+  const utterance = new SpeechSynthesisUtterance(String(text));
+  utterance.lang = languageCode || "en-IN";
+  utterance.rate = 0.85;
+  utterance.pitch = 1;
+
+  window.speechSynthesis.speak(utterance);
+}
+
+function getLessonContextForQuiz(topic){
+  try{
+    const saved = JSON.parse(
+      localStorage.getItem("eduaiLastLesson") || "null"
+    );
+
+    if(
+      saved &&
+      saved.content &&
+      String(saved.topic || "").trim().toLowerCase() ===
+      String(topic || "").trim().toLowerCase()
+    ){
+      return String(saved.content).slice(0,12000);
+    }
+  }catch(error){
+    console.log("Lesson context unavailable:", error);
+  }
+
+  return "";
+}
 
 async function generateQuiz(){
 
   const topic = $("quizTopic").value.trim();
 
   if(!topic){
-    alert("Please enter a quiz topic.");
+    alert("Please enter the exact lesson/topic name.");
     return;
   }
 
@@ -2387,17 +2475,20 @@ async function generateQuiz(){
   const subject = student?.subject || "Science";
   const grade = student?.grade || "5";
   const language = student?.motherTongue || "English";
+  const lessonContent = getLessonContextForQuiz(topic);
 
   output.classList.remove("hidden");
-  output.textContent = "📝 Preparing your quiz...";
+  output.textContent = lessonContent
+    ? "📚 Using your lesson content to create a topic-specific quiz..."
+    : "📝 Creating a quiz only about the requested lesson/topic...";
 
+  /* V2 prevents old generic quizzes from localStorage from returning. */
   const cacheKey =
-    "eduaiQuiz:" +
-    [subject, topic, grade, language, count]
+    "eduaiQuizV2:" +
+    [subject, topic, grade, language, count, lessonContent ? "lesson" : "topic"]
       .map(v => String(v).trim().toLowerCase())
       .join("|");
 
-  /* Previously generated quizzes load immediately. */
   try{
     const cached = localStorage.getItem(cacheKey);
 
@@ -2409,8 +2500,9 @@ async function generateQuiz(){
         Array.isArray(cachedQuiz.questions) &&
         cachedQuiz.questions.length
       ){
+        currentGeneratedQuiz = cachedQuiz;
         output.innerHTML =
-          "<div class='message success'>⚡ Loaded your saved quiz instantly.</div>" +
+          "<div class='message success'>⚡ Loaded a saved lesson-specific quiz.</div>" +
           renderQuiz(cachedQuiz);
         return;
       }
@@ -2420,19 +2512,20 @@ async function generateQuiz(){
   }
 
   try{
-    output.textContent = "📝 AI is creating your quiz...";
+    output.textContent = "🤖 AI is creating questions from this lesson...";
 
     const result = await api("generateQuiz", {
       topic: topic,
       subject: subject,
       grade: grade,
       language: language,
-      questionCount: count
+      questionCount: count,
+      lessonContent: lessonContent
     });
 
     if(!result.success){
       throw new Error(
-        result.error || "Quiz generation failed."
+        result.error || "Lesson-specific quiz generation failed."
       );
     }
 
@@ -2440,7 +2533,7 @@ async function generateQuiz(){
       !Array.isArray(result.questions) ||
       !result.questions.length
     ){
-      throw new Error("Gemini returned no quiz questions.");
+      throw new Error("No lesson-specific questions were returned.");
     }
 
     const quizData = {
@@ -2451,6 +2544,8 @@ async function generateQuiz(){
       language: language,
       questions: result.questions
     };
+
+    currentGeneratedQuiz = quizData;
 
     try{
       localStorage.setItem(
@@ -2468,324 +2563,177 @@ async function generateQuiz(){
   }
 }
 
-
-/* =====================================================
-   QUIZ RENDERER
-===================================================== */
-
 function renderQuiz(result){
 
-  let quiz =
-    result.quiz ||
-    result.data ||
-    result.questions ||
-    result;
+  const quiz = result || currentGeneratedQuiz || {};
+  const questions = Array.isArray(quiz.questions)
+    ? quiz.questions
+    : [];
 
-
-  if(typeof quiz==="string"){
-
-    try{
-      quiz=JSON.parse(quiz);
-    }
-    catch(error){
-
-      return escapeHTML(
-        quiz
-      );
-
-    }
-
+  if(!questions.length){
+    return "<div class='message error'>No quiz questions available.</div>";
   }
 
-
-  const questions =
-    quiz.questions ||
-    quiz;
-
-
-  if(!Array.isArray(
-    questions
-  )){
-
-    return `
-      <pre>
-      ${escapeHTML(
-        JSON.stringify(
-          result,
-          null,
-          2
-        )
-      )}
-      </pre>
-    `;
-
-  }
-
+  currentGeneratedQuiz = quiz;
 
   return `
-
     <div class="score-box">
-
-      🎯 Quiz Ready!
-
+      🎯 ${escapeHTML(quiz.topic || "Lesson")} Quiz Ready!
       <br>
-
-      <small>
-      Answer all questions carefully.
-      </small>
-
+      <small>Every question is based on this lesson/topic. Choose one answer for each question.</small>
     </div>
 
+    ${questions.map((q,index)=>`
+      <div class="question" id="quizQuestion${index}">
+        <strong>
+          ${index+1}. ${escapeHTML(q.question || q.text || "")}
+        </strong>
 
-    ${
-      questions
-      .map(
-        (q,index)=>`
+        ${(q.options || []).map((option,optIndex)=>`
+          <label class="option" id="option${index}_${optIndex}">
+            <input
+              type="radio"
+              name="q${index}"
+              value="${optIndex}"
+              onchange="showQuizFeedback(${index}, ${optIndex})">
+            ${escapeHTML(option)}
+          </label>
+        `).join("")}
 
-        <div class="question">
+        <div id="feedback${index}"></div>
+      </div>
+    `).join("")}
 
-          <strong>
-            ${index+1}.
-            ${escapeHTML(
-              q.question ||
-              q.text ||
-              ""
-            )}
-          </strong>
-
-
-          ${
-            (q.options || [])
-            .map(
-              option=>`
-
-              <label class="option">
-
-                <input
-                  type="radio"
-                  name="q${index}"
-                  value="${escapeHTML(option)}">
-
-                ${escapeHTML(option)}
-
-              </label>
-
-              `
-            )
-            .join("")
-          }
-
-        </div>
-
-        `
-      )
-      .join("")
-    }
-
-
-    <button
-      class="primary"
-      onclick='submitGeneratedQuiz(${JSON.stringify(questions)}, ${JSON.stringify(quiz.quizId || )})'>
-
+    <button class="primary" onclick="submitGeneratedQuiz()">
       ✅ Submit Quiz
-
     </button>
-
   `;
-
 }
 
+function showQuizFeedback(index, selectedIndex){
+  const quiz = currentGeneratedQuiz;
+  if(!quiz || !quiz.questions || !quiz.questions[index]) return;
 
+  const q = quiz.questions[index];
+  const correctIndex = Number(q.correctAnswer);
+  const isCorrect = selectedIndex === correctIndex;
 
-/* =====================================================
-   SUBMIT QUIZ
-===================================================== */
+  document.querySelectorAll(`input[name="q${index}"]`).forEach((input,optIndex)=>{
+    const label = input.closest(".option");
+    if(label) label.classList.remove("correct","wrong");
 
-async function submitGeneratedQuiz(
-  questions,
-  quizId = ""
-){
+    if(optIndex === correctIndex && label){
+      label.classList.add("correct");
+    }
 
-  let correct=0;
+    if(input.checked && optIndex !== correctIndex && label){
+      label.classList.add("wrong");
+    }
+  });
 
+  const feedback = document.getElementById(`feedback${index}`);
+  if(!feedback) return;
 
-  questions.forEach(
-    (question,index)=>{
+  const english = q.explanation || "Review the lesson concept again.";
+  const native = q.vernacularExplanation || english;
+  const spoken = q.spokenExplanation || native;
+  const voice = q.voiceLanguage || VOICE_LANGUAGES[quiz.language] || "en-IN";
 
-      const selected =
-        document.querySelector(
-          `input[name="q${index}"]:checked`
-        );
+  feedback.innerHTML = `
+    <div class="quiz-feedback">
+      <strong>${isCorrect ? "✅ Correct!" : "❌ Wrong answer"}</strong>
+      ${!isCorrect ? `<div><b>Correct answer:</b> ${escapeHTML(q.options?.[correctIndex] || "")}</div>` : ""}
+      <div><b>Simple English:</b> ${escapeHTML(english)}</div>
+      <div><b>${escapeHTML(quiz.language || "Native language")}:</b> ${escapeHTML(native)}</div>
+      <div><b>Spoken ${escapeHTML(quiz.language || "language")}:</b> ${escapeHTML(spoken)}</div>
+      <button class="voice-btn" onclick='speakPedagogy(${JSON.stringify(spoken)}, ${JSON.stringify(voice)})'>
+        🔊 Hear explanation
+      </button>
+    </div>
+  `;
+}
 
+async function submitGeneratedQuiz(){
 
-      const answer =
-        selected?.value;
+  const quiz = currentGeneratedQuiz;
+  if(!quiz || !Array.isArray(quiz.questions)){
+    alert("Please generate a quiz first.");
+    return;
+  }
 
+  let correct = 0;
+  const responses = [];
 
-      const correctAnswer =
-        question.answer ||
-        question.correctAnswer ||
-        question.correct;
-
-
-      document
-      .querySelectorAll(
-        `input[name="q${index}"]`
-      )
-      .forEach(input=>{
-
-        const label =
-          input.closest(
-            ".option"
-          );
-
-
-        if(
-          input.value ===
-          correctAnswer
-        ){
-
-          label.classList.add(
-            "correct"
-          );
-
-        }
-
-
-        if(
-          input.checked &&
-          input.value !==
-          correctAnswer
-        ){
-
-          label.classList.add(
-            "wrong"
-          );
-
-        }
-
-      });
-
-
-      if(
-        answer &&
-        String(answer).trim() ===
-        String(correctAnswer).trim()
-      ){
-
-        correct++;
-
-      }
-
-    });
-
-
-  const total =
-    questions.length;
-
-
-  const score =
-    correct;
-
-
-  $("quizScore").textContent =
-    score;
-
-
-  const percentage =
-    total ?
-    Math.round(
-      correct /
-      total *
-      100
-    ) :
-    0;
-
-
-  const scoreBox =
-    document.querySelector(
-      "#quizOutput .score-box"
+  quiz.questions.forEach((question,index)=>{
+    const selected = document.querySelector(
+      `input[name="q${index}"]:checked`
     );
 
+    const selectedIndex = selected
+      ? Number(selected.value)
+      : null;
 
+    const correctIndex = Number(question.correctAnswer);
+    const isCorrect = selectedIndex !== null && selectedIndex === correctIndex;
+
+    if(isCorrect) correct++;
+
+    responses.push(
+      selectedIndex === null ? "" : selectedIndex
+    );
+
+    if(selectedIndex !== null){
+      showQuizFeedback(index, selectedIndex);
+    }else{
+      const feedback = document.getElementById(`feedback${index}`);
+      if(feedback){
+        feedback.innerHTML =
+          "<div class='quiz-feedback'><strong>⚠️ Not answered</strong><div>Please choose an answer.</div></div>";
+      }
+    }
+  });
+
+  const total = quiz.questions.length;
+  const percentage = total
+    ? Math.round(correct / total * 100)
+    : 0;
+
+  $("quizScore").textContent = correct;
+
+  const scoreBox = document.querySelector("#quizOutput .score-box");
   if(scoreBox){
-
-    scoreBox.innerHTML =
-      `🎉 Score: ${correct}/${total}
-       (${percentage}%)
-       <br>
-       <small>
-       ${
-         percentage>=80
-         ? "Excellent work! 🌟"
-         : percentage>=50
-         ? "Good job! Keep practising! 💪"
-         : "Keep learning and try again! 📚"
-       }
-       </small>`;
-
-  }
-
-
-  /*
-     Send responses to backend.
-  */
-
-  if(student?.studentId){
-
-    try{
-
-      const responses =
-        questions.map(
-          (question,index)=>{
-
-            const selected =
-              document.querySelector(
-                `input[name="q${index}"]:checked`
-              );
-
-            return {
-              questionIndex:index,
-              answer:selected?.value || ""
-            };
-
-          }
-        );
-
-
-      await api(
-        "submitResponses",
-        {
-
-          studentId:
-            student.studentId,
-
-          quizId:
-            "WEB-" +
-            Date.now(),
-
-          responses:
-            JSON.stringify(
-              responses
-            )
-
+    scoreBox.innerHTML = `
+      🎉 Score: ${correct}/${total} (${percentage}%)
+      <br>
+      <small>
+        ${
+          percentage >= 80
+            ? "Excellent work! 🌟"
+            : percentage >= 50
+              ? "Good job! Keep practising! 💪"
+              : "Keep learning and try again! 📚"
         }
-      );
-
-    }
-    catch(error){
-
-      console.log(
-        "Quiz result save failed:",
-        error
-      );
-
-    }
-
+      </small>
+    `;
   }
 
-}
+  /* Save the real quiz ID and numeric answers to the backend. */
+  if(student?.studentId && quiz.quizId){
+    try{
+      const saved = await api("submitResponses", {
+        studentId: student.studentId,
+        quizId: quiz.quizId,
+        responses: JSON.stringify(responses)
+      });
 
+      if(!saved.success){
+        console.log("Quiz result save failed:", saved.error);
+      }
+    }catch(error){
+      console.log("Quiz result save failed:", error);
+    }
+  }
+}
 
 
 /* =====================================================
